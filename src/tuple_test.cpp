@@ -4,42 +4,42 @@
 
 #include <cmath>
 
-using RayTracing::Tuple;
+using RayTracer::Tuple;
 
 TEST(Tuple, WhenTupleIsPointExpectWEqualsOne) {
   Tuple a(4.3, -4.2, 3.1, 1.0);
-  EXPECT_FLOAT_EQ(4.3, a.x());
-  EXPECT_FLOAT_EQ(-4.2, a.y());
-  EXPECT_FLOAT_EQ(3.1, a.z());
-  EXPECT_FLOAT_EQ(1.0, a.w());
+  EXPECT_DOUBLE_EQ(4.3, a.x());
+  EXPECT_DOUBLE_EQ(-4.2, a.y());
+  EXPECT_DOUBLE_EQ(3.1, a.z());
+  EXPECT_DOUBLE_EQ(1.0, a.w());
   EXPECT_TRUE(a.is_point());
   EXPECT_FALSE(a.is_vector());
 }
 
 TEST(Tuple, WhenTupleIsVectorExpectWEqualsZero) {
   Tuple a(4.3, -4.2, 3.1, 0.0);
-  EXPECT_FLOAT_EQ(4.3, a.x());
-  EXPECT_FLOAT_EQ(-4.2, a.y());
-  EXPECT_FLOAT_EQ(3.1, a.z());
-  EXPECT_FLOAT_EQ(0.0, a.w());
+  EXPECT_DOUBLE_EQ(4.3, a.x());
+  EXPECT_DOUBLE_EQ(-4.2, a.y());
+  EXPECT_DOUBLE_EQ(3.1, a.z());
+  EXPECT_DOUBLE_EQ(0.0, a.w());
   EXPECT_FALSE(a.is_point());
   EXPECT_TRUE(a.is_vector());
 }
 
 TEST(Tuple, WhenMakePointExpectANewPoint) {
   Tuple a = Tuple::make_point(4, -4, 3);
-  EXPECT_FLOAT_EQ(4.0, a.x());
-  EXPECT_FLOAT_EQ(-4.0, a.y());
-  EXPECT_FLOAT_EQ(3.0, a.z());
-  EXPECT_FLOAT_EQ(1.0, a.w());
+  EXPECT_DOUBLE_EQ(4.0, a.x());
+  EXPECT_DOUBLE_EQ(-4.0, a.y());
+  EXPECT_DOUBLE_EQ(3.0, a.z());
+  EXPECT_DOUBLE_EQ(1.0, a.w());
 }
 
 TEST(Tuple, WhenMakeVectorExpectANewVector) {
   Tuple a = Tuple::make_vector(4, -4, 3);
-  EXPECT_FLOAT_EQ(4.0, a.x());
-  EXPECT_FLOAT_EQ(-4.0, a.y());
-  EXPECT_FLOAT_EQ(3.0, a.z());
-  EXPECT_FLOAT_EQ(0.0, a.w());
+  EXPECT_DOUBLE_EQ(4.0, a.x());
+  EXPECT_DOUBLE_EQ(-4.0, a.y());
+  EXPECT_DOUBLE_EQ(3.0, a.z());
+  EXPECT_DOUBLE_EQ(0.0, a.w());
 }
 
 TEST(Tuple, WhenTuplesAreEqualExpectComparerReturnTrue) {
@@ -125,21 +125,21 @@ TEST(Tuple, WhenDividingATupleByAScalarExpectTuple) {
 
 TEST(Tuple, WhenGetMagnitudeFromVectorWithAxisEqualsOneExpectUnitLength) {
   Tuple v1 = Tuple::make_vector(1, 0, 0);
-  EXPECT_FLOAT_EQ(1.0, v1.magnitude());
+  EXPECT_DOUBLE_EQ(1.0, v1.magnitude());
 
   Tuple v2 = Tuple::make_vector(0, 1, 0);
-  EXPECT_FLOAT_EQ(1.0, v2.magnitude());
+  EXPECT_DOUBLE_EQ(1.0, v2.magnitude());
 
   Tuple v3 = Tuple::make_vector(0, 0, 1);
-  EXPECT_FLOAT_EQ(1.0, v3.magnitude());
+  EXPECT_DOUBLE_EQ(1.0, v3.magnitude());
 }
 
 TEST(Tuple, WhenGetMagnitudeFromAnyVectorExpectCorrectValue) {
   Tuple v1 = Tuple::make_vector(1, 2, 3);
-  EXPECT_FLOAT_EQ(std::sqrt(14), v1.magnitude());
+  EXPECT_DOUBLE_EQ(std::sqrt(14), v1.magnitude());
 
   Tuple v2 = Tuple::make_vector(-1, -2, -3);
-  EXPECT_FLOAT_EQ(std::sqrt(14), v2.magnitude());
+  EXPECT_DOUBLE_EQ(std::sqrt(14), v2.magnitude());
 }
 
 TEST(Tuple, WhenNormalizeAVectorExpectANormalizedVector) {
@@ -155,14 +155,14 @@ TEST(Tuple, WhenNormalizeAVectorExpectANormalizedVector) {
 TEST(Tuple, WhenGetMagnitudeFromANormalizedVectorExpectOne) {
   Tuple v = Tuple::make_vector(1, 2, 3);
   v.normalize();
-  EXPECT_FLOAT_EQ(1.0, v.magnitude());
+  EXPECT_DOUBLE_EQ(1.0, v.magnitude());
 }
 
 TEST(Tuple, WhenGetDotOfTwoVectorsExpectACorrectScalar) {
   Tuple v1 = Tuple::make_vector(1, 2, 3);
   Tuple v2 = Tuple::make_vector(2, 3, 4);
-  EXPECT_FLOAT_EQ(20.0, v1.dot(v2));
-  EXPECT_FLOAT_EQ(20.0, v2.dot(v1));
+  EXPECT_DOUBLE_EQ(20.0, v1.dot(v2));
+  EXPECT_DOUBLE_EQ(20.0, v2.dot(v1));
 }
 
 TEST(Tuple, WhenGetCrossOfTwoVectorsExpectAPerpendicularVector) {
