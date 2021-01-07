@@ -268,6 +268,40 @@ inline Tuple operator*(const Matrix& a, const Tuple& b) {
   return product;
 }
 
+inline Point operator*(const Matrix& a, const Point& b) {
+  if (!a.is_square() || a.rows() != Tuple::TUPLE_DIMENSIONS) {
+    return b;
+  }
+
+  Point product;
+  double x = b.x();
+  double y = b.y();
+  double z = b.z();
+  double w = b.w();
+  product.set_x(x * a[0][0] + y * a[0][1] + z * a[0][2] + w * a[0][3]);
+  product.set_y(x * a[1][0] + y * a[1][1] + z * a[1][2] + w * a[1][3]);
+  product.set_z(x * a[2][0] + y * a[2][1] + z * a[2][2] + w * a[2][3]);
+
+  return product;
+}
+
+inline Vector operator*(const Matrix& a, const Vector& b) {
+  if (!a.is_square() || a.rows() != Tuple::TUPLE_DIMENSIONS) {
+    return b;
+  }
+
+  Vector product;
+  double x = b.x();
+  double y = b.y();
+  double z = b.z();
+  double w = b.w();
+  product.set_x(x * a[0][0] + y * a[0][1] + z * a[0][2] + w * a[0][3]);
+  product.set_y(x * a[1][0] + y * a[1][1] + z * a[1][2] + w * a[1][3]);
+  product.set_z(x * a[2][0] + y * a[2][1] + z * a[2][2] + w * a[2][3]);
+
+  return product;
+}
+
 inline std::ostream& operator<<(std::ostream& out, const Matrix& m) {
   out << "{\n";
   for (int row = 0; row < m.rows(); row++) {

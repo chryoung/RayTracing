@@ -29,11 +29,11 @@ void draw(Canvas& c, const Projectile& proj) {
 }
 
 int main() {
-  Tuple velocity = Tuple::make_vector(10, 1.8, 0);
+  Vector velocity(10, 1.8, 0);
   velocity.normalize();
   velocity = velocity * 11.25;
-  Projectile p(Tuple::make_point(20, 10, 0), velocity);
-  Environment e(Tuple::make_vector(0, -0.3, 0), Tuple::make_vector(-0.1, 0, 0));
+  Projectile p(Point(20, 10, 0), velocity);
+  Environment e(Vector(0, -0.3, 0), Vector(-0.1, 0, 0));
 
   Canvas c(900, 500);
   int count = 0;

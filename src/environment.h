@@ -7,28 +7,28 @@ namespace RayTracer
 {
 class Environment {
 public:
-  Environment(const Tuple& gravity, const Tuple& wind): _gravity(gravity), _wind(wind) {}
+  Environment(const Vector& gravity, const Vector& wind): _gravity(gravity), _wind(wind) {}
 
-  const Tuple& gravity() const { return _gravity; }
-  const Tuple& gravity() { return _gravity; }
+  const Vector& gravity() const { return _gravity; }
+  const Vector& gravity() { return _gravity; }
 
-  const Tuple& wind() const { return _wind; }
-  const Tuple& wind() { return _wind; }
+  const Vector& wind() const { return _wind; }
+  const Vector& wind() { return _wind; }
 
-  Environment& set_gravity(const Tuple& gravity) {
+  Environment& set_gravity(const Vector& gravity) {
     _gravity = gravity;
 
     return *this;
   }
 
-  Environment& set_wind(const Tuple& wind) {
+  Environment& set_wind(const Vector& wind) {
     _wind = wind;
 
     return *this;
   }
 private:
-  Tuple _gravity;
-  Tuple _wind;
+  Vector _gravity;
+  Vector _wind;
 };
 } // namespace RayTracer
 

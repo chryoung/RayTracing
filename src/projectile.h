@@ -6,33 +6,33 @@
 namespace RayTracer {
 class Projectile {
  public:
-  Projectile(const Tuple& position, const Tuple& velocity)
+  Projectile(const Point& position, const Vector& velocity)
       : _position(position), _velocity(velocity) {}
 
-  Projectile(Tuple&& position, Tuple&& velocity)
+  Projectile(Point&& position, Vector&& velocity)
     : _position(position), _velocity(velocity) {}
 
-  const Tuple& postion() const { return _position; }
-  const Tuple& postion() { return _position; }
+  const Point& postion() const { return _position; }
+  const Point& postion() { return _position; }
 
-  const Tuple& velocity() const { return _velocity; }
-  const Tuple& velocity() { return _velocity; }
+  const Vector& velocity() const { return _velocity; }
+  const Vector& velocity() { return _velocity; }
 
-  Projectile& set_position(const Tuple& position) {
+  Projectile& set_position(const Point& position) {
     _position = position;
 
     return *this;
   }
 
-  Projectile& set_velocity(const Tuple& velocity) {
+  Projectile& set_velocity(const Vector& velocity) {
     _velocity = velocity;
 
     return *this;
   }
 
  private:
-  Tuple _position;
-  Tuple _velocity;
+  Point _position;
+  Vector _velocity;
 };
 }  // namespace RayTracer
 
