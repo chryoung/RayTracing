@@ -6,6 +6,10 @@ add_executable(projenv_demo
   src/canvas.cpp
   src/projenv_demo.cpp)
 
+add_executable(transformation_demo
+  src/canvas.cpp
+  src/transformation_demo.cpp)
+
 enable_testing()
 find_package(GTest REQUIRED)
 
