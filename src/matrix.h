@@ -174,7 +174,7 @@ class Matrix {
 
   double determinant() {
     if (!is_square()) {
-      return 0;
+      throw std::runtime_error(CURRENT_LINE + " determinant: non-square matrix cannot have determinant.");
     }
 
     if (rows() == 2) {
@@ -195,7 +195,7 @@ class Matrix {
 
   Matrix submatrix(int row, int col) {
     if (row < 0 || col < 0 || row >= rows() || col >= cols()) {
-      return Matrix(1, 1);
+      throw std::invalid_argument(CURRENT_LINE + " submatrix: invalid row or col");
     }
 
     Matrix s(rows() - 1, cols() - 1);
@@ -294,7 +294,8 @@ inline bool operator!=(const Matrix& a, const Matrix& b) { return !(a == b); }
 
 inline Matrix operator*(const Matrix& a, const Matrix b) {
   if (a.cols() != b.rows()) {
-    return a;  // throw std::runtime_exception("a.cols() != b.rows()");
+    throw std::runtime_error(CURRENT_LINE +
+                             " operator*: Matrix multiplication cannot be performed because a.cols() != b.rows()");
   }
 
   Matrix product = Matrix::create(a.rows(), b.cols());
@@ -311,7 +312,9 @@ inline Matrix operator*(const Matrix& a, const Matrix b) {
 
 inline Tuple operator*(const Matrix& a, const Tuple& b) {
   if (!a.is_square() || a.rows() != Tuple::TUPLE_DIMENSIONS) {
-    return b;
+    throw std::runtime_error(
+        CURRENT_LINE +
+        " operator*: Matrix multiplication cannot be performed because a's dimension is not compatible with Tuple.");
   }
 
   Tuple product;
@@ -329,7 +332,9 @@ inline Tuple operator*(const Matrix& a, const Tuple& b) {
 
 inline Point operator*(const Matrix& a, const Point& b) {
   if (!a.is_square() || a.rows() != Tuple::TUPLE_DIMENSIONS) {
-    return b;
+    throw std::runtime_error(
+        CURRENT_LINE +
+        " operator*: Matrix multiplication cannot be performed because a's dimension is not compatible with Point.");
   }
 
   Point product;
@@ -346,7 +351,9 @@ inline Point operator*(const Matrix& a, const Point& b) {
 
 inline Vector operator*(const Matrix& a, const Vector& b) {
   if (!a.is_square() || a.rows() != Tuple::TUPLE_DIMENSIONS) {
-    return b;
+    throw std::runtime_error(
+        CURRENT_LINE +
+        " operator*: Matrix multiplication cannot be performed because a's dimension is not compatible with Vector.");
   }
 
   Vector product;
