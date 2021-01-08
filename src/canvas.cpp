@@ -1,29 +1,52 @@
 #include "canvas.h"
 
 #include <cstdio>
+#include <exception>
 #include <iostream>
+#include <string>
+
+#include "log_helper.h"
 
 namespace RayTracer {
-Canvas::Canvas(int width, int height) {
-  if (width > 0 && height > 0) {
-    _canvas =
-        std::vector<std::vector<Color>>(width, std::vector<Color>(height));
-  } else {
-    _canvas = std::vector<std::vector<Color>>(1, std::vector<Color>(1));
+Canvas::Canvas(int width, int height) : _canvas(std::vector<std::vector<Color>>(width, std::vector<Color>(height))) {}
+
+Canvas Canvas::create(int width, int height) {
+  if (width <= 0) {
+    throw std::invalid_argument(CURRENT_LINE + " create: Canvas width should not be less or equal than 0.");
   }
+
+  if (height <= 0) {
+    throw std::invalid_argument(CURRENT_LINE + " create: Canvas height should not be less or equal than 0.");
+  }
+
+  return Canvas(width, height);
 }
 
-Canvas::~Canvas() {}
-
 Canvas& Canvas::write_pixel(int x, int y, const Color& color) {
+  if (x < 0 || x >= width() || y < 0 || y >= height()) {
+    throw std::out_of_range(CURRENT_LINE + " write_pixel: x or y is out of range.");
+  }
+
   _canvas[x][y] = color;
 
   return *this;
 }
 
-Color& Canvas::pixel_at(int x, int y) { return _canvas[x][y]; }
+Color& Canvas::pixel_at(int x, int y) {
+  if (x < 0 || x >= width() || y < 0 || y >= height()) {
+    throw std::out_of_range(CURRENT_LINE + " pixel_at: x or y is out of range.");
+  }
 
-const Color& Canvas::pixel_at(int x, int y) const { return _canvas[x][y]; }
+  return _canvas[x][y];
+}
+
+const Color& Canvas::pixel_at(int x, int y) const {
+  if (x < 0 || x >= width() || y < 0 || y >= height()) {
+    throw std::out_of_range(CURRENT_LINE + " pixel_at: x or y is out of range.");
+  }
+
+  return _canvas[x][y];
+}
 
 int Canvas::width() { return _canvas.size(); }
 
@@ -33,12 +56,12 @@ int Canvas::height() { return _canvas[0].size(); }
 
 int Canvas::height() const { return _canvas[0].size(); }
 
-bool Canvas::to_ppm(std::ostream& out) const {
-  return const_cast<Canvas&>(*this).to_ppm(out);
-}
+bool Canvas::to_ppm(std::ostream& out) const { return const_cast<Canvas&>(*this).to_ppm(out); }
 
 std::vector<std::string> Canvas::break_line(std::string line) {
-  if (line.size() < PPM_LINE_LIMIT) { return std::vector<std::string>{line}; }
+  if (line.size() < PPM_LINE_LIMIT) {
+    return std::vector<std::string>{line};
+  }
 
   std::vector<std::string> lines;
   int start = 0;
@@ -69,9 +92,7 @@ bool Canvas::to_ppm(std::ostream& out) {
   const char* ppm_magic_number = "P3";
 
   // Write PPM header.
-  out << ppm_magic_number << "\n"
-      << width() << " " << height() << "\n"
-      << COLOR_LIMIT << "\n";
+  out << ppm_magic_number << "\n" << width() << " " << height() << "\n" << COLOR_LIMIT << "\n";
 
   // Write pixels.
   string buffer;
@@ -80,8 +101,7 @@ bool Canvas::to_ppm(std::ostream& out) {
   for (int y = 0; y < height(); y++) {
     for (int x = 0; x < width(); x++) {
       const auto& pixel = pixel_at(x, y);
-      snprintf(color_buffer, COLOR_BUFFER_SIZE, "%d %d %d ",
-               scale_color(pixel.red()), scale_color(pixel.green()),
+      snprintf(color_buffer, COLOR_BUFFER_SIZE, "%d %d %d ", scale_color(pixel.red()), scale_color(pixel.green()),
                scale_color(pixel.blue()));
       buffer += color_buffer;
     }

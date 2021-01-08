@@ -1,36 +1,79 @@
 #ifndef CA47C3DE_E656_407E_870D_96E6611689C6
 #define CA47C3DE_E656_407E_870D_96E6611689C6
 
+#include <exception>
 #include <initializer_list>
+#include <ostream>
+#include <string>
+#include <type_traits>
 #include <utility>
 #include <vector>
-#include <ostream>
 
+#include "log_helper.h"
 #include "tuple.h"
 #include "utility.h"
 
 namespace RayTracer {
 class Matrix {
  public:
-  Matrix(int num_row, int num_col) {
-    if (num_row > 0 && num_col > 0) {
-      _data = std::vector<std::vector<double>>(num_row, std::vector<double>(num_col, 0.0));
-    } else {
-      _data = std::vector<std::vector<double>>(1, std::vector<double>(1, 0.0));
+  static Matrix create(int num_row, int num_col) {
+    if (num_row <= 0 || num_col <= 0) {
+      throw std::invalid_argument(CURRENT_LINE + " create: invalid num_row = " + std::to_string(num_row) +
+                                  " or num_col = " + std::to_string(num_col));
     }
+
+    return Matrix(num_row, num_col);
   }
 
-  Matrix(std::initializer_list<std::initializer_list<double>> numbers) {
-    for (auto iter = numbers.begin(); iter != numbers.end(); ++iter) {
-      _data.emplace_back(*iter);
+  template <class T>
+  static Matrix create(std::initializer_list<std::initializer_list<T>> numbers) {
+    static_assert(std::is_convertible<T, double>::value, "Matrix::create requires numbers can be converted to double.");
+
+    if (numbers.begin() == numbers.end() || numbers.begin()->begin() == numbers.begin()->end()) {
+      throw std::invalid_argument(CURRENT_LINE +
+                                  " create: empty std::initializer_list cannot be used to create a Matrix.");
     }
+
+    int num_col = 0;
+    for (auto iter = numbers.begin()->begin(); iter != numbers.begin()->end(); iter++, num_col++)
+      ;
+
+    std::vector<std::vector<double>> matrix_data;
+    int row = 0;
+    for (auto iter = numbers.begin(); iter != numbers.end(); iter++, row++) {
+      std::vector<double> matrix_row;
+      for (auto row_iter = iter->begin(); row_iter != iter->end(); row_iter++) {
+        matrix_row.emplace_back(static_cast<double>(*row_iter));
+      }
+
+      if (matrix_row.size() != num_col) {
+        throw std::invalid_argument(CURRENT_LINE + " create: the col of the row == " + std::to_string(row) +
+                                    " is not equal to the ncol of the first row == " + std::to_string(num_col));
+      }
+
+      matrix_data.emplace_back(std::move(matrix_row));
+    }
+
+    Matrix matrix;
+    matrix._data = std::move(matrix_data);
+
+    return matrix;
   }
 
-  ~Matrix() {}
+  static Matrix unchecked_create(std::initializer_list<std::initializer_list<double>> numbers) {
+    Matrix matrix;
+    for (auto iter = numbers.begin(); iter != numbers.end(); iter++) {
+      matrix._data.emplace_back(*iter);
+    }
+
+    return matrix;
+  }
+
+  ~Matrix() = default;
 
   static Matrix id(int num_rows) {
     if (num_rows <= 0) {
-      num_rows = 1;
+      throw std::invalid_argument(CURRENT_LINE + " id: num_rows should > 0.");
     }
 
     Matrix m(num_rows, num_rows);
@@ -43,6 +86,22 @@ class Matrix {
 
   std::vector<double>& operator[](size_t row) { return _data[row]; }
   const std::vector<double>& operator[](size_t row) const { return _data[row]; }
+
+  double at(int row, int col) {
+    if (row < 0 || row >= rows() || col < 0 || col >= cols()) {
+      throw std::out_of_range(CURRENT_LINE + " at: index is out of range.");
+    }
+
+    return _data[row][col];
+  }
+
+  double at(int row, int col) const {
+    if (row < 0 || row >= rows() || col < 0 || col >= cols()) {
+      throw std::out_of_range(CURRENT_LINE + " at: index is out of range.");
+    }
+
+    return _data[row][col];
+  }
 
   bool is_square() { return rows() == cols(); }
   bool is_square() const { return rows() == cols(); }
@@ -67,12 +126,12 @@ class Matrix {
   }
 
   bool multiply_inplace(const Tuple& b) {
-    Matrix matrix_b{
+    Matrix matrix_b = create({
         {b.x()},
         {b.y()},
         {b.z()},
         {b.w()},
-    };
+    });
 
     return multiply_inplace(matrix_b);
   }
@@ -129,9 +188,7 @@ class Matrix {
     }
   }
 
-  double determinant() const {
-    return const_cast<Matrix&>(*this).determinant();
-  }
+  double determinant() const { return const_cast<Matrix&>(*this).determinant(); }
 
   bool is_invertible() { return is_double_ne(determinant(), 0); }
   bool is_invertible() const { return is_double_ne(determinant(), 0); }
@@ -202,9 +259,7 @@ class Matrix {
     return companion.transpose();
   }
 
-  Matrix inverse() const {
-    return const_cast<Matrix&>(*this).inverse();
-  }
+  Matrix inverse() const { return const_cast<Matrix&>(*this).inverse(); }
 
   int rows() { return _data.size(); }
   int rows() const { return _data.size(); }
@@ -212,6 +267,10 @@ class Matrix {
   int cols() const { return (*this)[0].size(); }
 
  private:
+  Matrix() {}
+  Matrix(int num_row, int num_col)
+      : _data(std::vector<std::vector<double>>(num_row, std::vector<double>(num_col, 0.0))) {}
+
   std::vector<std::vector<double>> _data;
 };
 
@@ -238,7 +297,7 @@ inline Matrix operator*(const Matrix& a, const Matrix b) {
     return a;  // throw std::runtime_exception("a.cols() != b.rows()");
   }
 
-  Matrix product(a.rows(), b.cols());
+  Matrix product = Matrix::create(a.rows(), b.cols());
   for (int row = 0; row < a.rows(); ++row) {
     for (int col = 0; col < b.cols(); ++col) {
       for (int i = 0; i < a.cols(); ++i) {

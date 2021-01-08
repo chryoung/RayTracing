@@ -11,7 +11,7 @@ using namespace std;
 using namespace RayTracer;
 
 TEST(Canvas, WhenCreateACanvasExpectEveryPixelIsBlack) {
-  const Canvas c(10, 20);
+  Canvas c = Canvas::create(10, 20);
   EXPECT_EQ(c.width(), 10);
   EXPECT_EQ(c.height(), 20);
   Color black(0, 0, 0);
@@ -23,14 +23,14 @@ TEST(Canvas, WhenCreateACanvasExpectEveryPixelIsBlack) {
 }
 
 TEST(Canvas, WhenWriteAPixelExpectPixelOnCanvas) {
-  Canvas c(10, 20);
+  Canvas c = Canvas::create(10, 20);
   Color red(1, 0, 0);
   c.write_pixel(2, 3, red);
   EXPECT_EQ(red, c.pixel_at(2, 3));
 }
 
 TEST(Canvas, WhenWriteACanvasToPPMExpectHeaderIsCorrect) {
-  const Canvas c(5, 3);
+  const Canvas c = Canvas::create(5, 3);
   stringstream ppm_stream;
   c.to_ppm(ppm_stream);
   string ppm = ppm_stream.str();
@@ -39,7 +39,7 @@ TEST(Canvas, WhenWriteACanvasToPPMExpectHeaderIsCorrect) {
 }
 
 TEST(Canvas, WhenWriteACanvasToPPMExpectContentIsCorrect) {
-  Canvas c(5, 3);
+  Canvas c = Canvas::create(5, 3);
   c.write_pixel(0, 0, Color(1.5, 0, 0));
   c.write_pixel(2, 1, Color(0, 0.5, 0));
   c.write_pixel(4, 2, Color(-0.5, 0, 1));
@@ -88,7 +88,7 @@ TEST(Canvas, WhenWriteACanvasToPPMExpectContentIsCorrect) {
 }
 
 TEST(Canvas, WhenALineIsLongerThan70InPpmExpectNewLineInPpm) {
-  Canvas c(10, 2);
+  Canvas c = Canvas::create(10, 2);
   Color color(1, 0.8, 0.6);
   for (int x = 0; x < c.width(); x++) {
     for (int y = 0; y < c.height(); y++) {

@@ -10,8 +10,12 @@
 namespace RayTracer {
 class Canvas {
  public:
-  Canvas(int width, int height);
-  ~Canvas();
+  static Canvas create(int width, int height);
+  Canvas(const Canvas&) = default;
+  Canvas(Canvas&&) = default;
+  Canvas& operator=(const Canvas&) = default;
+  Canvas& operator=(Canvas&&) = default;
+  ~Canvas() = default;
   Canvas& write_pixel(int x, int y, const Color& color);
   Color& pixel_at(int x, int y);
   const Color& pixel_at(int x, int y) const;
@@ -42,6 +46,8 @@ class Canvas {
   static std::vector<std::string> break_line(std::string line);
 
  private:
+  Canvas(int width, int height);
+
   /**
    * @brief Scales the double to the int color component by COLOR_LIMIT.
    * @param color_component The color component to be scaled.

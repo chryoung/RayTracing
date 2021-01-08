@@ -35,7 +35,7 @@ int main() {
   Projectile p(Point(20, 10, 0), velocity);
   Environment e(Vector(0, -0.3, 0), Vector(-0.1, 0, 0));
 
-  Canvas c(900, 500);
+  Canvas c = Canvas::create(900, 500);
   int count = 0;
   do {
     cout << "Tick " << count << ": ";

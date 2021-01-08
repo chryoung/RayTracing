@@ -13,6 +13,7 @@ class Tuple {
   static constexpr int TUPLE_DIMENSIONS = 4;
   Tuple(double x, double y, double z, double w) : _x(x), _y(y), _z(z), _w(w) {}
   Tuple() : Tuple(0, 0, 0, 0) {}
+  virtual ~Tuple() = default;
 
   static constexpr double POINT_W = 1.0;
   static constexpr double VECTOR_W = 0.0;

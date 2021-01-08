@@ -15,11 +15,11 @@ using namespace std;
 using namespace RayTracer;
 
 int main() {
-  auto p = Tuple::make_point(1, 0, 0);
+  Point p(1, 0, 0);
   double pi_6 = M_PI / 6.0;
   constexpr int IMAGE_SIZE = 500;
   constexpr double SCALE_SIZE = IMAGE_SIZE * 3.0 / 8.0;
-  Canvas clock(IMAGE_SIZE, IMAGE_SIZE);
+  Canvas clock = Canvas::create(IMAGE_SIZE, IMAGE_SIZE);
   const Color white(1, 1, 1);
   for (int i = 0; i < 12; i++) {
     Transform::TransformationBuilder tb;

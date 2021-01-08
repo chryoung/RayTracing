@@ -5,17 +5,24 @@
 
 namespace RayTracer {
 class Ray {
+ public:
   Ray(double origin_x, double origin_y, double origin_z, double direction_x, double direction_y, double direction_z)
-      : _origin(Tuple::make_point(origin_x, origin_y, origin_z)),
-        _direction(Tuple::make_vector(direction_x, direction_y, direction_z)) {}
-  Ray(const Tuple& origin, const Tuple& direction) : _origin(origin), _direction(direction) {}
+      : _origin(Point(origin_x, origin_y, origin_z)),
+        _direction(Vector(direction_x, direction_y, direction_z)) {}
+  Ray(const Point& origin, const Vector& direction) : _origin(origin), _direction(direction) {}
 
-  Tuple position(double time) { return _origin + _direction * time; }
-  Tuple position(double time) const { return _origin + _direction * time; }
+  const Point& origin() { return _origin; }
+  const Point& origin() const { return _origin; }
+
+  const Vector& direction() { return _direction; }
+  const Vector& direction() const { return _direction; }
+
+  Point position(double time) { return _origin + _direction * time; }
+  Point position(double time) const { return _origin + _direction * time; }
 
  private:
-  Tuple _origin;
-  Tuple _direction;
+  Point _origin;
+  Vector _direction;
 };
 }  // namespace RayTracer
 
