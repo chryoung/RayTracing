@@ -19,7 +19,7 @@ inline bool is_double_ne(double a, double b) {
 }
 
 inline bool is_double_lt(double a, double b) {
-  if (a - b < DOUBLE_EPSILON) {
+  if (a < b) {
     return true;
   }
 
@@ -27,7 +27,7 @@ inline bool is_double_lt(double a, double b) {
 }
 
 inline bool is_double_gt(double a, double b) {
-  if (a - b > -DOUBLE_EPSILON) {
+  if (a > b) {
     return true;
   }
 
@@ -35,7 +35,7 @@ inline bool is_double_gt(double a, double b) {
 }
 
 inline bool is_double_le(double a, double b) {
-  if (a - b <= DOUBLE_EPSILON) {
+  if (is_double_eq(a, b) || is_double_lt(a, b)) {
     return true;
   }
 
@@ -43,7 +43,7 @@ inline bool is_double_le(double a, double b) {
 }
 
 inline bool is_double_ge(double a, double b) {
-  if (a - b >= -DOUBLE_EPSILON) {
+  if (is_double_eq(a, b) || is_double_gt(a, b)) {
     return true;
   }
 

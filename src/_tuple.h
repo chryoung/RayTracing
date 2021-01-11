@@ -96,7 +96,13 @@ class Tuple {
 
   double dot(const Tuple& other) { return _x * other._x + _y * other._y + _z * other._z + _w * other._w; }
 
+  double dot(const Tuple& other) const { return _x * other._x + _y * other._y + _z * other._z + _w * other._w; }
+
   Tuple cross(const Tuple& other) {
+    return make_vector(_y * other._z - _z * other._y, _z * other._x - _x * other._z, _x * other._y - _y * other._x);
+  }
+
+  Tuple cross(const Tuple& other) const {
     return make_vector(_y * other._z - _z * other._y, _z * other._x - _x * other._z, _x * other._y - _y * other._x);
   }
 

@@ -2,6 +2,9 @@
 
 #include <gtest/gtest.h>
 
+#include "shape/shapebuilder.h"
+#include "shape/sphere.h"
+
 using namespace RayTracer;
 
 TEST(Ray, WhenCreateARayExpectARay) {
@@ -18,4 +21,47 @@ TEST(Ray, WhenGetRayPositionExpectPosition) {
   EXPECT_EQ(Point(3, 3, 4), r.position(1));
   EXPECT_EQ(Point(1, 3, 4), r.position(-1));
   EXPECT_EQ(Point(4.5, 3, 4), r.position(2.5));
+}
+
+TEST(Ray, WhenIntersectWithSphereOn2PointsExpect2IntersectPoints) {
+  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+  Shape::Sphere s = Shape::ShapeBuilder::build<Shape::Sphere>();
+  auto xs = r.intersect(s);
+  ASSERT_EQ(2, xs.size());
+  EXPECT_DOUBLE_EQ(4.0, xs[0]);
+  EXPECT_DOUBLE_EQ(6.0, xs[1]);
+}
+
+TEST(Ray, WhenIntersectWithSphereOn1PointExpect1IntersectPoint) {
+  Ray r(Point(0, 1, -5), Vector(0, 0, 1));
+  Shape::Sphere s = Shape::ShapeBuilder::build<Shape::Sphere>();
+  auto xs = r.intersect(s);
+  ASSERT_EQ(2, xs.size());
+  EXPECT_DOUBLE_EQ(5.0, xs[0]);
+  EXPECT_DOUBLE_EQ(5.0, xs[1]);
+}
+
+TEST(Ray, WhenNoIntersectWithSphereExpectNoIntersectPoints) {
+  Ray r(Point(0, 2, -5), Vector(0, 0, 1));
+  Shape::Sphere s = Shape::ShapeBuilder::build<Shape::Sphere>();
+  auto xs = r.intersect(s);
+  ASSERT_EQ(0, xs.size());
+}
+
+TEST(Ray, WhenRayOriginIsInSphereExpect2IntersectPoints) {
+  Ray r(Point(0, 0, 0), Vector(0, 0, 1));
+  Shape::Sphere s = Shape::ShapeBuilder::build<Shape::Sphere>();
+  auto xs = r.intersect(s);
+  ASSERT_EQ(2, xs.size());
+  EXPECT_DOUBLE_EQ(-1.0, xs[0]);
+  EXPECT_DOUBLE_EQ(1, xs[1]);
+}
+
+TEST(Ray, WhenSphereIsBehindRayOriginExpect2IntersectPoints) {
+  Ray r(Point(0, 0, 5), Vector(0, 0, 1));
+  Shape::Sphere s = Shape::ShapeBuilder::build<Shape::Sphere>();
+  auto xs = r.intersect(s);
+  ASSERT_EQ(2, xs.size());
+  EXPECT_DOUBLE_EQ(-6.0, xs[0]);
+  EXPECT_DOUBLE_EQ(-4.0, xs[1]);
 }

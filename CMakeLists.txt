@@ -23,7 +23,8 @@ add_executable(rt_tests
   src/transform_test.cpp
   src/vector_test.cpp
   src/point_test.cpp
-  src/ray_test.cpp)
+  src/ray_test.cpp
+  src/shape/shapebuilder.cpp)
 target_link_libraries(rt_tests GTest::GTest GTest::Main)
 target_include_directories(rt_tests PUBLIC ${GTEST_INCLUDE_DIRS})
 
