@@ -7,14 +7,20 @@ namespace RayTracer {
 namespace Shape {
 class BasicShape {
  public:
-  BasicShape(std::uint64_t id) : _id(id) {}
   virtual ~BasicShape() = default;
   std::uint64_t id() { return _id; }
   std::uint64_t id() const { return _id; }
 
+ protected:
+  BasicShape(std::uint64_t id) : _id(id) {}
+
  private:
   std::uint64_t _id;
 };
+
+inline bool operator==(const BasicShape& a, const BasicShape b) {
+  return a.id() == b.id();
+}
 }  // namespace Shape
 
 }  // namespace RayTracer

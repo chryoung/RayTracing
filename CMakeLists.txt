@@ -1,31 +1,13 @@
-project(RayTracing)
 cmake_minimum_required(VERSION 3.10)
+project(RayTracing VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(projenv_demo
-  src/canvas.cpp
-  src/projenv_demo.cpp)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-add_executable(transformation_demo
-  src/canvas.cpp
-  src/transformation_demo.cpp)
+include_directories(third_party/googletest/googletest/include)
 
-enable_testing()
-find_package(GTest REQUIRED)
-
-add_executable(rt_tests
-  src/tuple_test.cpp
-  src/utility_test.cpp
-  src/color_test.cpp
-  src/canvas.cpp
-  src/canvas_test.cpp
-  src/matrix_test.cpp
-  src/transform_test.cpp
-  src/vector_test.cpp
-  src/point_test.cpp
-  src/ray_test.cpp
-  src/shape/shapebuilder.cpp)
-target_link_libraries(rt_tests GTest::GTest GTest::Main)
-target_include_directories(rt_tests PUBLIC ${GTEST_INCLUDE_DIRS})
-
-add_test(RayTracingTests rt_tests)
+if(MSVC)
+    SET(gtest_force_shared_crt ON CACHE BOOL "Use shared (DLL) run-time lib even when Google Test is built as static lib.")
+endif(MSVC)
+add_subdirectory(third_party/googletest)
+add_subdirectory(src)

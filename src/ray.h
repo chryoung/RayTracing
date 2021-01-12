@@ -3,10 +3,13 @@
 
 #include <vector>
 #include <cmath>
+#include <memory>
 
 #include "shape/sphere.h"
 #include "tuple.h"
 #include "utility.h"
+#include "intersection.h"
+#include "intersection_collection.h"
 
 namespace RayTracer {
 class Ray {
@@ -24,10 +27,10 @@ class Ray {
   Point position(double time) { return _origin + _direction * time; }
   Point position(double time) const { return _origin + _direction * time; }
 
-  std::vector<double> intersect(const Shape::Sphere& s) {
-    std::vector<double> roots;
+  IntersectionCollection intersect(std::shared_ptr<Shape::Sphere> s) {
+    IntersectionCollection intersections;
 
-    auto sphere_to_ray = origin() - s.origin();
+    auto sphere_to_ray = origin() - s->origin();
     auto a = direction().dot(direction());
     auto b = 2 * direction().dot(sphere_to_ray);
     auto c = sphere_to_ray.dot(sphere_to_ray) - 1;
@@ -38,14 +41,14 @@ class Ray {
       double double_a = 2 * a;
       double t1 = (-b - sqrt_discriminant) / double_a;
       double t2 = (-b + sqrt_discriminant) / double_a;
-      roots.emplace_back(t1);
-      roots.emplace_back(t2);
+      intersections.emplace_back(Intersection(t1, s));
+      intersections.emplace_back(Intersection(t2, s));
     }
 
-    return roots;
+    return intersections;
   }
 
-  std::vector<double> intersect(const Shape::Sphere& s) const {
+  IntersectionCollection intersect(std::shared_ptr<Shape::Sphere> s) const {
     return const_cast<Ray&>(*this).intersect(s);
   }
 

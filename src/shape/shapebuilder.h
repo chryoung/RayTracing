@@ -2,6 +2,7 @@
 #define DF44B5A4_72C3_40F9_9A2B_196B97646C89
 
 #include <cstdint>
+#include <memory>
 
 #include "basicshape.h"
 
@@ -10,9 +11,9 @@ namespace Shape {
 class ShapeBuilder final {
  public:
   template <class S>
-  static S build() {
+  static std::shared_ptr<S> build() {
     static_assert(std::is_base_of<BasicShape, S>::value, "Shape must be derived from BasicShape.");
-    S s(_total_id);
+    std::shared_ptr<S> s(new S(_total_id));
     _total_id++;
     return s;
   }
