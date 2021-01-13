@@ -8,8 +8,7 @@
 namespace RayTracer {
 class Color {
  public:
-  Color(double red, double green, double blue)
-      : _red(red), _green(green), _blue(blue) {}
+  Color(double red, double green, double blue) : _red(red), _green(green), _blue(blue) {}
   Color() : Color(0, 0, 0) {}
 
   double red() const { return _red; }
@@ -48,22 +47,16 @@ inline Color operator-(const Color& a, const Color& b) {
   return Color(a.red() - b.red(), a.green() - b.green(), a.blue() - b.blue());
 }
 
-inline Color operator*(const Color& a, double s) {
-  return Color(a.red() * s, a.green() * s, a.blue() * s);
-}
+inline Color operator*(const Color& a, double s) { return Color(a.red() * s, a.green() * s, a.blue() * s); }
 
-inline Color operator*(double s, const Color& a) {
-  return Color(a.red() * s, a.green() * s, a.blue() * s);
-}
+inline Color operator*(double s, const Color& a) { return Color(a.red() * s, a.green() * s, a.blue() * s); }
 
 inline Color operator*(const Color& a, const Color& b) {
   return Color(a.red() * b.red(), a.green() * b.green(), a.blue() * b.blue());
 }
 
 inline bool operator==(const Color& a, const Color& b) {
-  return is_double_eq(a.red(), b.red()) &&
-         is_double_eq(a.green(), b.green()) &&
-         is_double_eq(a.blue(), b.blue());
+  return is_double_eq(a.red(), b.red()) && is_double_eq(a.green(), b.green()) && is_double_eq(a.blue(), b.blue());
 }
 
 inline bool operator!=(const Color& a, const Color& b) { return !(a == b); }

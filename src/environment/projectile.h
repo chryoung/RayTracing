@@ -6,11 +6,9 @@
 namespace RayTracer {
 class Projectile {
  public:
-  Projectile(const Point& position, const Vector& velocity)
-      : _position(position), _velocity(velocity) {}
+  Projectile(const Point& position, const Vector& velocity) : _position(position), _velocity(velocity) {}
 
-  Projectile(Point&& position, Vector&& velocity)
-    : _position(position), _velocity(velocity) {}
+  Projectile(Point&& position, Vector&& velocity) : _position(position), _velocity(velocity) {}
 
   const Point& postion() const { return _position; }
   const Point& postion() { return _position; }

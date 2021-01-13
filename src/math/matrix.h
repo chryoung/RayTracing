@@ -1,9 +1,9 @@
 #ifndef CA47C3DE_E656_407E_870D_96E6611689C6
 #define CA47C3DE_E656_407E_870D_96E6611689C6
 
-#include <exception>
 #include <initializer_list>
 #include <ostream>
+#include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <utility>

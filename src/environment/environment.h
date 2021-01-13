@@ -3,11 +3,10 @@
 
 #include "math/tuple.h"
 
-namespace RayTracer
-{
+namespace RayTracer {
 class Environment {
-public:
-  Environment(const Vector& gravity, const Vector& wind): _gravity(gravity), _wind(wind) {}
+ public:
+  Environment(const Vector& gravity, const Vector& wind) : _gravity(gravity), _wind(wind) {}
 
   const Vector& gravity() const { return _gravity; }
   const Vector& gravity() { return _gravity; }
@@ -26,11 +25,11 @@ public:
 
     return *this;
   }
-private:
+
+ private:
   Vector _gravity;
   Vector _wind;
 };
-} // namespace RayTracer
-
+}  // namespace RayTracer
 
 #endif /* DB1E0476_45C3_4BB2_B83F_F11AF180E1E7 */

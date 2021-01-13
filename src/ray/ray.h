@@ -1,15 +1,15 @@
 #ifndef AFDAB679_02C5_4C88_A3D6_F6FE8B9859D5
 #define AFDAB679_02C5_4C88_A3D6_F6FE8B9859D5
 
-#include <vector>
 #include <cmath>
 #include <memory>
+#include <vector>
 
-#include "shape/sphere.h"
-#include "math/tuple.h"
-#include "utility/utility.h"
 #include "intersection.h"
 #include "intersection_collection.h"
+#include "math/tuple.h"
+#include "shape/sphere.h"
+#include "utility/utility.h"
 
 namespace RayTracer {
 class Ray {
@@ -41,8 +41,8 @@ class Ray {
       double double_a = 2 * a;
       double t1 = (-b - sqrt_discriminant) / double_a;
       double t2 = (-b + sqrt_discriminant) / double_a;
-      intersections.emplace_back(Intersection(t1, s));
-      intersections.emplace_back(Intersection(t2, s));
+      intersections.insert(Intersection(t1, s));
+      intersections.insert(Intersection(t2, s));
     }
 
     return intersections;

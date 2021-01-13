@@ -14,17 +14,11 @@ inline bool is_double_eq(double a, double b) {
   return false;
 }
 
-inline bool is_double_ne(double a, double b) {
-  return !is_double_eq(a, b);
-}
+inline bool is_double_ne(double a, double b) { return !is_double_eq(a, b); }
 
-inline bool is_double_lt(double a, double b) {
-  return a < b;
-}
+inline bool is_double_lt(double a, double b) { return a < b; }
 
-inline bool is_double_gt(double a, double b) {
-  return a > b;
-}
+inline bool is_double_gt(double a, double b) { return a > b; }
 
 inline bool is_double_le(double a, double b) {
   if (is_double_eq(a, b) || a < b) {

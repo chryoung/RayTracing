@@ -18,9 +18,7 @@ class BasicShape {
   std::uint64_t _id;
 };
 
-inline bool operator==(const BasicShape& a, const BasicShape b) {
-  return a.id() == b.id();
-}
+inline bool operator==(const BasicShape& a, const BasicShape b) { return a.id() == b.id(); }
 }  // namespace Shape
 
 }  // namespace RayTracer

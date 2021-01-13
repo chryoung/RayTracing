@@ -1,8 +1,8 @@
 #include "canvas.h"
 
 #include <cstdio>
-#include <exception>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 #include "utility/log_helper.h"

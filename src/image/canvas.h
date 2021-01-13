@@ -2,8 +2,8 @@
 #define C66010A5_4D2D_48DF_B8BF_7CE9A0F66900
 
 #include <ostream>
-#include <vector>
 #include <string>
+#include <vector>
 
 #include "color.h"
 
@@ -37,7 +37,7 @@ class Canvas {
    * @returns True if saved. Otherwise false.
    */
   bool to_ppm(std::ostream& out) const;
-  
+
   /**
    * @brief Breaks the string into lines which won't exceed PPM_LINE_LIMIT.
    * @param line The string which will be broken.

@@ -2,10 +2,10 @@
 #include <iostream>
 #include <string>
 
-#include "image/canvas.h"
-#include "image/color.h"
 #include "environment/environment.h"
 #include "environment/projectile.h"
+#include "image/canvas.h"
+#include "image/color.h"
 #include "math/tuple.h"
 #include "utility/utility.h"
 

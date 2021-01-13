@@ -3,8 +3,8 @@
 
 #include <cmath>
 
-#include "math/tuple.h"
 #include "math/matrix.h"
+#include "math/tuple.h"
 
 namespace RayTracer {
 namespace Transform {
