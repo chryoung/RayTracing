@@ -20,8 +20,8 @@ Projectile tick(const Environment& env, const Projectile& proj) {
 }
 
 void draw(Canvas& c, const Projectile& proj) {
-  int y = c.height() - proj.postion().y() + 0.5;
-  int x = proj.postion().x() + 0.5;
+  int y = static_cast<int>(c.height() - proj.postion().y() + 0.5);
+  int x = static_cast<int>(proj.postion().x() + 0.5);
   if (y >= 0 && y < c.height() && x >= 0 && x < c.width()) {
     const Color red(0.9, 0, 0);
     c.write_pixel(x, y, red);

@@ -48,13 +48,13 @@ const Color& Canvas::pixel_at(int x, int y) const {
   return _canvas[x][y];
 }
 
-int Canvas::width() { return _canvas.size(); }
+size_t Canvas::width() { return _canvas.size(); }
 
-int Canvas::width() const { return _canvas.size(); }
+size_t Canvas::width() const { return _canvas.size(); }
 
-int Canvas::height() { return _canvas[0].size(); }
+size_t Canvas::height() { return _canvas[0].size(); }
 
-int Canvas::height() const { return _canvas[0].size(); }
+size_t Canvas::height() const { return _canvas[0].size(); }
 
 bool Canvas::to_ppm(std::ostream& out) const { return const_cast<Canvas&>(*this).to_ppm(out); }
 
@@ -80,7 +80,6 @@ std::vector<std::string> Canvas::break_line(std::string line) {
     }
     start = end + 1;
   }
-  int count = line.size() - start - 1;
   lines.emplace_back(line.substr(start, line.size() - start - 1) + "\n");
 
   return lines;
@@ -117,7 +116,7 @@ bool Canvas::to_ppm(std::ostream& out) {
 }
 
 int Canvas::scale_color(double color_component) {
-  int scaled = (color_component * COLOR_LIMIT) + 0.5;  // Upper cap
+  int scaled = static_cast<int>((color_component * COLOR_LIMIT) + 0.5);  // Upper cap
   if (scaled < 0) {
     return 0;
   } else if (scaled > COLOR_LIMIT) {

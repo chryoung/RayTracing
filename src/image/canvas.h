@@ -19,10 +19,10 @@ class Canvas {
   Canvas& write_pixel(int x, int y, const Color& color);
   Color& pixel_at(int x, int y);
   const Color& pixel_at(int x, int y) const;
-  int width();
-  int width() const;
-  int height();
-  int height() const;
+  size_t width();
+  size_t width() const;
+  size_t height();
+  size_t height() const;
 
   /**
    * @brief Saves the Canvas to PPM file.

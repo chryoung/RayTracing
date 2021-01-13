@@ -48,7 +48,7 @@ TEST(Canvas, WhenWriteACanvasToPPMExpectContentIsCorrect) {
   c.to_ppm(ppm_stream);
   string ppm = ppm_stream.str();
   int line_count = 0;
-  int from = 0;
+  size_t from = 0;
   size_t to = 0;
 
   // Skip the header.
@@ -101,7 +101,7 @@ TEST(Canvas, WhenALineIsLongerThan70InPpmExpectNewLineInPpm) {
   c.to_ppm(ppm_stream);
   string ppm = ppm_stream.str();
   int line_count = 0;
-  int from = 0;
+  size_t from = 0;
   size_t to = 0;
 
   // Skip the header.
