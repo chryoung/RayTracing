@@ -1,9 +1,9 @@
-#include "intersection.h"
-#include "intersection_collection.h"
+#include "ray/intersection.h"
+#include "ray/intersection_collection.h"
 #include "shape/sphere.h"
 #include "shape/shapebuilder.h"
-#include "ray.h"
-#include "tuple.h"
+#include "ray/ray.h"
+#include "math/tuple.h"
 
 #include <gtest/gtest.h>
 

@@ -1,4 +1,4 @@
-#include "color.h"
+#include "image/color.h"
 
 #include <gtest/gtest.h>
 

@@ -4,7 +4,7 @@
 #include "_point.h"
 #include "_tuple.h"
 #include "_vector.h"
-#include "utility.h"
+#include "utility/utility.h"
 
 namespace RayTracer {
 

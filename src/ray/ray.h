@@ -6,8 +6,8 @@
 #include <memory>
 
 #include "shape/sphere.h"
-#include "tuple.h"
-#include "utility.h"
+#include "math/tuple.h"
+#include "utility/utility.h"
 #include "intersection.h"
 #include "intersection_collection.h"
 

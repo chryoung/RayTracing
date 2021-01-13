@@ -1,10 +1,10 @@
-#include "matrix.h"
+#include "math/matrix.h"
 
 #include <gtest/gtest.h>
 
 #include <memory>
 
-#include "tuple.h"
+#include "math/tuple.h"
 
 using namespace RayTracer;
 
@@ -12,15 +12,6 @@ TEST(Matrix, WhenCreateAMatrixExpectAMatrix) {
   auto m = Matrix::create(2, 3);
   EXPECT_EQ(2, m.rows());
   EXPECT_EQ(3, m.cols());
-}
-
-TEST(Matrix, WhenCreateMatrixWithNegativeRowColExpectThrowException) {
-  EXPECT_THROW(Matrix::create(-1, 1), std::invalid_argument)
-      << "Creating a Matrix with negative row should throw exception.";
-  EXPECT_THROW(Matrix::create(1, -1), std::invalid_argument)
-      << "Creating a Matrix with negative col should throw exception.";
-  EXPECT_THROW(Matrix::create(-1, -1), std::invalid_argument)
-      << "Creating a Matrix with negative row and negative col should throw exception.";
 }
 
 TEST(Matrix, WhenCreateMatrixWithZeroRowColExpectThrowException) {

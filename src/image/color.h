@@ -3,7 +3,7 @@
 
 #include <ostream>
 
-#include "utility.h"
+#include "utility/utility.h"
 
 namespace RayTracer {
 class Color {

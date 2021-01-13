@@ -1,4 +1,4 @@
-#include "transform.h"
+#include "geometry/transform.h"
 
 #include <gtest/gtest.h>
 
@@ -7,7 +7,7 @@
 #endif
 #include <math.h>
 
-#include "tuple.h"
+#include "math/tuple.h"
 
 using namespace RayTracer;
 

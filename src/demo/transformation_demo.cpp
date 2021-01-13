@@ -6,10 +6,10 @@
 #include <fstream>
 #include <iostream>
 
-#include "canvas.h"
-#include "color.h"
-#include "transform.h"
-#include "tuple.h"
+#include "image/canvas.h"
+#include "image/color.h"
+#include "geometry/transform.h"
+#include "math/tuple.h"
 
 using namespace std;
 using namespace RayTracer;
@@ -27,8 +27,8 @@ int main() {
       .scale(SCALE_SIZE, 0, SCALE_SIZE)
       .translate(IMAGE_SIZE / 2, 0, IMAGE_SIZE / 2);
     auto draw_point = tb.build() * p;
-    int x = draw_point.x() + 0.5;
-    int y = draw_point.z() + 0.5;
+    int x = static_cast<int>(draw_point.x() + 0.5);
+    int y = static_cast<int>(draw_point.z() + 0.5);
     cout << "Write at (" << x << ", " << y << ")" << endl;
     clock.write_pixel(x, y, white);
   }

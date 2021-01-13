@@ -1,4 +1,4 @@
-#include "canvas.h"
+#include "image/canvas.h"
 
 #include <gtest/gtest.h>
 
@@ -49,7 +49,7 @@ TEST(Canvas, WhenWriteACanvasToPPMExpectContentIsCorrect) {
   string ppm = ppm_stream.str();
   int line_count = 0;
   int from = 0;
-  int to = 0;
+  size_t to = 0;
 
   // Skip the header.
   constexpr int NUMBER_HEADER_LINES = 3;
@@ -102,7 +102,7 @@ TEST(Canvas, WhenALineIsLongerThan70InPpmExpectNewLineInPpm) {
   string ppm = ppm_stream.str();
   int line_count = 0;
   int from = 0;
-  int to = 0;
+  size_t to = 0;
 
   // Skip the header.
   constexpr int NUMBER_HEADER_LINES = 3;

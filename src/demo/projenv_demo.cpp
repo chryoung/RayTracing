@@ -2,12 +2,12 @@
 #include <iostream>
 #include <string>
 
-#include "canvas.h"
-#include "color.h"
-#include "environment.h"
-#include "projectile.h"
-#include "tuple.h"
-#include "utility.h"
+#include "image/canvas.h"
+#include "image/color.h"
+#include "environment/environment.h"
+#include "environment/projectile.h"
+#include "math/tuple.h"
+#include "utility/utility.h"
 
 using namespace std;
 using namespace RayTracer;

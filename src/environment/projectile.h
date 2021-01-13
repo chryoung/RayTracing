@@ -1,7 +1,7 @@
 #ifndef C17184CD_A5B1_436B_956B_328159AC7BC3
 #define C17184CD_A5B1_436B_956B_328159AC7BC3
 
-#include "tuple.h"
+#include "math/tuple.h"
 
 namespace RayTracer {
 class Projectile {

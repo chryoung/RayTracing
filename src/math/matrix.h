@@ -9,19 +9,17 @@
 #include <utility>
 #include <vector>
 
-#include "log_helper.h"
 #include "tuple.h"
-#include "utility.h"
+#include "utility/log_helper.h"
+#include "utility/utility.h"
 
 namespace RayTracer {
 class Matrix {
  public:
-  static Matrix create(int num_row, int num_col) {
-    if (num_row <= 0 || num_col <= 0) {
-      throw std::invalid_argument(CURRENT_LINE + " create: invalid num_row = " + std::to_string(num_row) +
-                                  " or num_col = " + std::to_string(num_col));
+  static Matrix create(size_t num_row, size_t num_col) {
+    if (num_row == 0 || num_col == 0) {
+      throw std::invalid_argument(CURRENT_LINE + " create: num_row or num_col should be greater than 0.");
     }
-
     return Matrix(num_row, num_col);
   }
 
@@ -34,12 +32,12 @@ class Matrix {
                                   " create: empty std::initializer_list cannot be used to create a Matrix.");
     }
 
-    int num_col = 0;
+    size_t num_col = 0;
     for (auto iter = numbers.begin()->begin(); iter != numbers.begin()->end(); iter++, num_col++)
       ;
 
     std::vector<std::vector<double>> matrix_data;
-    int row = 0;
+    size_t row = 0;
     for (auto iter = numbers.begin(); iter != numbers.end(); iter++, row++) {
       std::vector<double> matrix_row;
       for (auto row_iter = iter->begin(); row_iter != iter->end(); row_iter++) {
@@ -71,13 +69,13 @@ class Matrix {
 
   ~Matrix() = default;
 
-  static Matrix id(int num_rows) {
+  static Matrix id(size_t num_rows) {
     if (num_rows <= 0) {
       throw std::invalid_argument(CURRENT_LINE + " id: num_rows should > 0.");
     }
 
     Matrix m(num_rows, num_rows);
-    for (int row = 0; row < num_rows; row++) {
+    for (size_t row = 0; row < num_rows; row++) {
       m[row][row] = 1;
     }
 
@@ -87,16 +85,16 @@ class Matrix {
   std::vector<double>& operator[](size_t row) { return _data[row]; }
   const std::vector<double>& operator[](size_t row) const { return _data[row]; }
 
-  double at(int row, int col) {
-    if (row < 0 || row >= rows() || col < 0 || col >= cols()) {
+  double at(size_t row, size_t col) {
+    if (row >= rows() || col >= cols()) {
       throw std::out_of_range(CURRENT_LINE + " at: index is out of range.");
     }
 
     return _data[row][col];
   }
 
-  double at(int row, int col) const {
-    if (row < 0 || row >= rows() || col < 0 || col >= cols()) {
+  double at(size_t row, size_t col) const {
+    if (row >= rows() || col >= cols()) {
       throw std::out_of_range(CURRENT_LINE + " at: index is out of range.");
     }
 
@@ -112,9 +110,9 @@ class Matrix {
     }
 
     Matrix product(rows(), b.cols());
-    for (int row = 0; row < rows(); ++row) {
-      for (int col = 0; col < b.cols(); ++col) {
-        for (int i = 0; i < cols(); ++i) {
+    for (size_t row = 0; row < rows(); ++row) {
+      for (size_t col = 0; col < b.cols(); ++col) {
+        for (size_t i = 0; i < cols(); ++i) {
           product[row][col] += (*this)[row][i] * b[i][col];
         }
       }
@@ -156,8 +154,8 @@ class Matrix {
   Matrix transpose() {
     Matrix t(cols(), rows());
 
-    for (int row = 0; row < rows(); row++) {
-      for (int col = 0; col < cols(); col++) {
+    for (size_t row = 0; row < rows(); row++) {
+      for (size_t col = 0; col < cols(); col++) {
         t[col][row] = (*this)[row][col];
       }
     }
@@ -181,7 +179,7 @@ class Matrix {
       return (*this)[0][0] * (*this)[1][1] - (*this)[0][1] * (*this)[1][0];
     } else {
       double det = 0;
-      for (int col = 0; col < cols(); col++) {
+      for (size_t col = 0; col < cols(); col++) {
         det += (*this)[0][col] * cofactor(0, col);
       }
       return det;
@@ -193,32 +191,32 @@ class Matrix {
   bool is_invertible() { return is_double_ne(determinant(), 0); }
   bool is_invertible() const { return is_double_ne(determinant(), 0); }
 
-  Matrix submatrix(int row, int col) {
+  Matrix submatrix(size_t row, size_t col) {
     if (row < 0 || col < 0 || row >= rows() || col >= cols()) {
       throw std::invalid_argument(CURRENT_LINE + " submatrix: invalid row or col");
     }
 
     Matrix s(rows() - 1, cols() - 1);
-    for (int r = 0; r < row; r++) {
-      for (int c = 0; c < col; c++) {
+    for (size_t r = 0; r < row; r++) {
+      for (size_t c = 0; c < col; c++) {
         s[r][c] = (*this)[r][c];
       }
     }
 
-    for (int r = row + 1; r < rows(); r++) {
-      for (int c = 0; c < col; c++) {
+    for (size_t r = row + 1; r < rows(); r++) {
+      for (size_t c = 0; c < col; c++) {
         s[r - 1][c] = (*this)[r][c];
       }
     }
 
-    for (int r = 0; r < row; r++) {
-      for (int c = col + 1; c < cols(); c++) {
+    for (size_t r = 0; r < row; r++) {
+      for (size_t c = col + 1; c < cols(); c++) {
         s[r][c - 1] = (*this)[r][c];
       }
     }
 
-    for (int r = row + 1; r < rows(); r++) {
-      for (int c = col + 1; c < cols(); c++) {
+    for (size_t r = row + 1; r < rows(); r++) {
+      for (size_t c = col + 1; c < cols(); c++) {
         s[r - 1][c - 1] = (*this)[r][c];
       }
     }
@@ -226,16 +224,16 @@ class Matrix {
     return s;
   }
 
-  Matrix submatrix(int row, int col) const { return const_cast<Matrix&>(*this).submatrix(row, col); }
+  Matrix submatrix(size_t row, size_t col) const { return const_cast<Matrix&>(*this).submatrix(row, col); }
 
-  double minor(int row, int col) {
+  double minor(size_t row, size_t col) {
     auto sub = submatrix(row, col);
     return sub.determinant();
   }
 
-  double minor(int row, int col) const { return const_cast<Matrix&>(*this).minor(row, col); }
+  double minor(size_t row, size_t col) const { return const_cast<Matrix&>(*this).minor(row, col); }
 
-  double cofactor(int row, int col) {
+  double cofactor(size_t row, size_t col) {
     auto minor = this->minor(row, col);
     if ((row + col) % 2 == 1) {
       return -minor;
@@ -244,14 +242,14 @@ class Matrix {
     return minor;
   }
 
-  double cofactor(int row, int col) const { return const_cast<Matrix&>(*this).cofactor(row, col); }
+  double cofactor(size_t row, size_t col) const { return const_cast<Matrix&>(*this).cofactor(row, col); }
 
   Matrix inverse() {
     Matrix companion(rows(), cols());
 
     auto det = determinant();
-    for (int row = 0; row < rows(); row++) {
-      for (int col = 0; col < cols(); col++) {
+    for (size_t row = 0; row < rows(); row++) {
+      for (size_t col = 0; col < cols(); col++) {
         companion[row][col] = cofactor(row, col) / det;
       }
     }
@@ -261,14 +259,14 @@ class Matrix {
 
   Matrix inverse() const { return const_cast<Matrix&>(*this).inverse(); }
 
-  int rows() { return _data.size(); }
-  int rows() const { return _data.size(); }
-  int cols() { return (*this)[0].size(); }
-  int cols() const { return (*this)[0].size(); }
+  size_t rows() { return _data.size(); }
+  size_t rows() const { return _data.size(); }
+  size_t cols() { return (*this)[0].size(); }
+  size_t cols() const { return (*this)[0].size(); }
 
  private:
   Matrix() {}
-  Matrix(int num_row, int num_col)
+  Matrix(size_t num_row, size_t num_col)
       : _data(std::vector<std::vector<double>>(num_row, std::vector<double>(num_col, 0.0))) {}
 
   std::vector<std::vector<double>> _data;
@@ -279,8 +277,8 @@ inline bool operator==(const Matrix& a, const Matrix& b) {
     return false;
   }
 
-  for (int row = 0; row < a.rows(); ++row) {
-    for (int col = 0; col < a.cols(); ++col) {
+  for (size_t row = 0; row < a.rows(); ++row) {
+    for (size_t col = 0; col < a.cols(); ++col) {
       if (!is_double_eq(a[row][col], b[row][col])) {
         return false;
       }
@@ -299,9 +297,9 @@ inline Matrix operator*(const Matrix& a, const Matrix b) {
   }
 
   Matrix product = Matrix::create(a.rows(), b.cols());
-  for (int row = 0; row < a.rows(); ++row) {
-    for (int col = 0; col < b.cols(); ++col) {
-      for (int i = 0; i < a.cols(); ++i) {
+  for (size_t row = 0; row < a.rows(); ++row) {
+    for (size_t col = 0; col < b.cols(); ++col) {
+      for (size_t i = 0; i < a.cols(); ++i) {
         product[row][col] += a[row][i] * b[i][col];
       }
     }
@@ -370,9 +368,9 @@ inline Vector operator*(const Matrix& a, const Vector& b) {
 
 inline std::ostream& operator<<(std::ostream& out, const Matrix& m) {
   out << "{\n";
-  for (int row = 0; row < m.rows(); row++) {
+  for (size_t row = 0; row < m.rows(); row++) {
     out << "{";
-    for (int col = 0; col < m.cols() - 1; col++) {
+    for (size_t col = 0; col < m.cols() - 1; col++) {
       out << m[row][col] << ", ";
     }
     out << m[row][m.cols() - 1] << "},\n";

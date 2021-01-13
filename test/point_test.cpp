@@ -1,4 +1,4 @@
-#include "_point.h"
+#include "math/_point.h"
 
 #include <gtest/gtest.h>
 

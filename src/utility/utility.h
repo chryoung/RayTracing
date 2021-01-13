@@ -19,19 +19,11 @@ inline bool is_double_ne(double a, double b) {
 }
 
 inline bool is_double_lt(double a, double b) {
-  if (!is_double_eq(a, b) && a < b) {
-    return true;
-  }
-
-  return false;
+  return a < b;
 }
 
 inline bool is_double_gt(double a, double b) {
-  if (!is_double_eq(a, b) && a > b) {
-    return true;
-  }
-
-  return false;
+  return a > b;
 }
 
 inline bool is_double_le(double a, double b) {

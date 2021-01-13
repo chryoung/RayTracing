@@ -1,26 +1,15 @@
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+add_library(rt_shape
+    shape/shapebuilder.cpp)
+
+add_library(rt_image
+    image/canvas.cpp)
+
 add_executable(projenv_demo
-        canvas.cpp
-        projenv_demo.cpp)
+    demo/projenv_demo.cpp)
+target_link_libraries(projenv_demo rt_image)
 
 add_executable(transformation_demo
-        canvas.cpp
-        transformation_demo.cpp)
-
-enable_testing()
-add_executable(rt_tests
-        tuple_test.cpp
-        utility_test.cpp
-        color_test.cpp
-        canvas.cpp
-        canvas_test.cpp
-        matrix_test.cpp
-        transform_test.cpp
-        vector_test.cpp
-        point_test.cpp
-        ray_test.cpp
-        shape/shapebuilder.cpp
-        intersection_test.cpp)
-
-target_link_libraries(rt_tests gtest gtest_main)
-
-add_test(RayTracingTests rt_tests)
+    demo/transformation_demo.cpp)
+target_link_libraries(transformation_demo rt_image)

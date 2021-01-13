@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-#include "log_helper.h"
+#include "utility/log_helper.h"
 
 namespace RayTracer {
 Canvas::Canvas(int width, int height) : _canvas(std::vector<std::vector<Color>>(width, std::vector<Color>(height))) {}

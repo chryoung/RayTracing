@@ -2,7 +2,7 @@
 #define CA5A6AF1_A42B_4C61_B95B_A526A561D656
 
 #include "basicshape.h"
-#include "../tuple.h"
+#include "math/tuple.h"
 
 namespace RayTracer {
 namespace Shape {

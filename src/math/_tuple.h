@@ -5,7 +5,7 @@
 #include <ostream>
 #include <utility>
 
-#include "utility.h"
+#include "utility/utility.h"
 
 namespace RayTracer {
 class Tuple {
