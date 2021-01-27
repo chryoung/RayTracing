@@ -2,6 +2,7 @@
 #define DE42175B_5A7D_4059_8113_AC1894425874
 
 #include <cstdint>
+#include <memory>
 
 namespace RayTracer {
 namespace Shape {
@@ -12,13 +13,15 @@ class BasicShape {
   std::uint64_t id() const { return _id; }
 
  protected:
-  BasicShape(std::uint64_t id) : _id(id) {}
+  explicit BasicShape(std::uint64_t id) : _id(id) {}
 
  private:
   std::uint64_t _id;
 };
 
-inline bool operator==(const BasicShape& a, const BasicShape b) { return a.id() == b.id(); }
+using BasicShapePtr = std::shared_ptr<BasicShape>;
+
+inline bool operator==(const BasicShape& a, const BasicShape& b) { return a.id() == b.id(); }
 }  // namespace Shape
 
 }  // namespace RayTracer

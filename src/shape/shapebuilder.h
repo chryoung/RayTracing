@@ -10,10 +10,10 @@ namespace RayTracer {
 namespace Shape {
 class ShapeBuilder final {
  public:
-  template <class S>
-  static std::shared_ptr<S> build() {
-    static_assert(std::is_base_of<BasicShape, S>::value, "Shape must be derived from BasicShape.");
-    std::shared_ptr<S> s(new S(_total_id));
+  template <class ShapeType>
+  static std::shared_ptr<ShapeType> build() {
+    static_assert(std::is_base_of<BasicShape, ShapeType>::value, "Shape must be derived from BasicShape.");
+    std::shared_ptr<ShapeType> s(new ShapeType(_total_id));
     _total_id++;
     return s;
   }

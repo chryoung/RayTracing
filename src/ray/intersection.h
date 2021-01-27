@@ -9,16 +9,16 @@
 namespace RayTracer {
 class Intersection {
  public:
-  Intersection(double time, std::shared_ptr<Shape::BasicShape> object) : _object(object), _time(time) {}
+  Intersection(double time, Shape::BasicShapePtr object) : _object(object), _time(time) {}
 
-  std::shared_ptr<Shape::BasicShape> object() { return _object; }
-  std::shared_ptr<Shape::BasicShape> object() const { return _object; }
+  Shape::BasicShapePtr object() { return _object; }
+  Shape::BasicShapePtr object() const { return _object; }
 
   double time() { return _time; }
   double time() const { return _time; }
 
  private:
-  std::shared_ptr<Shape::BasicShape> _object;
+  Shape::BasicShapePtr _object;
   double _time;
 };
 

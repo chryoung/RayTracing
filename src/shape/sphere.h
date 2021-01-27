@@ -14,7 +14,7 @@ class Sphere : public BasicShape {
   friend class ShapeBuilder;
 
  private:
-  Sphere(std::uint64_t id) : BasicShape(id), _origin(Point(0, 0, 0)) {}
+  explicit Sphere(std::uint64_t id) : BasicShape(id), _origin(Point(0, 0, 0)) {}
   Point _origin;
 };
 }  // namespace Shape

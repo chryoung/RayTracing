@@ -1,15 +1,19 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_library(rt_shape
-    shape/shapebuilder.cpp)
+set(RT_SRC_FILES
+        shape/shapebuilder.cpp
+        image/canvas.cpp
+        math/matrix.cpp
+        ray/ray.cpp
+        ray/intersection_collection.cpp
+        geometry/transform.cpp)
 
-add_library(rt_image
-    image/canvas.cpp)
+add_library(rt ${RT_SRC_FILES})
 
 add_executable(projenv_demo
-    demo/projenv_demo.cpp)
-target_link_libraries(projenv_demo rt_image)
+        demo/projenv_demo.cpp math/matrix.cpp)
+target_link_libraries(projenv_demo rt)
 
 add_executable(transformation_demo
-    demo/transformation_demo.cpp)
-target_link_libraries(transformation_demo rt_image)
+        demo/transformation_demo.cpp)
+target_link_libraries(transformation_demo rt)

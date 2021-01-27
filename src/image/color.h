@@ -28,6 +28,7 @@ class Color {
     _green = green;
     return *this;
   }
+
   Color& set_blue(double blue) {
     _blue = blue;
     return *this;
