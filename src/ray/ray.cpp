@@ -3,10 +3,10 @@
 namespace RayTracer {
 IntersectionCollection Ray::intersect(std::shared_ptr<Shape::Sphere> s) {
   IntersectionCollection intersections;
-
-  auto sphere_to_ray = origin() - s->origin();
-  auto a = direction().dot(direction());
-  auto b = 2 * direction().dot(sphere_to_ray);
+  auto test_ray = transform(s->transform());
+  auto sphere_to_ray = test_ray.origin() - s->origin();
+  auto a = test_ray.direction().dot(test_ray.direction());
+  auto b = 2 * test_ray.direction().dot(sphere_to_ray);
   auto c = sphere_to_ray.dot(sphere_to_ray) - 1;
 
   double discriminant = b * b - 4 * a * c;
@@ -20,5 +20,9 @@ IntersectionCollection Ray::intersect(std::shared_ptr<Shape::Sphere> s) {
   }
 
   return intersections;
+}
+
+Ray Ray::transform(const Matrix& t) const {
+  return Ray(t * origin(), t * direction());
 }
 }  // namespace RayTracer

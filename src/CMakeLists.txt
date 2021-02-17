@@ -1,12 +1,12 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(RT_SRC_FILES
-        shape/shapebuilder.cpp
-        image/canvas.cpp
-        math/matrix.cpp
-        ray/ray.cpp
-        ray/intersection_collection.cpp
-        geometry/transform.cpp)
+    shape/shapebuilder.cpp
+    image/canvas.cpp
+    math/matrix.cpp
+    ray/ray.cpp
+    ray/intersection_collection.cpp
+    geometry/transform.cpp)
 
 add_library(rt ${RT_SRC_FILES})
 

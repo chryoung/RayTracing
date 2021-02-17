@@ -8,7 +8,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 if(MSVC)
     SET(gtest_force_shared_crt ON CACHE BOOL "Use shared (DLL) run-time lib even when Google Test is built as static lib.")
-endif(MSVC)
+endif()
+
 add_subdirectory(third_party/googletest)
 add_subdirectory(src)
 add_subdirectory(test)

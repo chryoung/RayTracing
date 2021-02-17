@@ -9,6 +9,8 @@
 namespace RayTracer {
 namespace Transform {
 
+constexpr int TRANSFORMATION_MATRIX_ROWS = 4;
+
 Matrix translating(double x, double y, double z);
 Matrix scaling(double x, double y, double z);
 Matrix rotation_x(double radians);

@@ -8,6 +8,7 @@
 #include "intersection.h"
 #include "intersection_collection.h"
 #include "math/tuple.h"
+#include "math/matrix.h"
 #include "shape/sphere.h"
 #include "utility/utility.h"
 
@@ -32,6 +33,8 @@ class Ray {
   IntersectionCollection intersect(std::shared_ptr<Shape::Sphere> s) const {
     return const_cast<Ray&>(*this).intersect(s);
   }
+
+  Ray transform(const Matrix& t) const;
 
  private:
   Point _origin;
