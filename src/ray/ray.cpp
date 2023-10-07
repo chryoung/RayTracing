@@ -3,7 +3,7 @@
 namespace RayTracer {
 IntersectionCollection Ray::intersect(std::shared_ptr<Shape::Sphere> s) {
   IntersectionCollection intersections;
-  auto test_ray = transform(s->transform());
+  auto test_ray = transform(s->transform().inverse());
   auto sphere_to_ray = test_ray.origin() - s->origin();
   auto a = test_ray.direction().dot(test_ray.direction());
   auto b = 2 * test_ray.direction().dot(sphere_to_ray);

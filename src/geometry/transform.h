@@ -11,19 +11,20 @@ namespace Transform {
 
 constexpr int TRANSFORMATION_MATRIX_ROWS = 4;
 
-Matrix translating(double x, double y, double z);
+Matrix translation(double x, double y, double z);
 Matrix scaling(double x, double y, double z);
 Matrix rotation_x(double radians);
 Matrix rotation_y(double radians);
 Matrix rotation_z(double radians);
 Matrix shearing(double x_y, double x_z, double y_x, double y_z, double z_x, double z_y);
+extern const Matrix id;
 
 class TransformationBuilder {
  public:
-  TransformationBuilder() : _transformation_matrix(Matrix::id(Tuple::TUPLE_DIMENSIONS)) {}
+  TransformationBuilder() : _transformation_matrix{id} {}
   ~TransformationBuilder() {}
   TransformationBuilder& translate(double x, double y, double z) {
-    _transformation_matrix = translating(x, y, z) * _transformation_matrix;
+    _transformation_matrix = translation(x, y, z) * _transformation_matrix;
 
     return *this;
   }
@@ -59,8 +60,6 @@ class TransformationBuilder {
   }
 
   Matrix build() { return _transformation_matrix; }
-
-  Matrix build() const { return _transformation_matrix; }
 
  private:
   Matrix _transformation_matrix;

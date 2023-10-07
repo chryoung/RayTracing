@@ -9,27 +9,27 @@
 namespace RayTracer {
 class Intersection {
  public:
-  Intersection(double time, Shape::BasicShapePtr object) : _object(object), _time(time) {}
+  Intersection(double t, Shape::BasicShapePtr object) : _object(object), _t(t) {}
 
   Shape::BasicShapePtr object() { return _object; }
   Shape::BasicShapePtr object() const { return _object; }
 
-  double time() { return _time; }
-  double time() const { return _time; }
+  double t() { return _t; }
+  double t() const { return _t; }
 
  private:
   Shape::BasicShapePtr _object;
-  double _time;
+  double _t;
 };
 
 inline bool operator==(const Intersection& a, const Intersection& b) {
-  return a.time() == b.time() && a.object() == b.object();
+  return a.t() == b.t() && a.object() == b.object();
 }
 
 inline bool operator!=(const Intersection& a, const Intersection& b) { return !(a == b); }
 
 inline std::ostream& operator<<(std::ostream& out, const Intersection& a) {
-  out << "t = " << a.time() << ", object ID == " << a.object()->id();
+  out << "t = " << a.t() << ", object ID == " << a.object()->id();
   return out;
 }
 

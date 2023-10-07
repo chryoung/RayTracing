@@ -12,7 +12,7 @@
 using namespace RayTracer;
 
 TEST(Transform, WhenTranslatePointExpectTranslatedPoint) {
-  auto tf = Transform::translating(5, -3, 2);
+  auto tf = Transform::translation(5, -3, 2);
   auto p = Point(-3, 4, 5);
   Tuple translated;
   EXPECT_TRUE(tf.multiply_to_tuple(p, translated));
@@ -22,14 +22,14 @@ TEST(Transform, WhenTranslatePointExpectTranslatedPoint) {
 }
 
 TEST(Transform, WhenMultiplyByInverseOfATranslationMatrixExpectMoveOpposite) {
-  auto tf = Transform::translating(5, -3, 2);
+  auto tf = Transform::translation(5, -3, 2);
   auto inv = tf.inverse();
   auto p = Point(-3, 4, 5);
   EXPECT_EQ(Point(-8, 7, 3), inv * p);
 }
 
 TEST(Transform, WhenTranslateAVectorExpectItself) {
-  auto tf = Transform::translating(5, -3, 2);
+  auto tf = Transform::translation(5, -3, 2);
   auto v = Vector(-3, 4, 5);
   EXPECT_EQ(v, tf * v);
 }
@@ -113,7 +113,7 @@ TEST(Transform, WhenChainingTransformationExpectFinalTransformedPoint) {
   auto p = Point(1, 0, 1);
   auto a = Transform::rotation_x(M_PI_2);
   auto b = Transform::scaling(5, 5, 5);
-  auto c = Transform::translating(10, 5, 7);
+  auto c = Transform::translation(10, 5, 7);
 
   auto p2 = a * p;
   EXPECT_EQ(Point(1, -1, 0), p2);

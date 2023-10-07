@@ -9,14 +9,13 @@
 using namespace RayTracer;
 
 TEST(Sphere, WhenCreateSphereExpectHasIdTransformation) {
-  auto id = Matrix::id(Transform::TRANSFORMATION_MATRIX_ROWS);
   auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
-  EXPECT_EQ(id, s->transform());
+  EXPECT_EQ(Transform::id, s->transform());
 }
 
 TEST(Sphere, WhenSetTransformExpectTransform) {
   auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
-  auto t = Transform::translating(2,3,4);
+  auto t = Transform::translation(2,3,4);
   s->set_transform(t);
   EXPECT_EQ(t, s->transform());
 }

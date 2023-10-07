@@ -26,7 +26,7 @@ class Ray {
   const Vector& direction() const { return _direction; }
 
   Point position(double time) { return _origin + _direction * time; }
-  Point position(double time) const { return _origin + _direction * time; }
+  Point position(double time) const { return const_cast<Ray&>(*this).position(time); }
 
   IntersectionCollection intersect(std::shared_ptr<Shape::Sphere> s);
 

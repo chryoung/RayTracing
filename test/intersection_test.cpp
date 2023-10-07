@@ -11,7 +11,7 @@ using namespace RayTracer;
 TEST(Intersection, WhenCreateIntersectionExpectIntersection) {
   auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
   Intersection i(3.5, s);
-  EXPECT_EQ(3.5, i.time());
+  EXPECT_EQ(3.5, i.t());
   EXPECT_EQ(s, i.object());
 }
 
@@ -21,8 +21,8 @@ TEST(Intersection, WhenAggregatingIntersectionsExpectIntersectionCollection) {
   Intersection i2(2, s);
   IntersectionCollection xs{i1, i2};
   ASSERT_EQ(2, xs.size());
-  EXPECT_EQ(1, xs[0].time());
-  EXPECT_EQ(2, xs[1].time());
+  EXPECT_EQ(1, xs[0].t());
+  EXPECT_EQ(2, xs[1].t());
 }
 
 TEST(Intersection, WhenGetIntersectionsFromRayExpectIntersectionCollection) {

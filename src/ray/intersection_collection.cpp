@@ -3,13 +3,13 @@
 namespace RayTracer {
 IntersectionCollection::IntersectionCollection(std::initializer_list<Intersection> intersections)
     : _intersections{intersections} {
-  _intersections.sort([](const Intersection& a, const Intersection& b) { return a.time() < b.time(); });
+  _intersections.sort([](const Intersection& a, const Intersection& b) { return a.t() < b.t(); });
 }
 
 void IntersectionCollection::insert(const Intersection& i) {
   auto iter = _intersections.begin();
   for (; iter != _intersections.end(); iter++) {
-    if (iter->time() > i.time()) {
+    if (iter->t() > i.t()) {
       break;
     }
   }
@@ -31,7 +31,7 @@ Intersection& IntersectionCollection::operator[](size_t index) {
 
 std::optional<Intersection> IntersectionCollection::hit() {
   for (const auto& intersection : _intersections) {
-    if (is_double_ge(intersection.time(), 0)) {
+    if (is_double_ge(intersection.t(), 0)) {
       return std::optional<Intersection>(intersection);
     }
   }
