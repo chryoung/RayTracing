@@ -17,3 +17,7 @@ target_link_libraries(projenv_demo rt)
 add_executable(transformation_demo
         demo/transformation_demo.cpp)
 target_link_libraries(transformation_demo rt)
+
+add_executable(sphere_demo
+        demo/sphere_demo.cpp)
+target_link_libraries(sphere_demo rt)

@@ -38,6 +38,12 @@ class Canvas {
    */
   bool to_ppm(std::ostream& out) const;
 
+  bool to_file(const std::string& file_name);
+
+  inline bool to_file(const std::string& file_name) const {
+    return const_cast<Canvas&>(*this).to_file(file_name);
+  }
+
   /**
    * @brief Breaks the string into lines which won't exceed PPM_LINE_LIMIT.
    * @param line The string which will be broken.

@@ -2,6 +2,7 @@
 
 #include <cstdio>
 #include <iostream>
+#include <fstream>
 #include <stdexcept>
 #include <string>
 
@@ -113,6 +114,13 @@ bool Canvas::to_ppm(std::ostream& out) {
   }
 
   return true;
+}
+
+bool Canvas::to_file(const std::string& file_name) {
+  std::ofstream output(file_name);
+  bool result = to_ppm(output);
+  output.close();
+  return result;
 }
 
 int Canvas::scale_color(double color_component) {
