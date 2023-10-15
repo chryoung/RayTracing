@@ -18,7 +18,7 @@ set(RT_TESTS_SRC_FILES
 
 add_executable(rt_tests ${RT_TESTS_SRC_FILES})
 
-target_link_libraries(rt_tests gtest gtest_main rt)
+target_link_libraries(rt_tests gtest_main rt)
 set_target_properties(rt_tests
         PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test")
