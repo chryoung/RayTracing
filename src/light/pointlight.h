@@ -15,8 +15,11 @@ public:
   {}
   ~PointLight() = default;
 
-  const Color& get_intensity() { return _intensity; }
-  const Point& get_position() { return _position; }
+  const Color& intensity() { return _intensity; }
+  const Point& position() { return _position; }
+
+  const Color& intensity() const { return _intensity; }
+  const Point& position() const { return _position; }
 private:
   Color _intensity;
   Point _position;

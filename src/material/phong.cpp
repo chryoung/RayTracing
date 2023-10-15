@@ -1,4 +1,7 @@
+#include <cmath>
 #include "phong.h"
+#include "math/util.h"
+#include "utility/utility.h"
 
 namespace RayTracer {
 namespace Material {
@@ -52,6 +55,37 @@ PhongMaterial& PhongMaterial::set_shininess(double shininess) {
   _shininess = shininess;
 
   return *this;
+}
+
+Color PhongMaterial::lighting(const Light::PointLight& light, const Point& position, const Vector& eyev, const Vector& normalv) {
+  Color effective_color = _color * light.intensity();
+
+  Vector lightv = light.position() - position;
+  lightv.normalize();
+
+  Color ambient = effective_color * _ambient;
+
+  double light_dot_normal = lightv.dot(normalv);
+
+  Color diffuse;
+  Color specular;
+
+  if (light_dot_normal < 0) {
+    diffuse = Color::make_black();
+    specular = Color::make_black();
+  } else {
+    diffuse = effective_color * _diffuse * light_dot_normal;
+    Vector reflectv = reflect(-lightv, normalv);
+    double reflect_dot_eye = reflectv.dot(eyev);
+    if (is_double_le(reflect_dot_eye, 0.0)) {
+      specular = Color::make_black();
+    } else {
+      double factor = std::pow(reflect_dot_eye, _shininess);
+      specular = light.intensity() * _specular * factor;
+    }
+  }
+
+  return ambient + diffuse + specular;
 }
 
 }

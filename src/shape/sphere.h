@@ -12,9 +12,9 @@ class Sphere : public BasicShape {
   const Point& origin() { return _origin; }
   const Point& origin() const { return _origin; }
 
-  Vector normal_at(const Point& p);
-
   friend class ShapeBuilder;
+
+  virtual Vector normal_at(const Point& p) override;
 
  private:
   explicit Sphere(std::uint64_t id) : 

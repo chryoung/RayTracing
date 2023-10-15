@@ -24,10 +24,15 @@ class BasicShape {
   }
 
   const Material::PhongMaterial& material() const { return _material; }
+  Material::PhongMaterial& material() { return _material; }
   BasicShape& set_material(const Material::PhongMaterial& material) {
     _material = material;
 
     return *this;
+  }
+
+  virtual Vector normal_at(const Point& p) {
+    return Vector{0, 0, 1};
   }
 
  protected:

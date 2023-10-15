@@ -30,6 +30,10 @@ class Vector : public Tuple {
     return *this;
   }
 
+  Vector operator-() const {
+    return Vector(-x(), -y(), -z());
+  }
+
   Vector cross(const Vector& other) {
     return Vector(y() * other.z() - z() * other.y(), z() * other.x() - x() * other.z(),
                   x() * other.y() - y() * other.x());

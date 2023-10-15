@@ -9,6 +9,7 @@ namespace RayTracer {
 class Color {
  public:
   Color(double red, double green, double blue) : _red(red), _green(green), _blue(blue) {}
+  Color(double factor): _red(factor), _green(factor), _blue(factor) {}
   Color() : Color(0, 0, 0) {}
 
   double red() const { return _red; }
@@ -33,6 +34,8 @@ class Color {
     _blue = blue;
     return *this;
   }
+
+  static Color make_black() { return Color(0); }
 
  private:
   double _red;
@@ -63,7 +66,7 @@ inline bool operator==(const Color& a, const Color& b) {
 inline bool operator!=(const Color& a, const Color& b) { return !(a == b); }
 
 inline std::ostream& operator<<(std::ostream& out, const Color& a) {
-  out << "(" << a.red() << ", " << a.green() << ", " << a.blue() << ")";
+  out << "Color(" << a.red() << ", " << a.green() << ", " << a.blue() << ")";
 
   return out;
 }
