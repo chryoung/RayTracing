@@ -6,6 +6,7 @@
 
 #include "math/matrix.h"
 #include "geometry/transform.h"
+#include "material/phong.h"
 
 namespace RayTracer {
 namespace Shape {
@@ -15,9 +16,16 @@ class BasicShape {
   std::uint64_t id() { return _id; }
   std::uint64_t id() const { return _id; }
 
-  Matrix transform() const { return _transform; }
+  const Matrix& transform() const { return _transform; }
   BasicShape& set_transform(const Matrix& new_transform) {
     _transform = new_transform;
+
+    return *this;
+  }
+
+  const Material::PhongMaterial& material() const { return _material; }
+  BasicShape& set_material(const Material::PhongMaterial& material) {
+    _material = material;
 
     return *this;
   }
@@ -28,6 +36,7 @@ class BasicShape {
  private:
   std::uint64_t _id;
   Matrix _transform;
+  Material::PhongMaterial _material;
 };
 
 using BasicShapePtr = std::shared_ptr<BasicShape>;
