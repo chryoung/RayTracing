@@ -36,7 +36,7 @@ inline Point operator+(const Point& a, const Vector& b) { return Point(a.x() + b
 
 inline Point operator-(const Point& a, const Vector& b) { return Point(a.x() - b.x(), a.y() - b.y(), a.z() - b.z()); }
 
-inline Vector operator-(const Point& a, const Point& b) { return Vector(b.x() - a.x(), b.y() - a.y(), b.z() - a.z()); }
+inline Vector operator-(const Point& a, const Point& b) { return Vector(a.x() - b.x(), a.y() - b.y(), a.z() - b.z()); }
 
 inline Vector operator+(const Vector& a, const Vector& b) {
   return Vector(a.x() + b.x(), a.y() + b.y(), a.z() + b.z());

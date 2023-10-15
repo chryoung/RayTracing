@@ -315,7 +315,7 @@ Vector operator*(const Matrix& a, const Vector& b) {
 std::ostream& operator<<(std::ostream& out, const Matrix& m) {
   out << "{\n";
   for (size_t row = 0; row < m.rows(); row++) {
-    out << "{";
+    out << "  {";
     for (size_t col = 0; col < m.cols() - 1; col++) {
       out << m[row][col] << ", ";
     }
