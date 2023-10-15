@@ -12,6 +12,8 @@ class Sphere : public BasicShape {
   const Point& origin() { return _origin; }
   const Point& origin() const { return _origin; }
 
+  Vector normal_at(const Point& p);
+
   friend class ShapeBuilder;
 
  private:
