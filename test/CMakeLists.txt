@@ -1,3 +1,4 @@
+find_package(GTest)
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/googletest/googletest/include)
 enable_testing()
@@ -21,4 +22,4 @@ target_link_libraries(rt_tests gtest gtest_main rt)
 set_target_properties(rt_tests
         PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test")
-add_test(RayTracingTests rt_tests)
+gtest_add_tests(TARGET rt_tests)
