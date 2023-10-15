@@ -7,7 +7,8 @@ set(RT_SRC_FILES
     ray/ray.cpp
     ray/intersection_collection.cpp
     geometry/transform.cpp
-    shape/sphere.cpp)
+    shape/sphere.cpp
+    material/phong.cpp)
 
 add_library(rt ${RT_SRC_FILES})
 
