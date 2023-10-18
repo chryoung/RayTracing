@@ -8,15 +8,6 @@
 #include "material/phong.h"
 #include "light/pointlight.h"
 
-#ifdef DEBUG
-#include <iostream>
-using std::cout;
-#define DEBUG(x) (cout << #x << " = " << (x) << "\n")
-#else
-#define DEBUG(x)
-#endif
-
-
 int main() {
   using namespace RayTracer;
 
@@ -32,13 +23,13 @@ int main() {
   Transform::TransformationBuilder tb;
   tb
     .scale(1, 0.5, 1)
-    .rotate_x(M_PI / 4.0);
-  // sphere->set_transform(tb.build());
+    .rotate_z(M_PI / 4.0);
+  sphere->set_transform(tb.build());
   sphere->set_material(Material::PhongMaterial());
   sphere->material().set_color(Color(1, 0.2, 1));
 
   auto light = Light::PointLight(Color(1), Point(-10, 10, -10));
-  const Color black = Color::make_black();
+  const Color BLACK = Color::make_black();
 
   for (int y = 0; y < canvas_pixels; ++y) {
     double world_y = half - pixel_size * y;
@@ -51,21 +42,18 @@ int main() {
       auto xs = ray.intersect(sphere);
       auto hit = xs.hit();
       if (hit) {
-        DEBUG(hit->t());
         auto point = ray.position(hit->t());
-        DEBUG(point);
         auto normal = hit->object()->normal_at(point);
-        DEBUG(normal);
         const auto& eye = ray.direction();
         auto color = hit->object()->material().lighting(light, point, eye, normal);
         c.write_pixel(x, y, color);
       } else {
-        c.write_pixel(x, y, black);
+        c.write_pixel(x, y, BLACK);
       }
     }
   }
 
-  c.to_file("sphere.ppm");
+  c.to_file("sphere_with_material_demo.ppm");
 
   return 0;
 }
