@@ -18,11 +18,15 @@ class Canvas {
   ~Canvas() = default;
   Canvas& write_pixel(int x, int y, const Color& color);
   Color& pixel_at(int x, int y);
+  Color& pixel_at(int index);
   const Color& pixel_at(int x, int y) const;
+  const Color& pixel_at(int index) const;
   size_t width();
   size_t width() const;
   size_t height();
   size_t height() const;
+  size_t num_pixels();
+  size_t num_pixels() const;
 
   /**
    * @brief Saves the Canvas to PPM file.
@@ -43,13 +47,6 @@ class Canvas {
   inline bool to_file(const std::string& file_name) const {
     return const_cast<Canvas&>(*this).to_file(file_name);
   }
-
-  /**
-   * @brief Breaks the string into lines which won't exceed PPM_LINE_LIMIT.
-   * @param line The string which will be broken.
-   * @returns A vector of strings.
-   */
-  static std::vector<std::string> break_line(std::string line);
 
  private:
   Canvas(int width, int height);
