@@ -42,11 +42,22 @@ Color& Canvas::pixel_at(int x, int y) {
 }
 
 const Color& Canvas::pixel_at(int x, int y) const {
-  if (x < 0 || x >= width() || y < 0 || y >= height()) {
+  return const_cast<Canvas&>(*this).pixel_at(x, y);
+}
+
+Color& Canvas::pixel_at(int index) {
+  if (index < 0 || index >= num_pixels()) {
     throw std::out_of_range(CURRENT_LINE + " pixel_at: x or y is out of range.");
   }
 
+  int y = index / width();
+  int x = index % width();
+
   return _canvas[x][y];
+}
+
+const Color& Canvas::pixel_at(int index) const {
+  return const_cast<Canvas&>(*this).pixel_at(index);
 }
 
 size_t Canvas::width() { return _canvas.size(); }
@@ -57,34 +68,11 @@ size_t Canvas::height() { return _canvas[0].size(); }
 
 size_t Canvas::height() const { return _canvas[0].size(); }
 
+size_t Canvas::num_pixels() { return height() * width(); }
+
+size_t Canvas::num_pixels() const { return height() * width(); }
+
 bool Canvas::to_ppm(std::ostream& out) const { return const_cast<Canvas&>(*this).to_ppm(out); }
-
-std::vector<std::string> Canvas::break_line(std::string line) {
-  if (line.size() < PPM_LINE_LIMIT) {
-    return std::vector<std::string>{line};
-  }
-
-  std::vector<std::string> lines;
-  int start = 0;
-  while (start < line.size() - PPM_LINE_LIMIT) {
-    int end = start + PPM_LINE_LIMIT;
-    if (line[end] == ' ') {
-      lines.emplace_back(line.substr(start, end - start - 1) + "\n");
-    } else {
-      while (end > start && line[end] != ' ') {
-        end--;
-      }
-      if (end <= start) {
-        break;
-      }
-      lines.emplace_back(line.substr(start, end - start) + "\n");
-    }
-    start = end + 1;
-  }
-  lines.emplace_back(line.substr(start, line.size() - start - 1) + "\n");
-
-  return lines;
-}
 
 bool Canvas::to_ppm(std::ostream& out) {
   using namespace std;
@@ -95,22 +83,29 @@ bool Canvas::to_ppm(std::ostream& out) {
   out << ppm_magic_number << "\n" << width() << " " << height() << "\n" << COLOR_LIMIT << "\n";
 
   // Write pixels.
-  string buffer;
-  constexpr int COLOR_BUFFER_SIZE = 13;
-  char color_buffer[COLOR_BUFFER_SIZE];
-  for (int y = 0; y < height(); y++) {
-    for (int x = 0; x < width(); x++) {
-      const auto& pixel = pixel_at(x, y);
-      snprintf(color_buffer, COLOR_BUFFER_SIZE, "%d %d %d ", scale_color(pixel.red()), scale_color(pixel.green()),
-               scale_color(pixel.blue()));
-      buffer += color_buffer;
+  char color_buffer[PPM_LINE_LIMIT];
+  constexpr int PIXELS_PER_LINE = 5;
+  constexpr int NUM_CHARS_PER_COLOR = 12;
+  constexpr int RETURN_POS = PIXELS_PER_LINE * NUM_CHARS_PER_COLOR + PIXELS_PER_LINE;
+  constexpr int END_POS = RETURN_POS + 1;
+  const int upper_limit = (num_pixels() / NUM_CHARS_PER_COLOR + 1) * NUM_CHARS_PER_COLOR;
+  for (int i = 0; i < upper_limit; i += PIXELS_PER_LINE) {
+    int num_wrote = 0;
+    for (int k = i; k < i + PIXELS_PER_LINE && k < num_pixels(); ++k) {
+      const Color& c = pixel_at(k);
+      snprintf(color_buffer + num_wrote, PPM_LINE_LIMIT - num_wrote,
+        "%3d %3d %3d ",
+        scale_color(c.red()),
+        scale_color(c.green()),
+        scale_color(c.blue())
+      );
+
+      num_wrote += NUM_CHARS_PER_COLOR;
     }
-    buffer[buffer.size() - 1] = '\n';
-    auto lines = break_line(buffer);
-    for (const auto& line : lines) {
-      out << line;
-    }
-    buffer.clear();
+
+    color_buffer[num_wrote - 1] = '\n';
+    color_buffer[num_wrote] = '\0';
+    out << color_buffer;
   }
 
   return true;

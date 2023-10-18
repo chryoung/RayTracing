@@ -66,25 +66,15 @@ TEST(Canvas, WhenWriteACanvasToPPMExpectContentIsCorrect) {
 
   // Verify the content.
   constexpr int NUMBER_CONTENT_LINES = 3;
-  string contents[NUMBER_CONTENT_LINES]{
-      "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0",
-      "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0",
-      "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255",
-  };
+  string contents = 
+      "P3\n"
+      "5 3\n"
+      "255\n"
+      "255   0   0   0   0   0   0   0   0   0   0   0   0   0   0\n"
+      "  0   0   0   0   0   0   0 128   0   0   0   0   0   0   0\n"
+      "  0   0   0   0   0   0   0   0   0   0   0   0   0   0 255\n";
 
-  constexpr int TOTAL_LINES = NUMBER_HEADER_LINES + NUMBER_CONTENT_LINES;
-  while (line_count < TOTAL_LINES) {
-    to = ppm.find('\n', from);
-    if (to == string::npos) {
-      break;
-    }
-    line = ppm.substr(from, to - from);
-    EXPECT_EQ(contents[line_count - NUMBER_HEADER_LINES], line);
-    from = to + 1;
-    ++line_count;
-  }
-
-  EXPECT_EQ(TOTAL_LINES, line_count);
+  EXPECT_EQ(contents, ppm);
 }
 
 TEST(Canvas, WhenALineIsLongerThan70InPpmExpectNewLineInPpm) {
@@ -119,70 +109,15 @@ TEST(Canvas, WhenALineIsLongerThan70InPpmExpectNewLineInPpm) {
 
   // Verify the content.
   constexpr int NUMBER_CONTENT_LINES = 4;
-  string contents[NUMBER_CONTENT_LINES]{
-      "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204",
-      "153 255 204 153 255 204 153 255 204 153 255 204 153",
-      "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204",
-      "153 255 204 153 255 204 153 255 204 153 255 204 153",
-  };
+  string contents =
+      "P3\n"
+      "10 2\n"
+      "255\n"
+      "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153\n"
+      "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153\n"
+      "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153\n"
+      "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153\n";
 
-  constexpr int TOTAL_LINES = NUMBER_HEADER_LINES + NUMBER_CONTENT_LINES;
-  while (line_count < TOTAL_LINES) {
-    to = ppm.find('\n', from);
-    if (to == string::npos) {
-      break;
-    }
-    line = ppm.substr(from, to - from);
-    EXPECT_EQ(contents[line_count - NUMBER_HEADER_LINES], line);
-    from = to + 1;
-    ++line_count;
-  }
-
-  EXPECT_EQ(TOTAL_LINES, line_count);
+  EXPECT_EQ(contents, ppm);
 }
 
-TEST(Canvas, WhenBreakLinesExpectCorrectBreakLines) {
-  string s1 = "0 0 0 0 0 0 0 0\n";
-  string s2 = "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 0\n";
-  string s3 = "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 0 0\n";
-  string s4 = "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 0 0 0 0 0\n";
-  string s5 =
-      "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 255 "
-      "204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 255 204 "
-      "153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 255 204 153 "
-      "255 204 153 255 204 153 255 204 153 255 204 153 255 204\n";
-
-  auto lines1 = Canvas::break_line(s1);
-  auto lines2 = Canvas::break_line(s2);
-  auto lines3 = Canvas::break_line(s3);
-  auto lines4 = Canvas::break_line(s4);
-  auto lines5 = Canvas::break_line(s5);
-
-  vector<string> truth1{
-      "0 0 0 0 0 0 0 0\n",
-  };
-  vector<string> truth2{
-      "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 "
-      "0\n",
-  };
-  vector<string> truth3{
-      "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 0\n",
-      "0\n",
-  };
-  vector<string> truth4{
-      "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204 0\n",
-      "0 0 0 0\n",
-  };
-  vector<string> truth5{
-      "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204\n",
-      "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204\n",
-      "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204\n",
-      "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204\n",
-  };
-
-  EXPECT_EQ(truth1, lines1);
-  EXPECT_EQ(truth2, lines2);
-  EXPECT_EQ(truth3, lines3);
-  EXPECT_EQ(truth4, lines4);
-  EXPECT_EQ(truth5, lines5);
-}
