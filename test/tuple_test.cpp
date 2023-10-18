@@ -1,10 +1,11 @@
 #include "math/tuple.h"
+#include "math/util.h"
 
 #include <gtest/gtest.h>
 
 #include <cmath>
 
-using RayTracer::Tuple;
+using namespace RayTracer;
 
 TEST(Tuple, WhenTupleIsPointExpectWEqualsOne) {
   Tuple a(4.3, -4.2, 3.1, 1.0);
@@ -171,3 +172,19 @@ TEST(Tuple, WhenGetCrossOfTwoVectorsExpectAPerpendicularVector) {
   EXPECT_EQ(Tuple::make_vector(-1, 2, -1), v1.cross(v2));
   EXPECT_EQ(Tuple::make_vector(1, -2, 1), v2.cross(v1));
 }
+
+TEST(Vector, ReflectAVectorApproacingAt45Degree) {
+  Vector v(1, -1, 0);
+  Vector n(0, 1, 0);
+  auto r = reflect(v, n);
+  EXPECT_EQ(Vector(1, 1, 0), r);
+}
+
+TEST(Vector, ReflectAVectorOffASlantedSurface) {
+  Vector v(0, -1, 0);
+  const double x = sqrt(2) / 2;
+  Vector n(x, x, 0);
+  auto r = reflect(v, n);
+  EXPECT_EQ(Vector(1, 0, 0), r);
+}
+

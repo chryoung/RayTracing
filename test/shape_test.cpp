@@ -7,6 +7,7 @@
 #include "geometry/transform.h"
 #include "math/matrix.h"
 #include "math/tuple.h"
+#include "material/phong.h"
 
 using namespace RayTracer;
 
@@ -70,4 +71,18 @@ TEST(Sphere, ComputingNormalOnATransformedSphere) {
   auto x = sqrt(2) / 2;
   auto n = s->normal_at(Point(0, x, -x));
   EXPECT_EQ(Vector(0, 0.97014, -0.24254), n);
+}
+
+TEST(Sphere, SphereDefaultMaterial) {
+  auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
+  const Material::PhongMaterial& m = s->material();
+  EXPECT_EQ(Material::PhongMaterial(), m);
+}
+
+TEST(Sphere, SphereMayBeAssignedAMaterial) {
+  auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
+  Material::PhongMaterial m;
+  m.set_ambient(1.0);
+  s->set_material(m);
+  EXPECT_EQ(m, s->material());
 }
