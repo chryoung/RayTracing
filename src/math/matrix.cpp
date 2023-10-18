@@ -2,16 +2,32 @@
 
 namespace RayTracer {
 Matrix Matrix::create(size_t num_row, size_t num_col) {
-  if (num_row == 0 || num_col == 0) {
+  if (num_row <= 0 || num_col <= 0) {
     throw std::invalid_argument(CURRENT_LINE + " create: num_row or num_col should be greater than 0.");
   }
   return Matrix(num_row, num_col);
 }
 
+Matrix Matrix::unchecked_create(size_t num_row, size_t num_col) {
+  return Matrix(num_row, num_col);
+}
+
 Matrix Matrix::unchecked_create(std::initializer_list<std::initializer_list<double>> numbers) {
-  Matrix matrix;
-  for (auto iter = numbers.begin(); iter != numbers.end(); iter++) {
-    matrix._data.emplace_back(*iter);
+  size_t num_row = 0;
+  size_t num_col = 0;
+  for (auto iter = numbers.begin(); iter != numbers.end(); ++iter, ++num_row)
+    ;
+  for (auto iter = numbers.begin()->begin(); iter != numbers.begin()->end(); ++iter, ++num_col)
+    ;
+
+  Matrix matrix(num_row, num_col);
+
+  int i = 0;
+  for (auto row_iter = numbers.begin(); i < num_row; ++i, ++row_iter) {
+    int j = 0;
+    for (auto col_iter = row_iter->begin(); j < num_col; ++j, ++col_iter) {
+      matrix._data[i][j] = *col_iter;
+    }
   }
 
   return matrix;
@@ -24,15 +40,32 @@ Matrix Matrix::id(size_t num_rows) {
 
   Matrix m(num_rows, num_rows);
   for (size_t row = 0; row < num_rows; row++) {
-    m[row][row] = 1;
+    for (size_t col = 0; col < num_rows; col++) {
+        m[row][col] = row == col ? 1 : 0;
+    }
   }
 
   return m;
 }
 
-std::vector<double>& Matrix::operator[](size_t row) { return _data[row]; }
+Matrix Matrix::zero(size_t num_row, size_t num_col) {
+  if (num_row <= 0 || num_col <= 0) {
+    throw std::invalid_argument(CURRENT_LINE + " id: num_row and num_col should > 0.");
+  }
 
-const std::vector<double>& Matrix::operator[](size_t row) const { return _data[row]; }
+  Matrix m(num_row, num_col);
+  for (size_t row = 0; row < num_row; row++) {
+    for (size_t col = 0; col < num_col; col++) {
+        m[row][col] = 0;
+    }
+  }
+
+  return m;
+}
+
+double* Matrix::operator[](size_t row) { return _data[row]; }
+
+double* Matrix::operator[](size_t row) const { return _data[row]; }
 
 double Matrix::at(size_t row, size_t col) {
   if (row >= rows() || col >= cols()) {
@@ -68,13 +101,13 @@ bool Matrix::multiply_inplace(const Matrix& b) {
     }
   }
 
-  _data = std::move(product._data);
+  *this = std::move(product);
 
   return true;
 }
 
 bool Matrix::multiply_inplace(const Tuple& b) {
-  Matrix matrix_b = create({
+  Matrix matrix_b = unchecked_create({
       {b.x()},
       {b.y()},
       {b.z()},
@@ -117,7 +150,7 @@ Matrix Matrix::transpose() const { return const_cast<Matrix&>(*this).transpose()
 
 void Matrix::transpose_inplace() {
   auto t = transpose();
-  _data = std::move(t._data);
+  *this = std::move(t);
 }
 
 double Matrix::determinant() {
@@ -210,13 +243,13 @@ Matrix Matrix::inverse() {
 
 Matrix Matrix::inverse() const { return const_cast<Matrix&>(*this).inverse(); }
 
-size_t Matrix::rows() { return _data.size(); }
+size_t Matrix::rows() { return _num_row; }
 
-size_t Matrix::rows() const { return _data.size(); }
+size_t Matrix::rows() const { return _num_row; }
 
-size_t Matrix::cols() { return (*this)[0].size(); }
+size_t Matrix::cols() { return _num_col; }
 
-size_t Matrix::cols() const { return (*this)[0].size(); }
+size_t Matrix::cols() const { return _num_col; }
 
 bool operator==(const Matrix& a, const Matrix& b) {
   if (a.rows() != b.rows() || a.cols() != b.cols()) {
@@ -242,7 +275,7 @@ Matrix operator*(const Matrix& a, const Matrix& b) {
                              " operator*: Matrix multiplication cannot be performed because a.cols() != b.rows()");
   }
 
-  Matrix product = Matrix::create(a.rows(), b.cols());
+  Matrix product = Matrix::unchecked_create(a.rows(), b.cols());
   for (size_t row = 0; row < a.rows(); ++row) {
     for (size_t col = 0; col < b.cols(); ++col) {
       for (size_t i = 0; i < a.cols(); ++i) {
