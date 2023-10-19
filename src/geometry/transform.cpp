@@ -3,7 +3,9 @@
 namespace RayTracer {
 namespace Transform {
 
-const Matrix id = Matrix::id(Transform::TRANSFORMATION_MATRIX_ROWS);
+Matrix id() {
+  return Matrix::id(Transform::TRANSFORMATION_MATRIX_ROWS);
+}
 
 Matrix translation(double x, double y, double z) {
   return Matrix::unchecked_create(4, 4, {

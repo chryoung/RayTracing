@@ -2,7 +2,7 @@
 
 namespace RayTracer {
 
-MemoryPool Matrix::_mem_pool = MemoryPool(sizeof(double) * 2000, sizeof(double) * 16);
+std::unique_ptr<MemoryPool> Matrix::_mem_pool;
 
 Matrix Matrix::create(size_t num_row, size_t num_col) {
   if (num_row <= 0 || num_col <= 0) {
@@ -59,9 +59,9 @@ Matrix Matrix::zero(size_t num_row, size_t num_col) {
   return m;
 }
 
-MatrixRow Matrix::operator[](size_t row) { return MatrixRow(row, _num_col, _data); }
+double* Matrix::operator[](size_t row) { return _data + row * _num_col; }
 
-const MatrixRow Matrix::operator[](size_t row) const { return MatrixRow(row, _num_col, _data); }
+const double* Matrix::operator[](size_t row) const { return _data + row * _num_col; }
 
 double Matrix::at(size_t row, size_t col) {
   if (row >= rows() || col >= cols()) {

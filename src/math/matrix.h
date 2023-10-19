@@ -2,6 +2,7 @@
 #define CA47C3DE_E656_407E_870D_96E6611689C6
 
 #include <initializer_list>
+#include <memory>
 #include <ostream>
 #include <stdexcept>
 #include <string>
@@ -16,32 +17,20 @@
 
 namespace RayTracer {
 
-class Matrix;
-
-class MatrixRow {
-public:
-  friend class Matrix;
-  double& operator[](int col) { return *(_mem + (_row_num * _row_size + col)); }
-  double operator[](int col) const { return *(_mem + (_row_num * _row_size + col)); }
-private:
-  MatrixRow(int row_num, int row_size, double* mem): _row_num(row_num), _row_size(row_size), _mem(mem) {}
-  int _row_num;
-  int _row_size;
-  double* _mem;
-};
-
 class Matrix {
  public:
   ~Matrix() {
-    _mem_pool.free(_data);
-    _data = nullptr;
+    if (_data != nullptr) {
+      _mem_pool->free(_data);
+      _data = nullptr;
+    }
   }
 
   Matrix(const Matrix& orig) {
     _num_row = orig._num_row;
     _num_col = orig._num_col;
     if (orig._data != nullptr) {
-      _data = _mem_pool.alloc<double>();
+      _data = _mem_pool->alloc<double>();
       for (int i = 0; i < _num_row; ++i) {
         for (int j = 0; j < _num_col; ++j) {
           _data[i * _num_col + j] = orig._data[i * _num_col + j];
@@ -63,13 +52,14 @@ class Matrix {
 
   Matrix& operator=(const Matrix& orig) {
     if (_data != nullptr) {
-      _mem_pool.free(_data);
+      _mem_pool->free(_data);
+      _data = nullptr;
     }
 
     _num_row = orig._num_row;
     _num_col = orig._num_col;
     if (orig._data != nullptr) {
-      _data = _mem_pool.alloc<double>();
+      _data = _mem_pool->alloc<double>();
       for (int i = 0; i < _num_row; ++i) {
         for (int j = 0; j < _num_row; ++j) {
           _data[i * _num_col + j] = orig._data[i * _num_col + j];
@@ -82,7 +72,8 @@ class Matrix {
 
   Matrix& operator=(Matrix&& orig) {
     if (_data != nullptr) {
-      _mem_pool.free(_data);
+      _mem_pool->free(_data);
+      _data = nullptr;
     }
 
     _num_row = orig._num_row;
@@ -136,8 +127,8 @@ class Matrix {
   static Matrix unchecked_create(int num_row, int num_col, std::initializer_list<std::initializer_list<double>> numbers);
   static Matrix id(size_t num_rows);
   static Matrix zero(size_t num_row, size_t num_col);
-  MatrixRow operator[](size_t row);
-  const MatrixRow operator[](size_t row) const;
+  double* operator[](size_t row);
+  const double* operator[](size_t row) const;
   double at(size_t row, size_t col);
   double at(size_t row, size_t col) const;
   bool is_square();
@@ -169,13 +160,17 @@ class Matrix {
   Matrix() = default;
   Matrix(size_t num_row, size_t num_col)
       : _num_row{num_row}, _num_col{num_col} {
-    _data = _mem_pool.alloc<double>();
+    if (_mem_pool == nullptr) {
+      _mem_pool = std::make_unique<MemoryPool>(sizeof(double) * 3200, sizeof(double) * 16);
+    }
+
+    _data = _mem_pool->alloc<double>();
   }
 
   double* _data;
   size_t _num_row;
   size_t _num_col;
-  static MemoryPool _mem_pool;
+  static std::unique_ptr<MemoryPool> _mem_pool;
 };
 
 bool operator==(const Matrix& a, const Matrix& b);

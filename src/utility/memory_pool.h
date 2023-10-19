@@ -3,7 +3,6 @@
 
 #include <cstdlib>
 #include <new>
-#include <iostream>
 
 namespace RayTracer{
   
@@ -20,24 +19,30 @@ public:
     for (int i = 0; i < _pool_size / _chunk_size; ++i) {
       if (_used[i] == false) {
         _used[i] = true;
-        unsigned long long addr = (unsigned long long)(_memory + i * _chunk_size);
-        std::cout << "alloc(): alloc addr = " << addr << ", start = " << (unsigned long long)(_memory) << std::endl;
         return reinterpret_cast<T*>(_memory + i * _chunk_size);
       }
     }
 
+    // No available memory.
     throw std::bad_alloc();
   }
 
-  void free(void* p) {
+  template<class T>
+  void free(T* p) {
     int i = (reinterpret_cast<unsigned char*>(p) - _memory) / _chunk_size;
-    std::cout << "free(p): i == " << i << "\n";
     _used[i] = false;
   }
 
   virtual ~MemoryPool() {
-    ::free(_memory);
-    ::free(_used);
+    if (_memory != nullptr) {
+      ::free(_memory);
+      _memory = nullptr;
+    }
+
+    if (_used != nullptr) {
+      ::free(_used);
+      _used = nullptr;
+    }
   }
 
 private:
