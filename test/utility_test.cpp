@@ -1,6 +1,9 @@
 #include "utility/utility.h"
+#include "utility/linked_list.h"
+#include "utility/memory_pool.h"
 
 #include <gtest/gtest.h>
+#include <utility>
 
 using namespace RayTracer;
 
@@ -54,8 +57,20 @@ TEST(LinkedList, NewListIsEmpty) {
 
 TEST(LinkedList, AddBack) {
   LinkedList<int> a;
-  a.add_back(new LinkedListNode<int>(10));
+  a.add_back(new LinkedListNode<int>(std::make_unique<int>(10)));
+  ASSERT_FALSE(a.is_empty());
   LinkedListNode<int>* v = a.pop_front();
   ASSERT_NE(nullptr, v);
-  EXPECT_EQ(v->val, 10);
+  EXPECT_EQ(*(v->val), 10);
+}
+
+TEST(MemoryPool, NewMemoryPool) {
+  MemoryPool p(2, sizeof(double));
+  MemoryPool::Memory m1 = p.alloc();
+  MemoryPool::Memory m2 = p.alloc();
+  ASSERT_NE(nullptr, m1);
+  ASSERT_NE(nullptr, m2);
+  ASSERT_NE(nullptr, m1->val->get<double>());
+  ASSERT_NE(nullptr, m2->val->get<double>());
+  ASSERT_EQ(sizeof(double), (unsigned long long)m2->val->get<double>() - (unsigned long long)m1->val->get<double>());
 }

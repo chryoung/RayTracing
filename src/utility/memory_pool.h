@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <new>
+#include <utility>
 
 #include "linked_list.h"
 
@@ -11,13 +12,12 @@ namespace RayTracer{
 
 class MemoryChunk {
 public:
-  MemoryChunk(): _index(0), _mem(nullptr) {}
-  MemoryChunk(int i, unsigned char* mem): _index(i), _mem(mem) {}
+  MemoryChunk(): _mem(nullptr) {}
+  MemoryChunk(unsigned char* mem): _mem(mem) {}
 
   template<class T>
   T* get() { return reinterpret_cast<T*>(_mem); }
 private:
-  int _index;
   unsigned char * _mem;
 };
 
@@ -28,7 +28,7 @@ public:
   MemoryPool(int pool_size, int chunk_size): _pool_size(pool_size), _chunk_size(chunk_size) {
     _memory = reinterpret_cast<unsigned char*>(::malloc(sizeof(unsigned char) * chunk_size * pool_size));
     for (int i = 0; i < _pool_size; ++i) {
-      _available.add_back(new LinkedListNode<MemoryChunk>(MemoryChunk(i, _memory + i * chunk_size)));
+      _available.add_back(new LinkedListNode<MemoryChunk>(std::make_unique<MemoryChunk>(_memory + i * chunk_size)));
     }
   }
 

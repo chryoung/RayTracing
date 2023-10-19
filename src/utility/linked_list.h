@@ -1,20 +1,23 @@
 #ifndef D4F5B7F5_8A00_45A1_B7EB_99B4792C6C8F
 #define D4F5B7F5_8A00_45A1_B7EB_99B4792C6C8F
 
+#include <memory>
+#include <utility>
 #include <stdexcept>
 
 template<class T>
 class LinkedListNode {
 public:
-  LinkedListNode<T>(T v): val(v) {}
-  T val;
+  LinkedListNode<T>(std::unique_ptr<T> v): val(std::move(v)) {}
+
+  std::unique_ptr<T> val;
   LinkedListNode* next;
 };
 
 template<class T>
 class LinkedList {
 public:
-  LinkedList<T>(): _head(new LinkedListNode<T>(T{})), _tail(_head) {}
+  LinkedList<T>(): _head(new LinkedListNode<T>(nullptr)), _tail(_head) {}
   ~LinkedList<T>() {
     free_list();
   }
@@ -42,9 +45,9 @@ public:
     return _head == _tail || _head == nullptr || _head->next == nullptr;
   }
 
-  void add_back(LinkedListNode<T>* v) {
-    _tail->next = v;
-    _tail = v;
+  void add_back(LinkedListNode<T>* n) {
+    _tail->next = n;
+    _tail = n;
   }
 
   LinkedListNode<T>* pop_front() {

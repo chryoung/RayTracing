@@ -33,7 +33,7 @@ class Matrix {
     _num_col = orig._num_col;
     if (orig._data != nullptr) {
       _assigned_mem = _mem_pool->alloc();
-      _data = _assigned_mem->val.get<double>();
+      _data = _assigned_mem->val->get<double>();
       for (int i = 0; i < _num_row; ++i) {
         for (int j = 0; j < _num_col; ++j) {
           _data[i * _num_col + j] = orig._data[i * _num_col + j];
@@ -66,7 +66,7 @@ class Matrix {
     _num_col = orig._num_col;
     if (orig._data != nullptr) {
       _assigned_mem = _mem_pool->alloc();
-      _data = _assigned_mem->val.get<double>();
+      _data = _assigned_mem->val->get<double>();
       for (int i = 0; i < _num_row; ++i) {
         for (int j = 0; j < _num_row; ++j) {
           _data[i * _num_col + j] = orig._data[i * _num_col + j];
@@ -175,7 +175,7 @@ class Matrix {
     }
 
     _assigned_mem = _mem_pool->alloc();
-    _data = _assigned_mem->val.get<double>();
+    _data = _assigned_mem->val->get<double>();
   }
 
   LinkedListNode<MemoryChunk>* _assigned_mem;
