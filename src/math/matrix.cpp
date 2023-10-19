@@ -15,14 +15,7 @@ Matrix Matrix::unchecked_create(size_t num_row, size_t num_col) {
   return Matrix(num_row, num_col);
 }
 
-Matrix Matrix::unchecked_create(std::initializer_list<std::initializer_list<double>> numbers) {
-  size_t num_row = 0;
-  size_t num_col = 0;
-  for (auto iter = numbers.begin(); iter != numbers.end(); ++iter, ++num_row)
-    ;
-  for (auto iter = numbers.begin()->begin(); iter != numbers.begin()->end(); ++iter, ++num_col)
-    ;
-
+Matrix Matrix::unchecked_create(int num_row, int num_col, std::initializer_list<std::initializer_list<double>> numbers) {
   Matrix matrix(num_row, num_col);
 
   int i = 0;
@@ -110,7 +103,7 @@ bool Matrix::multiply_inplace(const Matrix& b) {
 }
 
 bool Matrix::multiply_inplace(const Tuple& b) {
-  Matrix matrix_b = unchecked_create({
+  Matrix matrix_b = unchecked_create(4, 1, {
       {b.x()},
       {b.y()},
       {b.z()},

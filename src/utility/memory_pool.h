@@ -3,6 +3,7 @@
 
 #include <cstdlib>
 #include <new>
+#include <iostream>
 
 namespace RayTracer{
   
@@ -16,9 +17,11 @@ public:
 
   template<class T>
   T* alloc() {
-    for (int i = 0; i < _chunk_size; ++i) {
+    for (int i = 0; i < _pool_size / _chunk_size; ++i) {
       if (_used[i] == false) {
         _used[i] = true;
+        unsigned long long addr = (unsigned long long)(_memory + i * _chunk_size);
+        std::cout << "alloc(): alloc addr = " << addr << ", start = " << (unsigned long long)(_memory) << std::endl;
         return reinterpret_cast<T*>(_memory + i * _chunk_size);
       }
     }
@@ -28,6 +31,7 @@ public:
 
   void free(void* p) {
     int i = (reinterpret_cast<unsigned char*>(p) - _memory) / _chunk_size;
+    std::cout << "free(p): i == " << i << "\n";
     _used[i] = false;
   }
 
