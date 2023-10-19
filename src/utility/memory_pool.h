@@ -12,16 +12,21 @@ template<class T>
 class MemoryChunk {
 public:
   MemoryChunk(): _mem(nullptr) {}
-  MemoryChunk(T* mem): _mem(mem) {}
+  MemoryChunk(int chunk_size): _mem(new T[chunk_size]) {}
   ~MemoryChunk() {
-    _mem = nullptr;
-    _next = nullptr;
+    if (_mem != nullptr) {
+      delete[] _mem;
+      _mem = nullptr;
+      _next = nullptr;
+    }
   }
 
   friend class MemoryPool<T>;
 
   T* get() { return _mem; }
 private:
+  MemoryChunk(T* mem): _mem(mem) {}
+
   T* _mem;
   MemoryChunk<T>* _next = nullptr;
 };
@@ -30,11 +35,10 @@ template<class T>
 class MemoryPool {
 public:
   MemoryPool(int pool_size, int chunk_size): _pool_size(pool_size), _chunk_size(chunk_size) {
-    _total = new MemoryChunk(new T[_pool_size * chunk_size]);
     _available = new MemoryChunk<T>();
     for (int i = 0; i < _pool_size; ++i) {
       MemoryChunk<T>* next = _available->_next;
-      _available->_next = new MemoryChunk(_total->_mem + i * sizeof(T) * chunk_size);
+      _available->_next = new MemoryChunk<T>(_chunk_size);
       _available->_next->_next = next;
     }
   }
@@ -65,13 +69,9 @@ public:
       delete iter;
       iter = next;
     }
-
-    delete[] _total->_mem;
-    delete _total;
   }
 
 private:
-  MemoryChunk<T>* _total;
   MemoryChunk<T>* _available;
   int _pool_size;
   int _chunk_size;
