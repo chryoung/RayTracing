@@ -17,11 +17,11 @@ Matrix rotation_x(double radians);
 Matrix rotation_y(double radians);
 Matrix rotation_z(double radians);
 Matrix shearing(double x_y, double x_z, double y_x, double y_z, double z_x, double z_y);
-extern const Matrix id;
+Matrix id();
 
 class TransformationBuilder {
  public:
-  TransformationBuilder() : _transformation_matrix{id} {}
+  TransformationBuilder() : _transformation_matrix{id()} {}
   ~TransformationBuilder() {}
   TransformationBuilder& translate(double x, double y, double z) {
     _transformation_matrix = translation(x, y, z) * _transformation_matrix;

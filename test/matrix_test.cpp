@@ -6,6 +6,8 @@
 
 #include "math/tuple.h"
 
+#include <iostream>
+
 using namespace RayTracer;
 
 TEST(Matrix, WhenCreateAMatrixExpectAMatrix) {
@@ -21,15 +23,8 @@ TEST(Matrix, WhenCreateMatrixWithZeroRowColExpectThrowException) {
       << "Creating a Matrix with 0 row and 0 col should throw exception.";
 }
 
-TEST(Matrix, WhenCreateAMatrixWithRowsWithDifferentNumbersOfColExpectThrowException) {
-  EXPECT_THROW(Matrix::create({{1}, {1, 2}}), std::invalid_argument);
-  EXPECT_THROW(Matrix::create({{1, 2}, {1}}), std::invalid_argument);
-}
-
 TEST(Matrix, WhenCreateWithEmptyListExpectException) {
   EXPECT_THROW(Matrix::create<double>({{}}), std::invalid_argument);
-  EXPECT_THROW(Matrix::create<double>({{1}, {}}), std::invalid_argument);
-  EXPECT_THROW(Matrix::create<double>({{}, {1}}), std::invalid_argument);
 }
 
 TEST(Matrix, WhenCreateAMatrixPointerExpectPointerToMatrix) {

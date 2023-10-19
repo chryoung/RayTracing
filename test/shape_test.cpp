@@ -13,7 +13,7 @@ using namespace RayTracer;
 
 TEST(Sphere, WhenCreateSphereExpectHasIdTransformation) {
   auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
-  EXPECT_EQ(Transform::id, s->transform());
+  EXPECT_EQ(Transform::id(), s->transform());
 }
 
 TEST(Sphere, WhenSetTransformExpectTransform) {

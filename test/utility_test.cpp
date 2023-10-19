@@ -1,6 +1,8 @@
 #include "utility/utility.h"
+#include "utility/memory_pool.h"
 
 #include <gtest/gtest.h>
+#include <utility>
 
 using namespace RayTracer;
 
@@ -45,4 +47,17 @@ TEST(Utility, WhenAIsLessEqualThanBExpectTrue) {
 
   double c = b * 3.0;
   EXPECT_TRUE(is_double_le(1.0, c));
+}
+
+TEST(MemoryPool, NewMemoryPool) {
+  MemoryPool<double> p(2, 1);
+  MemoryChunk<double>* m1 = p.alloc();
+  MemoryChunk<double>* m2 = p.alloc();
+  ASSERT_NE(nullptr, m1);
+  ASSERT_NE(nullptr, m2);
+  ASSERT_NE(nullptr, m1->get());
+  ASSERT_NE(nullptr, m2->get());
+  ASSERT_NE(m1->get(), m2->get());
+  p.free(m1);
+  p.free(m2);
 }

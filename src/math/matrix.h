@@ -2,6 +2,7 @@
 #define CA47C3DE_E656_407E_870D_96E6611689C6
 
 #include <initializer_list>
+#include <memory>
 #include <ostream>
 #include <stdexcept>
 #include <string>
@@ -12,11 +13,88 @@
 #include "tuple.h"
 #include "utility/log_helper.h"
 #include "utility/utility.h"
+#include "utility/memory_pool.h"
 
 namespace RayTracer {
+
 class Matrix {
  public:
-  ~Matrix() = default;
+  ~Matrix() {
+    if (_data != nullptr) {
+      _mem_pool->free(_assigned_mem);
+      _assigned_mem = nullptr;
+      _data = nullptr;
+    }
+  }
+
+  Matrix(const Matrix& orig) {
+    _num_row = orig._num_row;
+    _num_col = orig._num_col;
+    if (orig._data != nullptr) {
+      _assigned_mem = _mem_pool->alloc();
+      _data = _assigned_mem->get();
+      for (int i = 0; i < _num_row; ++i) {
+        for (int j = 0; j < _num_col; ++j) {
+          _data[i * _num_col + j] = orig._data[i * _num_col + j];
+        }
+      }
+    }
+  }
+
+
+  Matrix(Matrix&& orig) {
+    _num_row = orig._num_row;
+    _num_col = orig._num_col;
+    _assigned_mem = orig._assigned_mem;
+    _data = orig._data;
+
+    orig._num_row = 0;
+    orig._num_col = 0;
+    orig._data = nullptr;
+    orig._assigned_mem = nullptr;
+  }
+
+  Matrix& operator=(const Matrix& orig) {
+    if (_data != nullptr) {
+      _mem_pool->free(_assigned_mem);
+      _assigned_mem = nullptr;
+      _data = nullptr;
+    }
+
+    _num_row = orig._num_row;
+    _num_col = orig._num_col;
+    if (orig._data != nullptr) {
+      _assigned_mem = _mem_pool->alloc();
+      _data = _assigned_mem->get();
+      for (int i = 0; i < _num_row; ++i) {
+        for (int j = 0; j < _num_row; ++j) {
+          _data[i * _num_col + j] = orig._data[i * _num_col + j];
+        }
+      }
+    }
+
+    return *this;
+  }
+
+  Matrix& operator=(Matrix&& orig) {
+    if (_data != nullptr) {
+      _mem_pool->free(_assigned_mem);
+      _assigned_mem = nullptr;
+      _data = nullptr;
+    }
+
+    _num_row = orig._num_row;
+    _num_col = orig._num_col;
+    _data = orig._data;
+    _assigned_mem = orig._assigned_mem;
+
+    orig._num_row = 0;
+    orig._num_col = 0;
+    orig._data = nullptr;
+    orig._assigned_mem = nullptr;
+
+    return *this;
+  }
 
   template <class T>
   static Matrix create(std::initializer_list<std::initializer_list<T>> numbers) {
@@ -27,37 +105,39 @@ class Matrix {
                                   " create: empty std::initializer_list cannot be used to create a Matrix.");
     }
 
+    size_t num_row = 0;
     size_t num_col = 0;
-    for (auto iter = numbers.begin()->begin(); iter != numbers.begin()->end(); iter++, num_col++)
+    for (auto iter = numbers.begin(); iter != numbers.end(); ++iter, ++num_row)
       ;
-
-    std::vector<std::vector<double>> matrix_data;
-    size_t row = 0;
-    for (auto iter = numbers.begin(); iter != numbers.end(); iter++, row++) {
-      std::vector<double> matrix_row;
-      for (auto row_iter = iter->begin(); row_iter != iter->end(); row_iter++) {
-        matrix_row.emplace_back(static_cast<double>(*row_iter));
-      }
-
-      if (matrix_row.size() != num_col) {
-        throw std::invalid_argument(CURRENT_LINE + " create: the col of the row == " + std::to_string(row) +
-                                    " is not equal to the ncol of the first row == " + std::to_string(num_col));
-      }
-
-      matrix_data.emplace_back(std::move(matrix_row));
+    if (numbers.begin() != numbers.end()) {
+      for (auto iter = numbers.begin()->begin(); iter != numbers.begin()->end(); ++iter, ++num_col)
+        ;
     }
 
-    Matrix matrix;
-    matrix._data = std::move(matrix_data);
+    if (num_row == 0 || num_col == 0) {
+      throw std::invalid_argument(CURRENT_LINE + " create: invalid initializer_list");
+    }
+
+    Matrix matrix(num_row, num_col);
+
+    int i = 0;
+    for (auto row_iter = numbers.begin(); i < num_row && row_iter; ++i, ++row_iter) {
+      int j = 0;
+      for (auto col_iter = row_iter->begin(); j < num_col && col_iter; ++j, ++col_iter) {
+        matrix._data[i * num_col + j] = *col_iter;
+      }
+    }
 
     return matrix;
   }
 
   static Matrix create(size_t num_row, size_t num_col);
-  static Matrix unchecked_create(std::initializer_list<std::initializer_list<double>> numbers);
+  static Matrix unchecked_create(size_t num_row, size_t num_col);
+  static Matrix unchecked_create(int num_row, int num_col, std::initializer_list<std::initializer_list<double>> numbers);
   static Matrix id(size_t num_rows);
-  std::vector<double>& operator[](size_t row);
-  const std::vector<double>& operator[](size_t row) const;
+  static Matrix zero(size_t num_row, size_t num_col);
+  double* operator[](size_t row);
+  const double* operator[](size_t row) const;
   double at(size_t row, size_t col);
   double at(size_t row, size_t col) const;
   bool is_square();
@@ -88,9 +168,21 @@ class Matrix {
  private:
   Matrix() = default;
   Matrix(size_t num_row, size_t num_col)
-      : _data(std::vector<std::vector<double>>(num_row, std::vector<double>(num_col, 0.0))) {}
+      : _num_row{num_row}, _num_col{num_col} {
+    if (_mem_pool == nullptr) {
+      _mem_pool = std::make_unique<MemoryPool<double>>(200, 16);
+    }
 
-  std::vector<std::vector<double>> _data;
+    _assigned_mem = _mem_pool->alloc();
+    _data = _assigned_mem->get();
+  }
+
+  MemoryChunk<double>* _assigned_mem;
+  double* _data;
+  size_t _num_row;
+  size_t _num_col;
+
+  static std::unique_ptr<MemoryPool<double>> _mem_pool;
 };
 
 bool operator==(const Matrix& a, const Matrix& b);

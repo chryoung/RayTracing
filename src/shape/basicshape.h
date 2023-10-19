@@ -36,7 +36,7 @@ class BasicShape {
   }
 
  protected:
-  explicit BasicShape(std::uint64_t id, Matrix transform = Transform::id) : _id(id), _transform(transform) {}
+  explicit BasicShape(std::uint64_t id, Matrix transform = Transform::id()) : _id(id), _transform(transform) {}
 
  private:
   std::uint64_t _id;
