@@ -4,33 +4,45 @@
 #include <cstdlib>
 #include <new>
 
+#include "linked_list.h"
+
 namespace RayTracer{
-  
-class MemoryPool
-{
+
+
+class MemoryChunk {
 public:
-  MemoryPool(int init_size, int chunk_size): _pool_size(init_size), _chunk_size(chunk_size) {
-    _memory = reinterpret_cast<unsigned char*>(::malloc(sizeof(unsigned char) * init_size));
-    _used = reinterpret_cast<bool*>(::malloc(sizeof(bool) * (init_size / chunk_size)));
-  }
+  MemoryChunk(): _index(0), _mem(nullptr) {}
+  MemoryChunk(int i, unsigned char* mem): _index(i), _mem(mem) {}
 
   template<class T>
-  T* alloc() {
-    for (int i = 0; i < _pool_size / _chunk_size; ++i) {
-      if (_used[i] == false) {
-        _used[i] = true;
-        return reinterpret_cast<T*>(_memory + i * _chunk_size);
-      }
+  T* get() { return reinterpret_cast<T*>(_mem); }
+private:
+  int _index;
+  unsigned char * _mem;
+};
+
+class MemoryPool {
+public:
+  using Memory = LinkedListNode<MemoryChunk>*;
+
+  MemoryPool(int pool_size, int chunk_size): _pool_size(pool_size), _chunk_size(chunk_size) {
+    _memory = reinterpret_cast<unsigned char*>(::malloc(sizeof(unsigned char) * chunk_size * pool_size));
+    for (int i = 0; i < _pool_size; ++i) {
+      _available.add_back(new LinkedListNode<MemoryChunk>(MemoryChunk(i, _memory + i * chunk_size)));
+    }
+  }
+
+  Memory alloc() {
+    if (_available.is_empty()) {
+    // No available memory.
+      throw std::bad_alloc();
     }
 
-    // No available memory.
-    throw std::bad_alloc();
+    return _available.pop_front();
   }
 
-  template<class T>
-  void free(T* p) {
-    int i = (reinterpret_cast<unsigned char*>(p) - _memory) / _chunk_size;
-    _used[i] = false;
+  void free(Memory p) {
+    _available.add_back(p);
   }
 
   virtual ~MemoryPool() {
@@ -38,18 +50,13 @@ public:
       ::free(_memory);
       _memory = nullptr;
     }
-
-    if (_used != nullptr) {
-      ::free(_used);
-      _used = nullptr;
-    }
   }
 
 private:
   unsigned char* _memory;
+  LinkedList<MemoryChunk> _available;
   int _pool_size;
   int _chunk_size;
-  bool* _used;
 };
 
 }

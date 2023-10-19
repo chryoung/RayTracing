@@ -13,6 +13,7 @@
 #include "tuple.h"
 #include "utility/log_helper.h"
 #include "utility/utility.h"
+#include "utility/linked_list.h"
 #include "utility/memory_pool.h"
 
 namespace RayTracer {
@@ -21,7 +22,8 @@ class Matrix {
  public:
   ~Matrix() {
     if (_data != nullptr) {
-      _mem_pool->free(_data);
+      _mem_pool->free(_assigned_mem);
+      _assigned_mem = nullptr;
       _data = nullptr;
     }
   }
@@ -30,7 +32,8 @@ class Matrix {
     _num_row = orig._num_row;
     _num_col = orig._num_col;
     if (orig._data != nullptr) {
-      _data = _mem_pool->alloc<double>();
+      _assigned_mem = _mem_pool->alloc();
+      _data = _assigned_mem->val.get<double>();
       for (int i = 0; i < _num_row; ++i) {
         for (int j = 0; j < _num_col; ++j) {
           _data[i * _num_col + j] = orig._data[i * _num_col + j];
@@ -43,23 +46,27 @@ class Matrix {
   Matrix(Matrix&& orig) {
     _num_row = orig._num_row;
     _num_col = orig._num_col;
+    _assigned_mem = orig._assigned_mem;
     _data = orig._data;
 
     orig._num_row = 0;
     orig._num_col = 0;
     orig._data = nullptr;
+    orig._assigned_mem = nullptr;
   }
 
   Matrix& operator=(const Matrix& orig) {
     if (_data != nullptr) {
-      _mem_pool->free(_data);
+      _mem_pool->free(_assigned_mem);
+      _assigned_mem = nullptr;
       _data = nullptr;
     }
 
     _num_row = orig._num_row;
     _num_col = orig._num_col;
     if (orig._data != nullptr) {
-      _data = _mem_pool->alloc<double>();
+      _assigned_mem = _mem_pool->alloc();
+      _data = _assigned_mem->val.get<double>();
       for (int i = 0; i < _num_row; ++i) {
         for (int j = 0; j < _num_row; ++j) {
           _data[i * _num_col + j] = orig._data[i * _num_col + j];
@@ -72,17 +79,20 @@ class Matrix {
 
   Matrix& operator=(Matrix&& orig) {
     if (_data != nullptr) {
-      _mem_pool->free(_data);
+      _mem_pool->free(_assigned_mem);
+      _assigned_mem = nullptr;
       _data = nullptr;
     }
 
     _num_row = orig._num_row;
     _num_col = orig._num_col;
     _data = orig._data;
+    _assigned_mem = orig._assigned_mem;
 
     orig._num_row = 0;
     orig._num_col = 0;
     orig._data = nullptr;
+    orig._assigned_mem = nullptr;
 
     return *this;
   }
@@ -164,12 +174,15 @@ class Matrix {
       _mem_pool = std::make_unique<MemoryPool>(sizeof(double) * 3200, sizeof(double) * 16);
     }
 
-    _data = _mem_pool->alloc<double>();
+    _assigned_mem = _mem_pool->alloc();
+    _data = _assigned_mem->val.get<double>();
   }
 
+  LinkedListNode<MemoryChunk>* _assigned_mem;
   double* _data;
   size_t _num_row;
   size_t _num_col;
+
   static std::unique_ptr<MemoryPool> _mem_pool;
 };
 

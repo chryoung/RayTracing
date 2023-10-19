@@ -46,3 +46,16 @@ TEST(Utility, WhenAIsLessEqualThanBExpectTrue) {
   double c = b * 3.0;
   EXPECT_TRUE(is_double_le(1.0, c));
 }
+
+TEST(LinkedList, NewListIsEmpty) {
+  LinkedList<int> a;
+  EXPECT_TRUE(a.is_empty());
+}
+
+TEST(LinkedList, AddBack) {
+  LinkedList<int> a;
+  a.add_back(new LinkedListNode<int>(10));
+  LinkedListNode<int>* v = a.pop_front();
+  ASSERT_NE(nullptr, v);
+  EXPECT_EQ(v->val, 10);
+}
