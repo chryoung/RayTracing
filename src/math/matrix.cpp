@@ -1,6 +1,9 @@
 #include "matrix.h"
 
 namespace RayTracer {
+
+MemoryPool Matrix::_mem_pool = MemoryPool(sizeof(double) * 2000, sizeof(double) * 16);
+
 Matrix Matrix::create(size_t num_row, size_t num_col) {
   if (num_row <= 0 || num_col <= 0) {
     throw std::invalid_argument(CURRENT_LINE + " create: num_row or num_col should be greater than 0.");
@@ -26,7 +29,7 @@ Matrix Matrix::unchecked_create(std::initializer_list<std::initializer_list<doub
   for (auto row_iter = numbers.begin(); i < num_row; ++i, ++row_iter) {
     int j = 0;
     for (auto col_iter = row_iter->begin(); j < num_col; ++j, ++col_iter) {
-      matrix._data[i][j] = *col_iter;
+      matrix._data[i * num_col + j] = *col_iter;
     }
   }
 
@@ -63,16 +66,16 @@ Matrix Matrix::zero(size_t num_row, size_t num_col) {
   return m;
 }
 
-double* Matrix::operator[](size_t row) { return _data[row]; }
+MatrixRow Matrix::operator[](size_t row) { return MatrixRow(row, _num_col, _data); }
 
-double* Matrix::operator[](size_t row) const { return _data[row]; }
+const MatrixRow Matrix::operator[](size_t row) const { return MatrixRow(row, _num_col, _data); }
 
 double Matrix::at(size_t row, size_t col) {
   if (row >= rows() || col >= cols()) {
     throw std::out_of_range(CURRENT_LINE + " at: index is out of range.");
   }
 
-  return _data[row][col];
+  return _data[row * _num_col + col];
 }
 
 double Matrix::at(size_t row, size_t col) const {
@@ -80,7 +83,7 @@ double Matrix::at(size_t row, size_t col) const {
     throw std::out_of_range(CURRENT_LINE + " at: index is out of range.");
   }
 
-  return _data[row][col];
+  return _data[row * _num_col + col];
 }
 
 bool Matrix::is_square() { return rows() == cols(); }

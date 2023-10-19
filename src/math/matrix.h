@@ -12,17 +12,28 @@
 #include "tuple.h"
 #include "utility/log_helper.h"
 #include "utility/utility.h"
+#include "utility/memory_pool.h"
 
 namespace RayTracer {
+
+class Matrix;
+
+class MatrixRow {
+public:
+  friend class Matrix;
+  double& operator[](int col) { return *(_mem + (_row_num * _row_size + col)); }
+  double operator[](int col) const { return *(_mem + (_row_num * _row_size + col)); }
+private:
+  MatrixRow(int row_num, int row_size, double* mem): _row_num(row_num), _row_size(row_size), _mem(mem) {}
+  int _row_num;
+  int _row_size;
+  double* _mem;
+};
+
 class Matrix {
  public:
   ~Matrix() {
-    for (int i = 0; i < _num_row; ++i) {
-      delete[] _data[i];
-      _data[i] = nullptr;
-    }
-
-    delete[] _data;
+    _mem_pool.free(_data);
     _data = nullptr;
   }
 
@@ -30,11 +41,10 @@ class Matrix {
     _num_row = orig._num_row;
     _num_col = orig._num_col;
     if (orig._data != nullptr) {
-      _data = new double*[_num_row];
+      _data = _mem_pool.alloc<double>();
       for (int i = 0; i < _num_row; ++i) {
-        _data[i] = new double[_num_col];
-        for (int j = 0; j < _num_row; ++j) {
-          _data[i][j] = orig._data[i][j];
+        for (int j = 0; j < _num_col; ++j) {
+          _data[i * _num_col + j] = orig._data[i * _num_col + j];
         }
       }
     }
@@ -53,23 +63,16 @@ class Matrix {
 
   Matrix& operator=(const Matrix& orig) {
     if (_data != nullptr) {
-      for (int i = 0; i < _num_row; ++i) {
-        delete[] _data[i];
-        _data[i] = nullptr;
-      }
-
-      delete[] _data;
-      _data = nullptr;
+      _mem_pool.free(_data);
     }
 
     _num_row = orig._num_row;
     _num_col = orig._num_col;
     if (orig._data != nullptr) {
-      _data = new double*[_num_row];
+      _data = _mem_pool.alloc<double>();
       for (int i = 0; i < _num_row; ++i) {
-        _data[i] = new double[_num_col];
         for (int j = 0; j < _num_row; ++j) {
-          _data[i][j] = orig._data[i][j];
+          _data[i * _num_col + j] = orig._data[i * _num_col + j];
         }
       }
     }
@@ -79,13 +82,7 @@ class Matrix {
 
   Matrix& operator=(Matrix&& orig) {
     if (_data != nullptr) {
-      for (int i = 0; i < _num_row; ++i) {
-        delete[] _data[i];
-        _data[i] = nullptr;
-      }
-
-      delete[] _data;
-      _data = nullptr;
+      _mem_pool.free(_data);
     }
 
     _num_row = orig._num_row;
@@ -127,7 +124,7 @@ class Matrix {
     for (auto row_iter = numbers.begin(); i < num_row && row_iter; ++i, ++row_iter) {
       int j = 0;
       for (auto col_iter = row_iter->begin(); j < num_col && col_iter; ++j, ++col_iter) {
-        matrix._data[i][j] = *col_iter;
+        matrix._data[i * num_col + j] = *col_iter;
       }
     }
 
@@ -139,8 +136,8 @@ class Matrix {
   static Matrix unchecked_create(std::initializer_list<std::initializer_list<double>> numbers);
   static Matrix id(size_t num_rows);
   static Matrix zero(size_t num_row, size_t num_col);
-  double* operator[](size_t row);
-  double* operator[](size_t row) const;
+  MatrixRow operator[](size_t row);
+  const MatrixRow operator[](size_t row) const;
   double at(size_t row, size_t col);
   double at(size_t row, size_t col) const;
   bool is_square();
@@ -172,15 +169,13 @@ class Matrix {
   Matrix() = default;
   Matrix(size_t num_row, size_t num_col)
       : _num_row{num_row}, _num_col{num_col} {
-    _data = new double*[num_row];
-    for (int i = 0; i < num_row; ++i) {
-      _data[i] = new double[num_col];
-    }
+    _data = _mem_pool.alloc<double>();
   }
 
-  double** _data;
+  double* _data;
   size_t _num_row;
   size_t _num_col;
+  static MemoryPool _mem_pool;
 };
 
 bool operator==(const Matrix& a, const Matrix& b);
