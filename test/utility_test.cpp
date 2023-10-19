@@ -1,5 +1,4 @@
 #include "utility/utility.h"
-#include "utility/linked_list.h"
 #include "utility/memory_pool.h"
 
 #include <gtest/gtest.h>
@@ -50,27 +49,15 @@ TEST(Utility, WhenAIsLessEqualThanBExpectTrue) {
   EXPECT_TRUE(is_double_le(1.0, c));
 }
 
-TEST(LinkedList, NewListIsEmpty) {
-  LinkedList<int> a;
-  EXPECT_TRUE(a.is_empty());
-}
-
-TEST(LinkedList, AddBack) {
-  LinkedList<int> a;
-  a.add_back(new LinkedListNode<int>(std::make_unique<int>(10)));
-  ASSERT_FALSE(a.is_empty());
-  LinkedListNode<int>* v = a.pop_front();
-  ASSERT_NE(nullptr, v);
-  EXPECT_EQ(*(v->val), 10);
-}
-
 TEST(MemoryPool, NewMemoryPool) {
-  MemoryPool p(2, sizeof(double));
-  MemoryPool::Memory m1 = p.alloc();
-  MemoryPool::Memory m2 = p.alloc();
+  MemoryPool<double> p(2, 1);
+  MemoryChunk<double>* m1 = p.alloc();
+  MemoryChunk<double>* m2 = p.alloc();
   ASSERT_NE(nullptr, m1);
   ASSERT_NE(nullptr, m2);
-  ASSERT_NE(nullptr, m1->val->get<double>());
-  ASSERT_NE(nullptr, m2->val->get<double>());
-  ASSERT_EQ(sizeof(double), (unsigned long long)m2->val->get<double>() - (unsigned long long)m1->val->get<double>());
+  ASSERT_NE(nullptr, m1->get());
+  ASSERT_NE(nullptr, m2->get());
+  ASSERT_NE(m1->get(), m2->get());
+  p.free(m1);
+  p.free(m2);
 }

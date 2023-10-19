@@ -6,6 +6,8 @@
 
 #include "math/tuple.h"
 
+#include <iostream>
+
 using namespace RayTracer;
 
 TEST(Matrix, WhenCreateAMatrixExpectAMatrix) {

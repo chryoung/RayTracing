@@ -13,7 +13,6 @@
 #include "tuple.h"
 #include "utility/log_helper.h"
 #include "utility/utility.h"
-#include "utility/linked_list.h"
 #include "utility/memory_pool.h"
 
 namespace RayTracer {
@@ -33,7 +32,7 @@ class Matrix {
     _num_col = orig._num_col;
     if (orig._data != nullptr) {
       _assigned_mem = _mem_pool->alloc();
-      _data = _assigned_mem->val->get<double>();
+      _data = _assigned_mem->get();
       for (int i = 0; i < _num_row; ++i) {
         for (int j = 0; j < _num_col; ++j) {
           _data[i * _num_col + j] = orig._data[i * _num_col + j];
@@ -66,7 +65,7 @@ class Matrix {
     _num_col = orig._num_col;
     if (orig._data != nullptr) {
       _assigned_mem = _mem_pool->alloc();
-      _data = _assigned_mem->val->get<double>();
+      _data = _assigned_mem->get();
       for (int i = 0; i < _num_row; ++i) {
         for (int j = 0; j < _num_row; ++j) {
           _data[i * _num_col + j] = orig._data[i * _num_col + j];
@@ -171,19 +170,19 @@ class Matrix {
   Matrix(size_t num_row, size_t num_col)
       : _num_row{num_row}, _num_col{num_col} {
     if (_mem_pool == nullptr) {
-      _mem_pool = std::make_unique<MemoryPool>(sizeof(double) * 3200, sizeof(double) * 16);
+      _mem_pool = std::make_unique<MemoryPool<double>>(200, 16);
     }
 
     _assigned_mem = _mem_pool->alloc();
-    _data = _assigned_mem->val->get<double>();
+    _data = _assigned_mem->get();
   }
 
-  LinkedListNode<MemoryChunk>* _assigned_mem;
+  MemoryChunk<double>* _assigned_mem;
   double* _data;
   size_t _num_row;
   size_t _num_col;
 
-  static std::unique_ptr<MemoryPool> _mem_pool;
+  static std::unique_ptr<MemoryPool<double>> _mem_pool;
 };
 
 bool operator==(const Matrix& a, const Matrix& b);

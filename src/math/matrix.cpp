@@ -2,7 +2,7 @@
 
 namespace RayTracer {
 
-std::unique_ptr<MemoryPool> Matrix::_mem_pool;
+std::unique_ptr<MemoryPool<double>> Matrix::_mem_pool;
 
 Matrix Matrix::create(size_t num_row, size_t num_col) {
   if (num_row <= 0 || num_col <= 0) {
@@ -271,7 +271,7 @@ Matrix operator*(const Matrix& a, const Matrix& b) {
                              " operator*: Matrix multiplication cannot be performed because a.cols() != b.rows()");
   }
 
-  Matrix product = Matrix::unchecked_create(a.rows(), b.cols());
+  Matrix product = Matrix::zero(a.rows(), b.cols());
   for (size_t row = 0; row < a.rows(); ++row) {
     for (size_t col = 0; col < b.cols(); ++col) {
       for (size_t i = 0; i < a.cols(); ++i) {

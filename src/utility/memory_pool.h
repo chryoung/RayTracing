@@ -1,60 +1,78 @@
 #ifndef A6A29969_407D_4F35_8232_D57683122DCC
 #define A6A29969_407D_4F35_8232_D57683122DCC
 
-#include <cstdlib>
 #include <new>
-#include <utility>
-
-#include "linked_list.h"
 
 namespace RayTracer{
 
+template<class T>
+class MemoryPool;
 
+template<class T>
 class MemoryChunk {
 public:
   MemoryChunk(): _mem(nullptr) {}
-  MemoryChunk(unsigned char* mem): _mem(mem) {}
+  MemoryChunk(T* mem): _mem(mem) {}
+  ~MemoryChunk() {
+    _mem = nullptr;
+    _next = nullptr;
+  }
 
-  template<class T>
-  T* get() { return reinterpret_cast<T*>(_mem); }
+  friend class MemoryPool<T>;
+
+  T* get() { return _mem; }
 private:
-  unsigned char * _mem;
+  T* _mem;
+  MemoryChunk<T>* _next = nullptr;
 };
 
+template<class T>
 class MemoryPool {
 public:
-  using Memory = LinkedListNode<MemoryChunk>*;
-
   MemoryPool(int pool_size, int chunk_size): _pool_size(pool_size), _chunk_size(chunk_size) {
-    _memory = reinterpret_cast<unsigned char*>(::malloc(sizeof(unsigned char) * chunk_size * pool_size));
+    _total = new MemoryChunk(new T[_pool_size * chunk_size]);
+    _available = new MemoryChunk<T>();
     for (int i = 0; i < _pool_size; ++i) {
-      _available.add_back(new LinkedListNode<MemoryChunk>(std::make_unique<MemoryChunk>(_memory + i * chunk_size)));
+      MemoryChunk<T>* next = _available->_next;
+      _available->_next = new MemoryChunk(_total->_mem + i * sizeof(T) * chunk_size);
+      _available->_next->_next = next;
     }
   }
 
-  Memory alloc() {
-    if (_available.is_empty()) {
+  MemoryChunk<T>* alloc() {
+    if (_available->_next == nullptr) {
     // No available memory.
       throw std::bad_alloc();
     }
 
-    return _available.pop_front();
+    MemoryChunk<T>* mem = _available->_next;
+    _available->_next = _available->_next->_next;
+    mem->_next = nullptr;
+
+    return mem;
   }
 
-  void free(Memory p) {
-    _available.add_back(p);
+  void free(MemoryChunk<T>* p) {
+    MemoryChunk<T>* next = _available->_next;
+    _available->_next = p;
+    p->_next = next;
   }
 
   virtual ~MemoryPool() {
-    if (_memory != nullptr) {
-      ::free(_memory);
-      _memory = nullptr;
+    MemoryChunk<T>* iter = _available;
+    while (iter) {
+      MemoryChunk<T>* next = iter->_next;
+      delete iter;
+      iter = next;
     }
+
+    delete[] _total->_mem;
+    delete _total;
   }
 
 private:
-  unsigned char* _memory;
-  LinkedList<MemoryChunk> _available;
+  MemoryChunk<T>* _total;
+  MemoryChunk<T>* _available;
   int _pool_size;
   int _chunk_size;
 };
