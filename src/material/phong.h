@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include "math/tuple.h"
+#include "material.h"
 #include "image/color.h"
 #include "utility/utility.h"
 #include "utility/log_helper.h"
@@ -11,7 +12,7 @@
 namespace RayTracer {
 namespace Material {
 
-class PhongMaterial {
+class PhongMaterial : public Material {
 public:
   PhongMaterial():
     _color(Color(1, 1, 1)),
@@ -37,7 +38,7 @@ public:
   PhongMaterial& set_specular(double specular);
   PhongMaterial& set_shininess(double shininess);
 
-  Color lighting(const Light::PointLight& light, const Point& position, const Vector& eyev, const Vector& normalv);
+  Color lighting(const Light::PointLight& light, const Point& position, const Vector& eyev, const Vector& normalv) override;
 
 private:
   Color _color;

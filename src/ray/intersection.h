@@ -12,7 +12,7 @@ class Intersection {
   Intersection(double t, Shape::BasicShapePtr object) : _object(object), _t(t) {}
 
   Shape::BasicShapePtr object() { return _object; }
-  Shape::BasicShapePtr object() const { return _object; }
+  const Shape::BasicShapePtr& object() const { return _object; }
 
   double t() { return _t; }
   double t() const { return _t; }

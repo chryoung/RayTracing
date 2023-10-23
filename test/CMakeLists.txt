@@ -16,7 +16,8 @@ set(RT_TESTS_SRC_FILES
     intersection_test.cpp
     shape_test.cpp
     light_test.cpp
-    material_test.cpp)
+    material_test.cpp
+    world_test.cpp)
 
 add_executable(rt_tests ${RT_TESTS_SRC_FILES})
 

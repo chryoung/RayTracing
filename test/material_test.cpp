@@ -9,7 +9,7 @@
 
 using namespace RayTracer;
 
-class MaterialTest: public testing::Test {
+class MaterialTest : public ::testing::Test {
 protected:
   void SetUp() override {
     normalv = Vector{0, 0, -1};

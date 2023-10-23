@@ -23,9 +23,9 @@ class BasicShape {
     return *this;
   }
 
-  const Material::PhongMaterial& material() const { return _material; }
-  Material::PhongMaterial& material() { return _material; }
-  BasicShape& set_material(const Material::PhongMaterial& material) {
+  const Material::MaterialPtr material() const { return _material; }
+  Material::MaterialPtr material() { return _material; }
+  BasicShape& set_material(const Material::MaterialPtr& material) {
     _material = material;
 
     return *this;
@@ -41,7 +41,7 @@ class BasicShape {
  private:
   std::uint64_t _id;
   Matrix _transform;
-  Material::PhongMaterial _material;
+  Material::MaterialPtr _material;
 };
 
 using BasicShapePtr = std::shared_ptr<BasicShape>;
