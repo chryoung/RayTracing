@@ -9,7 +9,20 @@
 
 using namespace RayTracer;
 
-TEST(Material, DefaultMaterial) {
+class MaterialTest: public testing::Test {
+protected:
+  void SetUp() override {
+    normalv = Vector{0, 0, -1};
+    position = Point{0, 0, 0};
+    white = Color{1, 1, 1};
+  }
+
+  Vector normalv;
+  Point position;
+  Color white;
+};
+
+TEST_F(MaterialTest, DefaultMaterial) {
   Material::PhongMaterial m;
   EXPECT_EQ(Color(1, 1, 1), m.color());
   EXPECT_DOUBLE_EQ(0.1, m.ambient());
@@ -18,57 +31,47 @@ TEST(Material, DefaultMaterial) {
   EXPECT_DOUBLE_EQ(200.0, m.shininess());
 }
 
-TEST(Material, LightingWithEyeBetweenLightAndSurface) {
+TEST_F(MaterialTest, LightingWithEyeBetweenLightAndSurface) {
   Vector eyev{0, 0, -1};
-  Vector normalv{0, 0, -1};
-  Light::PointLight light{Color{1, 1, 1}, Point{0, 0, -10}};
-  Point position{0, 0, 0};
+  Light::PointLight light{white, Point{0, 0, -10}};
   Material::PhongMaterial m;
 
   auto result = m.lighting(light, position, eyev, normalv);
   EXPECT_EQ(Color(1.9), result);
 }
 
-TEST(Material, LightingWithEyeBetweenLightAndSurfaceEyeOffset45) {
+TEST_F(MaterialTest, LightingWithEyeBetweenLightAndSurfaceEyeOffset45) {
   const double x = sqrt(2.0) / 2.0;
   Vector eyev{0, x, -x};
-  Vector normalv{0, 0, -1};
-  Light::PointLight light{Color{1, 1, 1}, Point{0, 0, -10}};
-  Point position{0, 0, 0};
+  Light::PointLight light{white, Point{0, 0, -10}};
   Material::PhongMaterial m;
 
   auto result = m.lighting(light, position, eyev, normalv);
   EXPECT_EQ(Color(1), result);
 }
 
-TEST(Material, LightingWithEyeBetweenLightAndSurfaceLightOffset45) {
+TEST_F(MaterialTest, LightingWithEyeBetweenLightAndSurfaceLightOffset45) {
   Vector eyev{0, 0, -1};
-  Vector normalv{0, 0, -1};
-  Light::PointLight light{Color{1, 1, 1}, Point{0, 10, -10}};
-  Point position{0, 0, 0};
+  Light::PointLight light{white, Point{0, 10, -10}};
   Material::PhongMaterial m;
 
   auto result = m.lighting(light, position, eyev, normalv);
   EXPECT_EQ(Color(0.7364), result);
 }
 
-TEST(Material, LightingWithEyeInThePathOfTheReflection) {
+TEST_F(MaterialTest, LightingWithEyeInThePathOfTheReflection) {
   const double x = sqrt(2.0) / 2.0;
   Vector eyev{0, -x, -x};
-  Vector normalv{0, 0, -1};
-  Light::PointLight light{Color{1, 1, 1}, Point{0, 10, -10}};
-  Point position{0, 0, 0};
+  Light::PointLight light{white, Point{0, 10, -10}};
   Material::PhongMaterial m;
 
   auto result = m.lighting(light, position, eyev, normalv);
   EXPECT_EQ(Color(1.6364), result);
 }
 
-TEST(Material, LightingWithLightBehindSurface) {
+TEST_F(MaterialTest, LightingWithLightBehindSurface) {
   Vector eyev{0, 0, -1};
-  Vector normalv{0, 0, -1};
-  Light::PointLight light{Color{1, 1, 1}, Point{0, 0, 10}};
-  Point position{0, 0, 0};
+  Light::PointLight light{white, Point{0, 0, 10}};
   Material::PhongMaterial m;
 
   auto result = m.lighting(light, position, eyev, normalv);
