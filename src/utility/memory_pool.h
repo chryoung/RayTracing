@@ -34,19 +34,15 @@ private:
 template<class T>
 class MemoryPool {
 public:
-  MemoryPool(int pool_size, int chunk_size): _pool_size(pool_size), _chunk_size(chunk_size) {
+  MemoryPool(int pool_size, int chunk_size, int resize_step = 100): _pool_size(pool_size), _chunk_size(chunk_size), _resize_step(resize_step) {
     _available = new MemoryChunk<T>();
-    for (int i = 0; i < _pool_size; ++i) {
-      MemoryChunk<T>* next = _available->_next;
-      _available->_next = new MemoryChunk<T>(_chunk_size);
-      _available->_next->_next = next;
-    }
+    alloc_chunk(_pool_size);
   }
 
   MemoryChunk<T>* alloc() {
     if (_available->_next == nullptr) {
-    // No available memory.
-      throw std::bad_alloc();
+      alloc_chunk(_resize_step);
+      _pool_size += _resize_step;
     }
 
     MemoryChunk<T>* mem = _available->_next;
@@ -72,9 +68,18 @@ public:
   }
 
 private:
+  void alloc_chunk(int n) {
+    for (int i = 0; i < n; ++i) {
+      MemoryChunk<T>* next = _available->_next;
+      _available->_next = new MemoryChunk<T>(_chunk_size);
+      _available->_next->_next = next;
+    }
+  }
+
   MemoryChunk<T>* _available;
   int _pool_size;
   int _chunk_size;
+  int _resize_step;
 };
 
 }
