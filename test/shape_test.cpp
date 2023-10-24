@@ -1,6 +1,8 @@
+#include "material/material.h"
 #include "shape/sphere.h"
 
 #include <cmath>
+#include <memory>
 #include <gtest/gtest.h>
 
 #include "shape/shapebuilder.h"
@@ -75,14 +77,14 @@ TEST(Sphere, ComputingNormalOnATransformedSphere) {
 
 TEST(Sphere, SphereDefaultMaterial) {
   auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
-  const Material::PhongMaterial& m = s->material();
-  EXPECT_EQ(Material::PhongMaterial(), m);
+  Material::MaterialPtr m = s->material();
+  EXPECT_EQ(Material::PhongMaterial(), *m);
 }
 
 TEST(Sphere, SphereMayBeAssignedAMaterial) {
   auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
-  Material::PhongMaterial m;
-  m.set_ambient(1.0);
+  Material::MaterialPtr m = std::make_shared<Material::PhongMaterial>();
+  m->set_ambient(1.0);
   s->set_material(m);
-  EXPECT_EQ(m, s->material());
+  EXPECT_EQ(*m, *(s->material()));
 }

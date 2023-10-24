@@ -28,9 +28,9 @@ class Ray {
   Point position(double time) { return _origin + _direction * time; }
   Point position(double time) const { return const_cast<Ray&>(*this).position(time); }
 
-  IntersectionCollection intersect(std::shared_ptr<Shape::Sphere> s);
+  IntersectionCollection intersect(Shape::BasicShapePtr s);
 
-  IntersectionCollection intersect(std::shared_ptr<Shape::Sphere> s) const {
+  IntersectionCollection intersect(Shape::BasicShapePtr s) const {
     return const_cast<Ray&>(*this).intersect(s);
   }
 

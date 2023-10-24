@@ -1,3 +1,4 @@
+#include <memory>
 #include "math/tuple.h"
 #include "ray/ray.h"
 #include "image/canvas.h"
@@ -25,8 +26,8 @@ int main() {
     .scale(1, 0.5, 1)
     .rotate_z(M_PI / 4.0);
   sphere->set_transform(tb.build());
-  sphere->set_material(Material::PhongMaterial());
-  sphere->material().set_color(Color(1, 0.2, 1));
+  sphere->set_material(std::make_shared<Material::PhongMaterial>());
+  sphere->material()->set_color(Color(1, 0.2, 1));
 
   auto light = Light::PointLight(Color(1), Point(-10, 10, -10));
   const Color BLACK = Color::make_black();
@@ -45,7 +46,7 @@ int main() {
         auto point = ray.position(hit->t());
         auto normal = hit->object()->normal_at(point);
         const auto& eye = ray.direction();
-        auto color = hit->object()->material().lighting(light, point, eye, normal);
+        auto color = hit->object()->material()->lighting(light, point, eye, normal);
         c.write_pixel(x, y, color);
       } else {
         c.write_pixel(x, y, BLACK);

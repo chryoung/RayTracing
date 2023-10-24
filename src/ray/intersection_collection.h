@@ -15,6 +15,8 @@
 namespace RayTracer {
 class IntersectionCollection {
  public:
+  using value_type = Intersection;
+
   IntersectionCollection() {}
 
   IntersectionCollection(std::initializer_list<Intersection> intersections);
@@ -28,6 +30,11 @@ class IntersectionCollection {
   const Intersection& operator[](size_t index) const {
     return const_cast<IntersectionCollection&>(*this).operator[](index);
   }
+
+  std::list<Intersection>::iterator begin() { return _intersections.begin(); }
+  std::list<Intersection>::const_iterator cbegin() const { return _intersections.cbegin(); }
+  std::list<Intersection>::iterator end() { return _intersections.end(); }
+  std::list<Intersection>::const_iterator cend() const { return _intersections.cend(); }
 
   std::optional<Intersection> hit();
   std::optional<Intersection> hit() const { return const_cast<IntersectionCollection&>(*this).hit(); }

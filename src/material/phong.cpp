@@ -12,6 +12,12 @@ double PhongMaterial::diffuse() { return _diffuse; }
 double PhongMaterial::specular() { return _specular; }
 double PhongMaterial::shininess() { return _shininess; }
 
+const Color& PhongMaterial::color() const { return _color; }
+double PhongMaterial::ambient() const { return _ambient; }
+double PhongMaterial::diffuse() const { return _diffuse; }
+double PhongMaterial::specular() const { return _specular; }
+double PhongMaterial::shininess() const { return _shininess; }
+
 PhongMaterial& PhongMaterial::set_color(Color color) {
   _color = color;
   return *this;
@@ -57,7 +63,7 @@ PhongMaterial& PhongMaterial::set_shininess(double shininess) {
   return *this;
 }
 
-Color PhongMaterial::lighting(const Light::PointLight& light, const Point& position, const Vector& eyev, const Vector& normalv) {
+Color PhongMaterial::lighting(const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv) {
   Color effective_color = _color * light.intensity();
 
   Vector lightv = light.position() - position;

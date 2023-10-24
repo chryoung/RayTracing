@@ -1,6 +1,7 @@
 find_package(GTest)
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/googletest/googletest/include)
+include_directories(${CMAKE_SOURCE_DIR}/third_party/googletest/googlemock/include)
 enable_testing()
 
 set(RT_TESTS_SRC_FILES
