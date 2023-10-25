@@ -6,6 +6,7 @@ set(RT_SRC_FILES
     math/matrix.cpp
     ray/ray.cpp
     ray/intersection_collection.cpp
+    ray/computation.cpp
     geometry/transform.cpp
     shape/sphere.cpp
     material/phong.cpp

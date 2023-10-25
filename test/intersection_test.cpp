@@ -3,6 +3,7 @@
 #include "shape/sphere.h"
 #include "shape/shapebuilder.h"
 #include "ray/ray.h"
+#include "ray/computation.h"
 
 #include <gtest/gtest.h>
 
@@ -86,4 +87,16 @@ TEST(Intersection, WhenInsertLowestTToIntersectionsExpectLowestPositiveT) {
   auto hit = xs.hit();
   ASSERT_TRUE(hit.has_value());
   EXPECT_EQ(i5, *hit);
+}
+
+TEST(Intersection, PrecomputeStateOfAnInterSection) {
+  Ray r(Point(0, 0, -5), Vector(0, 0, 1));
+  auto shape = Shape::ShapeBuilder::build<Shape::Sphere>();
+  Intersection i(4, shape);
+  auto comps = Computation::prepare_computations(i, r);
+  EXPECT_EQ(i.t(), comps.t);
+  EXPECT_EQ(i.object(), comps.object);
+  EXPECT_EQ(Point(0, 0, -1), comps.point);
+  EXPECT_EQ(Vector(0, 0, -1), comps.eyev);
+  EXPECT_EQ(Vector(0, 0, -1), comps.normalv);
 }
