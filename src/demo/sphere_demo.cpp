@@ -33,7 +33,7 @@ int main() {
       Vector direction = position - ray_origin;
       direction.normalize();
       auto ray = Ray(ray_origin, direction);
-      auto xs = ray.intersect(sphere);
+      auto xs = sphere->intersect(ray);
       if (xs.hit()) {
         c.write_pixel(x, y, color);
       }

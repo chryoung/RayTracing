@@ -9,8 +9,12 @@
 #include "material/phong.h"
 
 namespace RayTracer {
+
+class Ray;
+class IntersectionCollection;
+
 namespace Shape {
-class BasicShape {
+class BasicShape : public std::enable_shared_from_this<BasicShape> {
  public:
   virtual ~BasicShape() = default;
   std::uint64_t id() { return _id; }
@@ -34,6 +38,9 @@ class BasicShape {
   virtual Vector normal_at(const Point& p) {
     return Vector{0, 0, 1};
   }
+
+  virtual IntersectionCollection intersect(const Ray& ray) = 0;
+  virtual IntersectionCollection intersect(const Ray& ray) const = 0;
 
  protected:
   explicit BasicShape(std::uint64_t id, Matrix transform = Transform::id()) : _id(id), _transform(transform), _material(std::make_shared<Material::PhongMaterial>()) {}

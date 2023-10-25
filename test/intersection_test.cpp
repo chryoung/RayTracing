@@ -28,7 +28,7 @@ TEST(Intersection, WhenAggregatingIntersectionsExpectIntersectionCollection) {
 TEST(Intersection, WhenGetIntersectionsFromRayExpectIntersectionCollection) {
   Ray r(Point(0, 0, -5), Vector(0, 0, 1));
   auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
-  auto xs = r.intersect(s);
+  auto xs = s->intersect(r);
   ASSERT_EQ(2, xs.size());
   EXPECT_EQ(s, xs[0].object());
   EXPECT_EQ(s, xs[1].object());

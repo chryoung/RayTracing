@@ -14,7 +14,9 @@ class Sphere : public BasicShape {
 
   friend class ShapeBuilder;
 
-  virtual Vector normal_at(const Point& p) override;
+  Vector normal_at(const Point& p) override;
+  IntersectionCollection intersect(const Ray& ray) override;
+  IntersectionCollection intersect(const Ray& ray) const override;
 
  private:
   explicit Sphere(std::uint64_t id) : 
