@@ -8,6 +8,8 @@
 #include "ray/intersection_collection.h"
 
 namespace RayTracer {
+class Computation;
+
 class World {
 public:
   World() {}
@@ -16,13 +18,24 @@ public:
   std::list<Shape::BasicShapePtr>& objects() { return _objects; }
   const std::list<Shape::BasicShapePtr>& objects() const { return _objects; }
 
-  std::list<Light::LightPtr>& light_sources() { return _light_sources; }
-  const std::list<Light::LightPtr>& light_sources() const { return _light_sources; }
+  Shape::BasicShapePtr object_at(int i);
+  const Shape::BasicShapePtr object_at(int i) const;
+
+  Light::LightPtr light() { return _light; }
+  const Light::LightPtr light() const { return _light; }
+
+  World& set_light(Light::LightPtr light) {
+    _light = light;
+
+    return *this;
+  }
 
   IntersectionCollection intersect(const Ray& ray);
+
+  Color shade_hit(const Computation& comps);
 private:
   std::list<Shape::BasicShapePtr> _objects;
-  std::list<Light::LightPtr> _light_sources;
+  Light::LightPtr _light;
 };
 
 }

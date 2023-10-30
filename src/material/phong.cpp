@@ -24,7 +24,7 @@ PhongMaterial& PhongMaterial::set_color(Color color) {
 }
 
 PhongMaterial& PhongMaterial::set_ambient(double ambient) {
-  if (is_double_gt(ambient, 1.0) || is_double_lt(ambient, 0.0)) {
+  if (ambient > 1.0 || ambient < 0.0) {
     throw std::invalid_argument(CURRENT_LINE + "ambient should be between 0 and 1");
   }
 
@@ -34,7 +34,7 @@ PhongMaterial& PhongMaterial::set_ambient(double ambient) {
 }
 
 PhongMaterial& PhongMaterial::set_diffuse(double diffuse) {
-  if (is_double_gt(diffuse, 1.0) || is_double_lt(diffuse, 0.0)) {
+  if (diffuse > 1.0 || diffuse < 0.0) {
     throw std::invalid_argument(CURRENT_LINE + "diffuse should be between 0 and 1");
   }
 
@@ -44,7 +44,7 @@ PhongMaterial& PhongMaterial::set_diffuse(double diffuse) {
 }
 
 PhongMaterial& PhongMaterial::set_specular(double specular) {
-  if (is_double_gt(specular, 1.0) || is_double_lt(specular, 0.0)) {
+  if (specular > 1.0 || specular < 0.0) {
     throw std::invalid_argument(CURRENT_LINE + "specular should be between 0 and 1");
   }
 
@@ -54,7 +54,7 @@ PhongMaterial& PhongMaterial::set_specular(double specular) {
 }
 
 PhongMaterial& PhongMaterial::set_shininess(double shininess) {
-  if (is_double_gt(shininess, 200.0) || is_double_lt(shininess, 10.0)) {
+  if (shininess > 200.0 || shininess < 10.0) {
     throw std::invalid_argument(CURRENT_LINE + "shininess should be between 10 and 200");
   }
 

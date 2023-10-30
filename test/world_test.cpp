@@ -8,6 +8,7 @@
 #include "geometry/transform.h"
 #include "math/tuple.h"
 #include "ray/ray.h"
+#include "ray/computation.h"
 
 using namespace RayTracer;
 
@@ -16,7 +17,7 @@ protected:
   void SetUp() override {
     auto default_light = std::make_shared<Light::PointLight>(Color(1), Point(-10, 10, -10));
 
-    default_world.light_sources().emplace_back(default_light);
+    default_world.set_light(default_light);
 
     auto default_sphere_1 = Shape::ShapeBuilder::build<Shape::Sphere>();
     default_sphere_1->material()->
@@ -37,7 +38,7 @@ protected:
 TEST_F(WorldTest, CreateAWorld) {
   World w;
   EXPECT_TRUE(w.objects().empty());
-  EXPECT_TRUE(w.light_sources().empty());
+  EXPECT_EQ(w.light(), nullptr);
 }
 
 TEST_F(WorldTest, IntersectAWorldWithARay) {
@@ -56,5 +57,26 @@ TEST_F(WorldTest, IntersectAWorldWithARay) {
   iter++;
 
   EXPECT_EQ(xs.end(), iter);
+}
+
+TEST_F(WorldTest, ShadingIntersection) {
+  Ray r{Point{0, 0, -5}, Vector{0, 0, 1}};
+  auto shape = default_world.object_at(0);
+  Intersection i{4, shape};
+  auto comps = Computation::prepare_computations(i, r);
+  auto c = default_world.shade_hit(comps);
+  EXPECT_EQ(Color(0.38066, 0.47583, 0.2855), c);
+}
+
+TEST_F(WorldTest, ShadingIntersectionFromInside) {
+  Ray r{Point{0, 0, 0}, Vector{0, 0, 1}};
+  auto light = std::make_shared<Light::PointLight>(Color{1}, Point{0, 0.25, 0});
+  default_world.set_light(light);
+  auto shape = default_world.object_at(1);
+  Intersection i{0.5, shape};
+
+  auto comps = Computation::prepare_computations(i, r);
+  auto c = default_world.shade_hit(comps);
+  EXPECT_EQ(Color(0.90498), c);
 }
 
