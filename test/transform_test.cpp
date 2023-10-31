@@ -134,3 +134,44 @@ TEST(Transform, WhenUseTransformationBuilderToBuildChainingTransformationExpectC
   auto p = Point(1, 0, 1);
   EXPECT_EQ(Point(15, 0, 7), t.build() * p);
 }
+
+TEST(Transform, TransformationMatrixForDefaultOrientation) {
+  Point from{0, 0, 0};
+  Point to{0, 0, -1};
+  Vector up{0, 1, 0};
+  auto t = Transform::view_transform(from, to, up);
+  EXPECT_EQ(Transform::id(), t);
+}
+
+TEST(Transform, TransformationMatrixLookingInPositiveZDirection) {
+  Point from{0, 0, 0};
+  Point to{0, 0, 1};
+  Vector up{0, 1, 0};
+  auto t = Transform::view_transform(from, to, up);
+  EXPECT_EQ(Transform::scaling(-1, 1, -1), t);
+}
+
+TEST(Transform, ViewTransformationMovesWorld) {
+  Point from{0, 0, 8};
+  Point to{0, 0, 0};
+  Vector up{0, 1, 0};
+  auto t = Transform::view_transform(from, to, up);
+  EXPECT_EQ(Transform::translation(0, 0, -8), t);
+}
+
+TEST(Transform, ArbitraryViewTransformation) {
+  Point from{1, 3, 2};
+  Point to{4, -2, 8};
+  Vector up{1, 1, 0};
+  auto t = Transform::view_transform(from, to, up);
+  auto m = Matrix::unchecked_create(4, 4,
+      {
+        { -0.50709, 0.50709, 0.67612,  -2.36643 },
+        { 0.76772,  0.60609, 0.12122,  -2.82843 },
+        { -0.35857, 0.59761, -0.71714,  0.0 },
+        { 0.0,      0.0,     0.0,       1.0 }
+      }
+  );
+
+  EXPECT_EQ(m, t);
+}

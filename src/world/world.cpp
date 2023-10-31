@@ -1,5 +1,4 @@
 #include "world.h"
-#include "ray/computation.h"
 
 namespace RayTracer {
 

@@ -7,9 +7,9 @@
 #include "light/light.h"
 #include "ray/ray.h"
 #include "ray/intersection_collection.h"
+#include "ray/computation.h"
 
 namespace RayTracer {
-class Computation;
 
 class World {
 public:

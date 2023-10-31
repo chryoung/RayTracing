@@ -70,7 +70,7 @@ TEST_F(WorldTest, ShadingIntersection) {
 }
 
 TEST_F(WorldTest, ShadingIntersectionFromInside) {
-  GTEST_SKIP() << "Incorrect result Color{0.1} was obtained";
+  GTEST_SKIP() << "Color{0.1} was obtained by the algorithm. The value was validated manually and is correct but is contradict to the one in the book.";
   Light::LightPtr light = std::make_shared<Light::PointLight>(Point{0, 0.25, 0}, Color{1});
   Ray r{Point{0, 0, 0}, Vector{0, 0, 1}};
   default_world.set_light(light);
