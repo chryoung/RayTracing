@@ -66,7 +66,7 @@ TEST_F(WorldTest, ShadingIntersection) {
   Intersection i{4, shape};
   auto comps = Computation::prepare_computations(i, r);
   auto c = default_world.shade_hit(comps);
-  EXPECT_EQ(Color(0.38066, 0.47583, 0.2855), *c);
+  EXPECT_EQ(Color(0.38066, 0.47583, 0.2855), c);
 }
 
 TEST_F(WorldTest, ShadingIntersectionFromInside) {
@@ -79,15 +79,13 @@ TEST_F(WorldTest, ShadingIntersectionFromInside) {
 
   auto comps = Computation::prepare_computations(i, r);
   auto c = default_world.shade_hit(comps);
-  ASSERT_TRUE(c.has_value());
-  EXPECT_EQ(Color(0.90498), *c);
+  EXPECT_EQ(Color(0.90498), c);
 }
 
 TEST_F(WorldTest, ColorWhenARayHits) {
   Ray r{Point{0, 0, -5}, Vector{0, 0, 1}};
   auto c = default_world.color_at(r);
-  ASSERT_TRUE(c.has_value());
-  EXPECT_EQ(Color(0.38066, 0.47583, 0.2855), *c);
+  EXPECT_EQ(Color(0.38066, 0.47583, 0.2855), c);
 }
 
 TEST_F(WorldTest, ColorWithAnIntersectionBehindTheRay) {
@@ -97,5 +95,5 @@ TEST_F(WorldTest, ColorWithAnIntersectionBehindTheRay) {
   inner->material()->set_ambient(1);
   Ray r{Point{0, 0, 0.75}, Vector{0, 0, -1}};
   auto c = default_world.color_at(r);
-  EXPECT_EQ(inner->material()->color(), *c);
+  EXPECT_EQ(inner->material()->color(), c);
 }

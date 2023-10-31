@@ -39,15 +39,15 @@ IntersectionCollection World::intersect(const Ray& ray) {
   return union_intersection;
 }
 
-std::optional<Color> World::shade_hit(const Computation& comps) {
+Color World::shade_hit(const Computation& comps) {
   if (_light) {
     return comps.object->material()->lighting(*_light, comps.point, comps.eyev, comps.normalv);
   }
 
-  return std::nullopt;
+  return Color::make_black();
 }
 
-std::optional<Color> World::color_at(const Ray& r) {
+Color World::color_at(const Ray& r) {
   auto xs = intersect(r);
   if (!xs.hit()) {
     return Color::make_black();

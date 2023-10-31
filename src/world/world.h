@@ -33,9 +33,9 @@ public:
 
   IntersectionCollection intersect(const Ray& ray);
 
-  std::optional<Color> shade_hit(const Computation& comps);
+  Color shade_hit(const Computation& comps);
 
-  std::optional<Color> color_at(const Ray& r);
+  Color color_at(const Ray& r);
 private:
   std::list<Shape::BasicShapePtr> _objects;
   Light::LightPtr _light;
