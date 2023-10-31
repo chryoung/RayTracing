@@ -5,6 +5,8 @@
 #include "math/matrix.h"
 #include "geometry/transform.h"
 #include "ray/ray.h"
+#include "world/world.h"
+#include "image/canvas.h"
 
 namespace RayTracer {
 
@@ -62,6 +64,7 @@ public:
   const Matrix& transform() const { return _transform; }
 
   Ray ray_for_pixel(int px, int py);
+  Canvas render(const World& w);
 
 private:
   void update_computed_data();

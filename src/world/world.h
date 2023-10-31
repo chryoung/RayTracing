@@ -36,6 +36,10 @@ public:
   Color shade_hit(const Computation& comps);
 
   Color color_at(const Ray& r);
+
+  Color color_at(const Ray& r) const {
+    return const_cast<World&>(*this).color_at(r);
+  }
 private:
   std::list<Shape::BasicShapePtr> _objects;
   Light::LightPtr _light;

@@ -32,4 +32,18 @@ Ray Camera::ray_for_pixel(int px, int py) {
 
   return Ray(origin, direction);
 }
+
+Canvas Camera::render(const World& w) {
+  Canvas image = Canvas::create(_hsize, _vsize);
+
+  for (int y = 0; y < _vsize; ++y) {
+    for (int x = 0; x < _hsize; ++x) {
+      Ray ray = ray_for_pixel(x, y);
+      Color color = w.color_at(ray);
+      image.write_pixel(x, y, color);
+    }
+  }
+
+  return image;
+}
 } /* RayTracer  */ 
