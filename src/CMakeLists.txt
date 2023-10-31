@@ -10,7 +10,8 @@ set(RT_SRC_FILES
     geometry/transform.cpp
     shape/sphere.cpp
     material/phong.cpp
-    world/world.cpp)
+    world/world.cpp
+    camera/camera.cpp)
 
 add_library(rt ${RT_SRC_FILES})
 
