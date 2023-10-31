@@ -29,7 +29,7 @@ int main() {
   sphere->set_material(std::make_shared<Material::PhongMaterial>());
   sphere->material()->set_color(Color(1, 0.2, 1));
 
-  auto light = Light::PointLight(Color(1), Point(-10, 10, -10));
+  auto light = Light::PointLight(Point(-10, 10, -10), Color(1));
   const Color BLACK = Color::make_black();
 
   for (int y = 0; y < canvas_pixels; ++y) {

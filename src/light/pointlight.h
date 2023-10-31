@@ -10,9 +10,9 @@ namespace Light {
 
 class PointLight : public Light {
 public:
-  PointLight(const Color& intensity, const Point& position):
-    _intensity(intensity),
-    _position(position)
+  PointLight(const Point& position, const Color& intensity):
+    _position(position),
+    _intensity(intensity)
   {}
   ~PointLight() = default;
 

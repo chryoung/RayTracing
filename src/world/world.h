@@ -2,6 +2,7 @@
 #define BCA943EF_21A1_4078_96EF_64102E5337C8
 
 #include <list>
+#include <optional>
 #include "shape/basicshape.h"
 #include "light/light.h"
 #include "ray/ray.h"
@@ -32,7 +33,9 @@ public:
 
   IntersectionCollection intersect(const Ray& ray);
 
-  Color shade_hit(const Computation& comps);
+  std::optional<Color> shade_hit(const Computation& comps);
+
+  std::optional<Color> color_at(const Ray& r);
 private:
   std::list<Shape::BasicShapePtr> _objects;
   Light::LightPtr _light;

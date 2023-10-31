@@ -73,13 +73,10 @@ Color PhongMaterial::lighting(const Light::Light& light, const Point& position, 
 
   double light_dot_normal = lightv.dot(normalv);
 
-  Color diffuse;
-  Color specular;
+  Color diffuse = Color::make_black();
+  Color specular = Color::make_black();
 
-  if (light_dot_normal < 0) {
-    diffuse = Color::make_black();
-    specular = Color::make_black();
-  } else {
+  if (light_dot_normal > 0) {
     diffuse = effective_color * _diffuse * light_dot_normal;
     Vector reflectv = reflect(-lightv, normalv);
     double reflect_dot_eye = reflectv.dot(eyev);

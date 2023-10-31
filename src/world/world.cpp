@@ -39,12 +39,23 @@ IntersectionCollection World::intersect(const Ray& ray) {
   return union_intersection;
 }
 
-Color World::shade_hit(const Computation& comps) {
+std::optional<Color> World::shade_hit(const Computation& comps) {
   if (_light) {
     return comps.object->material()->lighting(*_light, comps.point, comps.eyev, comps.normalv);
   }
 
-  return Color::make_black();
+  return std::nullopt;
+}
+
+std::optional<Color> World::color_at(const Ray& r) {
+  auto xs = intersect(r);
+  if (!xs.hit()) {
+    return Color::make_black();
+  }
+
+  auto comps = Computation::prepare_computations(*xs.hit(), r);
+
+  return shade_hit(comps);
 }
 
 } /* RayTracer  */ 
