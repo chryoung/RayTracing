@@ -19,6 +19,12 @@ public:
   std::list<Shape::BasicShapePtr>& objects() { return _objects; }
   const std::list<Shape::BasicShapePtr>& objects() const { return _objects; }
 
+  World& add_object(Shape::BasicShapePtr object) {
+    _objects.emplace_back(object);
+
+    return *this;
+  }
+
   Shape::BasicShapePtr object_at(int i);
   const Shape::BasicShapePtr object_at(int i) const;
 

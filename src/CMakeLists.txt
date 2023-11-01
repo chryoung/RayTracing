@@ -30,3 +30,7 @@ target_link_libraries(sphere_demo rt)
 add_executable(sphere_with_material_demo
         demo/sphere_with_material_demo.cpp)
 target_link_libraries(sphere_with_material_demo rt)
+
+add_executable(render_world_demo
+        demo/render_world_demo.cpp)
+target_link_libraries(render_world_demo rt)

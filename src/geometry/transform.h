@@ -24,6 +24,13 @@ class TransformationBuilder {
  public:
   TransformationBuilder() : _transformation_matrix{id()} {}
   ~TransformationBuilder() {}
+
+  TransformationBuilder& reset() {
+    _transformation_matrix = id();
+
+    return *this;
+  }
+
   TransformationBuilder& translate(double x, double y, double z) {
     _transformation_matrix = translation(x, y, z) * _transformation_matrix;
 
