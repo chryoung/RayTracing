@@ -7,7 +7,7 @@ namespace RayTracer {
 constexpr double DOUBLE_EPSILON = 1e-5;
 
 inline bool is_double_eq(double a, double b) {
-  if (abs(a - b) < DOUBLE_EPSILON) {
+  if (std::fabs(a - b) < DOUBLE_EPSILON) {
     return true;
   }
 
