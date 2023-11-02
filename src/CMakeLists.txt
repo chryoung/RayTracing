@@ -6,9 +6,12 @@ set(RT_SRC_FILES
     math/matrix.cpp
     ray/ray.cpp
     ray/intersection_collection.cpp
+    ray/computation.cpp
     geometry/transform.cpp
     shape/sphere.cpp
-    material/phong.cpp)
+    material/phong.cpp
+    world/world.cpp
+    camera/camera.cpp)
 
 add_library(rt ${RT_SRC_FILES})
 
@@ -27,3 +30,7 @@ target_link_libraries(sphere_demo rt)
 add_executable(sphere_with_material_demo
         demo/sphere_with_material_demo.cpp)
 target_link_libraries(sphere_with_material_demo rt)
+
+add_executable(render_world_demo
+        demo/render_world_demo.cpp)
+target_link_libraries(render_world_demo rt)

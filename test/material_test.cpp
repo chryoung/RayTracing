@@ -9,7 +9,7 @@
 
 using namespace RayTracer;
 
-class MaterialTest: public testing::Test {
+class MaterialTest : public ::testing::Test {
 protected:
   void SetUp() override {
     normalv = Vector{0, 0, -1};
@@ -33,7 +33,7 @@ TEST_F(MaterialTest, DefaultMaterial) {
 
 TEST_F(MaterialTest, LightingWithEyeBetweenLightAndSurface) {
   Vector eyev{0, 0, -1};
-  Light::PointLight light{white, Point{0, 0, -10}};
+  Light::PointLight light{Point{0, 0, -10}, white};
   Material::PhongMaterial m;
 
   auto result = m.lighting(light, position, eyev, normalv);
@@ -43,7 +43,7 @@ TEST_F(MaterialTest, LightingWithEyeBetweenLightAndSurface) {
 TEST_F(MaterialTest, LightingWithEyeBetweenLightAndSurfaceEyeOffset45) {
   const double x = sqrt(2.0) / 2.0;
   Vector eyev{0, x, -x};
-  Light::PointLight light{white, Point{0, 0, -10}};
+  Light::PointLight light{Point{0, 0, -10}, white};
   Material::PhongMaterial m;
 
   auto result = m.lighting(light, position, eyev, normalv);
@@ -52,7 +52,7 @@ TEST_F(MaterialTest, LightingWithEyeBetweenLightAndSurfaceEyeOffset45) {
 
 TEST_F(MaterialTest, LightingWithEyeBetweenLightAndSurfaceLightOffset45) {
   Vector eyev{0, 0, -1};
-  Light::PointLight light{white, Point{0, 10, -10}};
+  Light::PointLight light{Point{0, 10, -10}, white};
   Material::PhongMaterial m;
 
   auto result = m.lighting(light, position, eyev, normalv);
@@ -62,7 +62,7 @@ TEST_F(MaterialTest, LightingWithEyeBetweenLightAndSurfaceLightOffset45) {
 TEST_F(MaterialTest, LightingWithEyeInThePathOfTheReflection) {
   const double x = sqrt(2.0) / 2.0;
   Vector eyev{0, -x, -x};
-  Light::PointLight light{white, Point{0, 10, -10}};
+  Light::PointLight light{Point{0, 10, -10}, white};
   Material::PhongMaterial m;
 
   auto result = m.lighting(light, position, eyev, normalv);
@@ -71,7 +71,7 @@ TEST_F(MaterialTest, LightingWithEyeInThePathOfTheReflection) {
 
 TEST_F(MaterialTest, LightingWithLightBehindSurface) {
   Vector eyev{0, 0, -1};
-  Light::PointLight light{white, Point{0, 0, 10}};
+  Light::PointLight light{Point{0, 0, 10}, white};
   Material::PhongMaterial m;
 
   auto result = m.lighting(light, position, eyev, normalv);

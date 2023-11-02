@@ -27,7 +27,7 @@ TEST(Ray, WhenGetRayPositionExpectPosition) {
 TEST(Ray, WhenIntersectWithSphereOn2PointsExpect2IntersectPoints) {
   Ray r(Point(0, 0, -5), Vector(0, 0, 1));
   auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
-  auto xs = r.intersect(s);
+  auto xs = s->intersect(r);
   ASSERT_EQ(2, xs.size());
   EXPECT_DOUBLE_EQ(4.0, xs[0].t());
   EXPECT_DOUBLE_EQ(6.0, xs[1].t());
@@ -36,7 +36,7 @@ TEST(Ray, WhenIntersectWithSphereOn2PointsExpect2IntersectPoints) {
 TEST(Ray, WhenIntersectWithSphereOn1PointExpect1IntersectPoint) {
   Ray r(Point(0, 1, -5), Vector(0, 0, 1));
   auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
-  auto xs = r.intersect(s);
+  auto xs = s->intersect(r);
   ASSERT_EQ(2, xs.size());
   EXPECT_DOUBLE_EQ(5.0, xs[0].t());
   EXPECT_DOUBLE_EQ(5.0, xs[1].t());
@@ -45,14 +45,14 @@ TEST(Ray, WhenIntersectWithSphereOn1PointExpect1IntersectPoint) {
 TEST(Ray, WhenNoIntersectWithSphereExpectNoIntersectPoints) {
   Ray r(Point(0, 2, -5), Vector(0, 0, 1));
   auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
-  auto xs = r.intersect(s);
+  auto xs = s->intersect(r);
   ASSERT_EQ(0, xs.size());
 }
 
 TEST(Ray, WhenRayOriginIsInSphereExpect2IntersectPoints) {
   Ray r(Point(0, 0, 0), Vector(0, 0, 1));
   auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
-  auto xs = r.intersect(s);
+  auto xs = s->intersect(r);
   ASSERT_EQ(2, xs.size());
   EXPECT_DOUBLE_EQ(-1.0, xs[0].t());
   EXPECT_DOUBLE_EQ(1, xs[1].t());
@@ -61,7 +61,7 @@ TEST(Ray, WhenRayOriginIsInSphereExpect2IntersectPoints) {
 TEST(Ray, WhenSphereIsBehindRayOriginExpect2IntersectPoints) {
   Ray r(Point(0, 0, 5), Vector(0, 0, 1));
   auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
-  auto xs = r.intersect(s);
+  auto xs = s->intersect(r);
   ASSERT_EQ(2, xs.size());
   EXPECT_DOUBLE_EQ(-6.0, xs[0].t());
   EXPECT_DOUBLE_EQ(-4.0, xs[1].t());
@@ -87,7 +87,7 @@ TEST(Ray, WhenIntersectWithScaledSphereExpectIntersection) {
   Ray r(Point(0, 0, -5), Vector(0, 0, 1));
   auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
   s->set_transform(Transform::scaling(2, 2, 2));
-  auto xs = r.intersect(s);
+  auto xs = s->intersect(r);
   ASSERT_EQ(2, xs.size());
   EXPECT_DOUBLE_EQ(3, xs[0].t());
   EXPECT_DOUBLE_EQ(7, xs[1].t());
@@ -97,6 +97,6 @@ TEST(Ray, WhenIntersectWithTranslatedSphereExpectIntersection) {
   Ray r(Point(0, 0, -5), Vector(0, 0, 1));
   auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
   s->set_transform(Transform::translation(5, 0, 0));
-  auto xs = r.intersect(s);
+  auto xs = s->intersect(r);
   ASSERT_EQ(0, xs.size());
 }

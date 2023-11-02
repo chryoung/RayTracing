@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include "math/tuple.h"
+#include "material.h"
 #include "image/color.h"
 #include "utility/utility.h"
 #include "utility/log_helper.h"
@@ -11,7 +12,7 @@
 namespace RayTracer {
 namespace Material {
 
-class PhongMaterial {
+class PhongMaterial : public Material {
 public:
   PhongMaterial():
     _color(Color(1, 1, 1)),
@@ -23,21 +24,27 @@ public:
 
   ~PhongMaterial() = default;
 
-  const Color& color();
-  double ambient();
-  double diffuse();
-  double specular();
-  double shininess();
+  const Color& color() override;
+  double ambient() override;
+  double diffuse() override;
+  double specular() override;
+  double shininess() override;
+
+  const Color& color() const override;
+  double ambient() const override;
+  double diffuse() const override;
+  double specular() const override;
+  double shininess() const override;
 
   friend bool operator==(const PhongMaterial& lhs, const PhongMaterial& rhs);
 
-  PhongMaterial& set_color(Color color);
-  PhongMaterial& set_ambient(double ambient);
-  PhongMaterial& set_diffuse(double diffuse);
-  PhongMaterial& set_specular(double specular);
-  PhongMaterial& set_shininess(double shininess);
+  PhongMaterial& set_color(Color color) override;
+  PhongMaterial& set_ambient(double ambient) override;
+  PhongMaterial& set_diffuse(double diffuse) override;
+  PhongMaterial& set_specular(double specular) override;
+  PhongMaterial& set_shininess(double shininess) override;
 
-  Color lighting(const Light::PointLight& light, const Point& position, const Vector& eyev, const Vector& normalv);
+  Color lighting(const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv) override;
 
 private:
   Color _color;

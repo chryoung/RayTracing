@@ -12,13 +12,19 @@ double PhongMaterial::diffuse() { return _diffuse; }
 double PhongMaterial::specular() { return _specular; }
 double PhongMaterial::shininess() { return _shininess; }
 
+const Color& PhongMaterial::color() const { return _color; }
+double PhongMaterial::ambient() const { return _ambient; }
+double PhongMaterial::diffuse() const { return _diffuse; }
+double PhongMaterial::specular() const { return _specular; }
+double PhongMaterial::shininess() const { return _shininess; }
+
 PhongMaterial& PhongMaterial::set_color(Color color) {
   _color = color;
   return *this;
 }
 
 PhongMaterial& PhongMaterial::set_ambient(double ambient) {
-  if (is_double_gt(ambient, 1.0) || is_double_lt(ambient, 0.0)) {
+  if (ambient > 1.0 || ambient < 0.0) {
     throw std::invalid_argument(CURRENT_LINE + "ambient should be between 0 and 1");
   }
 
@@ -28,7 +34,7 @@ PhongMaterial& PhongMaterial::set_ambient(double ambient) {
 }
 
 PhongMaterial& PhongMaterial::set_diffuse(double diffuse) {
-  if (is_double_gt(diffuse, 1.0) || is_double_lt(diffuse, 0.0)) {
+  if (diffuse > 1.0 || diffuse < 0.0) {
     throw std::invalid_argument(CURRENT_LINE + "diffuse should be between 0 and 1");
   }
 
@@ -38,7 +44,7 @@ PhongMaterial& PhongMaterial::set_diffuse(double diffuse) {
 }
 
 PhongMaterial& PhongMaterial::set_specular(double specular) {
-  if (is_double_gt(specular, 1.0) || is_double_lt(specular, 0.0)) {
+  if (specular > 1.0 || specular < 0.0) {
     throw std::invalid_argument(CURRENT_LINE + "specular should be between 0 and 1");
   }
 
@@ -48,7 +54,7 @@ PhongMaterial& PhongMaterial::set_specular(double specular) {
 }
 
 PhongMaterial& PhongMaterial::set_shininess(double shininess) {
-  if (is_double_gt(shininess, 200.0) || is_double_lt(shininess, 10.0)) {
+  if (shininess > 200.0 || shininess < 10.0) {
     throw std::invalid_argument(CURRENT_LINE + "shininess should be between 10 and 200");
   }
 
@@ -57,7 +63,7 @@ PhongMaterial& PhongMaterial::set_shininess(double shininess) {
   return *this;
 }
 
-Color PhongMaterial::lighting(const Light::PointLight& light, const Point& position, const Vector& eyev, const Vector& normalv) {
+Color PhongMaterial::lighting(const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv) {
   Color effective_color = _color * light.intensity();
 
   Vector lightv = light.position() - position;
@@ -67,13 +73,10 @@ Color PhongMaterial::lighting(const Light::PointLight& light, const Point& posit
 
   double light_dot_normal = lightv.dot(normalv);
 
-  Color diffuse;
-  Color specular;
+  Color diffuse = Color::make_black();
+  Color specular = Color::make_black();
 
-  if (light_dot_normal < 0) {
-    diffuse = Color::make_black();
-    specular = Color::make_black();
-  } else {
+  if (light_dot_normal > 0) {
     diffuse = effective_color * _diffuse * light_dot_normal;
     Vector reflectv = reflect(-lightv, normalv);
     double reflect_dot_eye = reflectv.dot(eyev);

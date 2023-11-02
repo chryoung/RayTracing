@@ -44,7 +44,7 @@ int main() {
     p = tick(e, p);
     cout << "p.position == " << p.postion() << "; "
          << "p.velocity == " << p.velocity() << "\n";
-  } while (is_double_gt(p.postion().y(), 0.0));
+  } while (p.postion().y() > 0.0);
 
   const string image_file = "image.ppm";
   fstream image(image_file, fstream::out | fstream::trunc);

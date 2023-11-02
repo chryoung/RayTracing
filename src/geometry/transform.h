@@ -18,11 +18,19 @@ Matrix rotation_y(double radians);
 Matrix rotation_z(double radians);
 Matrix shearing(double x_y, double x_z, double y_x, double y_z, double z_x, double z_y);
 Matrix id();
+Matrix view_transform(const Point& from, const Point& to, const Vector& up);
 
 class TransformationBuilder {
  public:
   TransformationBuilder() : _transformation_matrix{id()} {}
   ~TransformationBuilder() {}
+
+  TransformationBuilder& reset() {
+    _transformation_matrix = id();
+
+    return *this;
+  }
+
   TransformationBuilder& translate(double x, double y, double z) {
     _transformation_matrix = translation(x, y, z) * _transformation_matrix;
 

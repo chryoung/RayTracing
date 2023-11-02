@@ -1,6 +1,7 @@
 find_package(GTest)
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/third_party/googletest/googletest/include)
+include_directories(${CMAKE_SOURCE_DIR}/third_party/googletest/googlemock/include)
 enable_testing()
 
 set(RT_TESTS_SRC_FILES
@@ -16,7 +17,9 @@ set(RT_TESTS_SRC_FILES
     intersection_test.cpp
     shape_test.cpp
     light_test.cpp
-    material_test.cpp)
+    material_test.cpp
+    world_test.cpp
+    camera_test.cpp)
 
 add_executable(rt_tests ${RT_TESTS_SRC_FILES})
 

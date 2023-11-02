@@ -9,8 +9,12 @@
 #include "material/phong.h"
 
 namespace RayTracer {
+
+class Ray;
+class IntersectionCollection;
+
 namespace Shape {
-class BasicShape {
+class BasicShape : public std::enable_shared_from_this<BasicShape> {
  public:
   virtual ~BasicShape() = default;
   std::uint64_t id() { return _id; }
@@ -23,9 +27,9 @@ class BasicShape {
     return *this;
   }
 
-  const Material::PhongMaterial& material() const { return _material; }
-  Material::PhongMaterial& material() { return _material; }
-  BasicShape& set_material(const Material::PhongMaterial& material) {
+  const Material::MaterialPtr material() const { return _material; }
+  Material::MaterialPtr material() { return _material; }
+  BasicShape& set_material(const Material::MaterialPtr& material) {
     _material = material;
 
     return *this;
@@ -35,18 +39,22 @@ class BasicShape {
     return Vector{0, 0, 1};
   }
 
+  virtual IntersectionCollection intersect(const Ray& ray) = 0;
+  virtual IntersectionCollection intersect(const Ray& ray) const = 0;
+
  protected:
-  explicit BasicShape(std::uint64_t id, Matrix transform = Transform::id()) : _id(id), _transform(transform) {}
+  explicit BasicShape(std::uint64_t id, Matrix transform = Transform::id()) : _id(id), _transform(transform), _material(std::make_shared<Material::PhongMaterial>()) {}
 
  private:
   std::uint64_t _id;
   Matrix _transform;
-  Material::PhongMaterial _material;
+  Material::MaterialPtr _material;
 };
 
 using BasicShapePtr = std::shared_ptr<BasicShape>;
 
 inline bool operator==(const BasicShape& a, const BasicShape& b) { return a.id() == b.id(); }
+inline bool operator!=(const BasicShape& a, const BasicShape& b) { return a.id() != b.id(); }
 }  // namespace Shape
 
 }  // namespace RayTracer
