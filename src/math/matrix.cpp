@@ -1,8 +1,37 @@
 #include "matrix.h"
+#include "utility/debug.h"
 
 namespace RayTracer {
 
 std::unique_ptr<MemoryPool<double>> Matrix::_mem_pool;
+
+Matrix Matrix::operator-() {
+  Matrix minus = Matrix::unchecked_create(rows(), cols());
+
+  Matrix& a = *this;
+
+  for (int r = 0; r < rows(); ++r) {
+    for (int c = 0; c < cols(); ++c) {
+      minus[r][c] = a[r][c];
+    }
+  }
+
+  return minus;
+}
+
+Matrix Matrix::operator-() const {
+  Matrix minus = Matrix::unchecked_create(rows(), cols());
+
+  const Matrix& a = *this;
+
+  for (int r = 0; r < rows(); ++r) {
+    for (int c = 0; c < cols(); ++c) {
+      minus[r][c] = a[r][c];
+    }
+  }
+
+  return minus;
+}
 
 Matrix Matrix::create(size_t num_row, size_t num_col) {
   if (num_row <= 0 || num_col <= 0) {
@@ -225,9 +254,92 @@ double Matrix::cofactor(size_t row, size_t col) {
 double Matrix::cofactor(size_t row, size_t col) const { return const_cast<Matrix&>(*this).cofactor(row, col); }
 
 Matrix Matrix::inverse() {
-  Matrix companion(rows(), cols());
+  if (rows() != cols()) {
+    throw std::runtime_error("Non-square matrix is not invertible");
+  }
 
+  Matrix& a = *this;
+
+  if (rows() == 2) {
+    double det = a[0][0] * a[1][1] - a[0][1] * a[1][0];
+
+    Matrix inv = Matrix::unchecked_create(2, 2);
+
+    inv[0][0] =  a[1][1] / det;
+    inv[0][1] = -a[1][0] / det;
+    inv[1][0] = -a[0][1] / det;
+    inv[0][1] =  a[0][0] / det;
+
+    return inv;
+  }
+
+  if (rows() == 3) {
+    double det = a[0][0] * a[1][1] * a[2][2] +
+                 a[0][1] * a[1][2] * a[2][0] +
+                 a[0][2] * a[1][0] * a[2][1] -
+                 a[0][0] * a[1][2] * a[2][1] -
+                 a[0][1] * a[1][0] * a[2][2] -
+                 a[0][2] * a[1][1] * a[2][0];
+
+    Matrix inv = Matrix::unchecked_create(3, 3);
+
+    inv[0][0] =  (a[1][1] * a[2][2] - a[1][2] * a[2][1]) / det;
+    inv[0][1] = -(a[0][1] * a[2][2] - a[0][2] * a[2][1]) / det;
+    inv[0][2] =  (a[0][1] * a[1][2] - a[0][2] * a[1][1]) / det;
+
+    inv[1][0] = -(a[1][0] * a[2][2] - a[1][2] * a[2][0]) / det;
+    inv[1][1] =  (a[0][0] * a[2][2] - a[0][2] * a[2][0]) / det;
+    inv[1][2] = -(a[0][0] * a[1][2] - a[0][2] * a[1][0]) / det;
+
+    inv[2][0] =  (a[1][0] * a[2][1] - a[1][1] * a[2][0]) / det;
+    inv[2][1] = -(a[0][0] * a[2][1] - a[0][1] * a[2][0]) / det;
+    inv[2][2] =  (a[0][0] * a[1][1] - a[0][1] * a[1][0]) / det;
+
+    return inv;
+  }
+
+  if (rows() == 4 &&
+      is_double_eq(a[3][0], 0) &&
+      is_double_eq(a[3][1], 0) &&
+      is_double_eq(a[3][2], 0) &&
+      is_double_eq(a[3][3], 1)) {
+    Matrix M = Matrix::unchecked_create(3, 3);
+    for (int r = 0; r < 3; ++r) {
+      for (int c = 0; c < 3; ++c) {
+        M[r][c] = a[r][c];
+      }
+    }
+
+    Vector b{a[0][3], a[1][3], a[2][3]};
+
+    Matrix M_inv = M.inverse();
+
+    Vector M_inv_b = -(M_inv * b);
+
+    Matrix inv = Matrix::unchecked_create(4, 4);
+
+    for (int r = 0; r < 3; ++r) {
+      for (int c = 0; c < 3; ++c) {
+        inv[r][c] = M_inv[r][c];
+      }
+    }
+
+    inv[0][3] = M_inv_b.x();
+    inv[1][3] = M_inv_b.y();
+    inv[2][3] = M_inv_b.z();
+
+    inv[3][0] = 0;
+    inv[3][1] = 0;
+    inv[3][2] = 0;
+    inv[3][3] = 1;
+
+    return inv;
+  }
+
+
+  Matrix companion(rows(), cols());
   auto det = determinant();
+
   for (size_t row = 0; row < rows(); row++) {
     for (size_t col = 0; col < cols(); col++) {
       companion[row][col] = cofactor(row, col) / det;
@@ -323,20 +435,19 @@ Point operator*(const Matrix& a, const Point& b) {
 }
 
 Vector operator*(const Matrix& a, const Vector& b) {
-  if (!a.is_square() || a.rows() != Tuple::TUPLE_DIMENSIONS) {
+  if (!a.is_square() || !(a.rows() == Tuple::TUPLE_DIMENSIONS || a.rows() == 3)) {
     throw std::runtime_error(
         CURRENT_LINE +
         " operator*: Matrix multiplication cannot be performed because a's dimension is not compatible with Vector.");
   }
 
-  Vector product;
+  Vector product; // Vector.w is always 0
   double x = b.x();
   double y = b.y();
   double z = b.z();
-  double w = b.w();
-  product.set_x(x * a[0][0] + y * a[0][1] + z * a[0][2] + w * a[0][3]);
-  product.set_y(x * a[1][0] + y * a[1][1] + z * a[1][2] + w * a[1][3]);
-  product.set_z(x * a[2][0] + y * a[2][1] + z * a[2][2] + w * a[2][3]);
+  product.set_x(x * a[0][0] + y * a[0][1] + z * a[0][2]);
+  product.set_y(x * a[1][0] + y * a[1][1] + z * a[1][2]);
+  product.set_z(x * a[2][0] + y * a[2][1] + z * a[2][2]);
 
   return product;
 }
