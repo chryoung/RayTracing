@@ -131,6 +131,9 @@ class Matrix {
     return matrix;
   }
 
+  Matrix operator-();
+  Matrix operator-() const;
+
   static Matrix create(size_t num_row, size_t num_col);
   static Matrix unchecked_create(size_t num_row, size_t num_col);
   static Matrix unchecked_create(int num_row, int num_col, std::initializer_list<std::initializer_list<double>> numbers);

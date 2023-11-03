@@ -378,3 +378,66 @@ TEST(Matrix, WhenMultiplyAProductByItsInverseExpectAFactor) {
   auto c = a * b;
   EXPECT_EQ(a, c * b.inverse());
 }
+
+TEST(Matrix, InverseOf3x3Matrix1) {
+  Matrix m = Matrix::unchecked_create(3, 3,
+  {
+    {1, 2, 1},
+    {2, 2, 2},
+    {2, 3, 1}
+  });
+
+  auto m_inv = m.inverse();
+
+  EXPECT_DOUBLE_EQ(-2, m_inv[0][0]);
+  EXPECT_DOUBLE_EQ(0.5, m_inv[0][1]);
+  EXPECT_DOUBLE_EQ(1, m_inv[0][2]);
+  EXPECT_DOUBLE_EQ(1, m_inv[1][0]);
+  EXPECT_DOUBLE_EQ(-0.5, m_inv[1][1]);
+  EXPECT_DOUBLE_EQ(0, m_inv[1][2]);
+  EXPECT_DOUBLE_EQ(1, m_inv[2][0]);
+  EXPECT_DOUBLE_EQ(0.5, m_inv[2][1]);
+  EXPECT_DOUBLE_EQ(-1, m_inv[2][2]);
+}
+
+TEST(Matrix, InverseOf3x3Matrix2) {
+  Matrix m = Matrix::unchecked_create(3, 3,
+  {
+    {1, 2, 1},
+    {2, 1, 2},
+    {1, 2, 2},
+  });
+
+  Matrix m_inv_expected = Matrix::unchecked_create(3, 3,
+  {
+    { 0.66666667,  0.66666667, -1 },
+    { 0.66666667, -0.33333333,  0 },
+    {         -1,  0,           1 },
+  });
+
+  auto m_inv = m.inverse();
+
+  EXPECT_EQ(m_inv_expected, m_inv);
+}
+
+TEST(Matrix, InverseOf4x4AffineMatrix) {
+  Matrix m = Matrix::unchecked_create(4, 4,
+  {
+    {1, 2, 1, 1},
+    {2, 1, 2, 2},
+    {1, 2, 2, 1},
+    {0, 0, 0, 1},
+  });
+
+  auto m_inv = m.inverse();
+
+  Matrix m_inv_expected = Matrix::unchecked_create(4, 4,
+  {
+    { 0.66666667,  0.66666667, -1, -1 },
+    { 0.66666667, -0.33333333,  0,  0 },
+    {         -1,  0,           1,  0 },
+    {          0,  0,           0,  1 },
+  });
+
+  EXPECT_EQ(m_inv_expected, m_inv);
+}
