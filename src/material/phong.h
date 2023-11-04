@@ -44,7 +44,7 @@ public:
   PhongMaterial& set_specular(double specular) override;
   PhongMaterial& set_shininess(double shininess) override;
 
-  Color lighting(const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv) override;
+  Color lighting(const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) override;
 
 private:
   Color _color;

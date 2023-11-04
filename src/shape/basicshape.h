@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <memory>
 
+#include "material/material.h"
 #include "math/matrix.h"
 #include "geometry/transform.h"
 #include "material/phong.h"
@@ -39,11 +40,20 @@ class BasicShape : public std::enable_shared_from_this<BasicShape> {
     return Vector{0, 0, 1};
   }
 
+  /**
+   * Test if the object intersects with the test ray.
+   * @param ray The test ray.
+   */
   virtual IntersectionCollection intersect(const Ray& ray) = 0;
+
+  /**
+   * Test if the object intersects with the test ray.
+   * @param ray The test ray.
+   */
   virtual IntersectionCollection intersect(const Ray& ray) const = 0;
 
  protected:
-  explicit BasicShape(std::uint64_t id, Matrix transform = Transform::id()) : _id(id), _transform(transform), _material(std::make_shared<Material::PhongMaterial>()) {}
+  explicit BasicShape(std::uint64_t id, Matrix transform = Transform::id(), Material::MaterialPtr material = std::make_shared<Material::PhongMaterial>()) : _id(id), _transform(transform), _material(material) {}
 
  private:
   std::uint64_t _id;

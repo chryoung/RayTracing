@@ -10,6 +10,7 @@
 #include "math/tuple.h"
 #include "ray/ray.h"
 #include "ray/computation.h"
+#include "utility/utility.h"
 
 using namespace RayTracer;
 
@@ -26,8 +27,7 @@ protected:
       .set_diffuse(0.7)
       .set_specular(0.2);
 
-    auto default_sphere_2 = Shape::ShapeBuilder::build<Shape::Sphere>();
-    default_sphere_2->set_transform(Transform::scaling(0.5, 0.5, 0.5));
+    auto default_sphere_2 = Shape::ShapeBuilder::build<Shape::Sphere>(Transform::scaling(0.5, 0.5, 0.5));
 
     default_world.objects().emplace_back(default_sphere_1);
     default_world.objects().emplace_back(default_sphere_2);
@@ -96,4 +96,48 @@ TEST_F(WorldTest, ColorWithAnIntersectionBehindTheRay) {
   Ray r{Point{0, 0, 0.75}, Vector{0, 0, -1}};
   auto c = default_world.color_at(r);
   EXPECT_EQ(inner->material()->color(), c);
+}
+
+TEST_F(WorldTest, NoShadowWhenNothingIsCollinearBetweenPointAndLight) {
+  Point p{0, 10, 0};
+  EXPECT_FALSE(default_world.is_shadowed(p));
+}
+
+TEST_F(WorldTest, ShadowWhenObjectBetweenPointAndLight) {
+  Point p{10, -10, 10};
+  EXPECT_TRUE(default_world.is_shadowed(p));
+}
+
+TEST_F(WorldTest, NoShadowWhenObjectIsBehindLight) {
+  Point p{-20, 20, -20};
+  EXPECT_FALSE(default_world.is_shadowed(p));
+}
+
+TEST_F(WorldTest, NoShadowWhenObjectIsBehindPoint) {
+  Point p{-2, 2, -2};
+  EXPECT_FALSE(default_world.is_shadowed(p));
+}
+
+TEST_F(WorldTest, ShadeHitIsGivenAnIntersectionInShadow) {
+  World w;
+  w.set_light(std::make_shared<Light::PointLight>(Point{0, 0, -10}, Color{1}));
+  auto s1 = Shape::ShapeBuilder::build<Shape::Sphere>();
+  w.add_object(s1);
+  auto s2 = Shape::ShapeBuilder::build<Shape::Sphere>(Transform::translation(0, 0, 10));
+  w.add_object(s2);
+  Ray r{Point{0, 0, 5}, Vector{0, 0, 1}};
+  Intersection i{4, s2};
+  auto comps = Computation::prepare_computations(i, r);
+  auto c = w.shade_hit(comps);
+
+  EXPECT_EQ(Color{0.1}, c);
+}
+
+TEST_F(WorldTest, HitShouldOffsetPoint) {
+  Ray r{Point{0, 0, -5}, Vector{0, 0, 1}};
+  auto shape = Shape::ShapeBuilder::build<Shape::Sphere>(Transform::translation(0, 0, 1));
+  Intersection i{5, shape};
+  auto comps = Computation::prepare_computations(i, r);
+  EXPECT_TRUE(comps.over_point.z() < DOUBLE_EPSILON / 2);
+  EXPECT_TRUE(comps.point.z() > comps.over_point.z());
 }

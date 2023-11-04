@@ -12,8 +12,20 @@ namespace Material {
 class Material {
 public:
   Material() {}
+  /**
+   * @brief The deconstructor
+   */
   virtual ~Material() {}
-  virtual Color lighting(const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv) = 0;
+
+  /**
+   * Calculate the color when the light hit the material.
+   * @param light The light source.
+   * @param position The position where the light hit.
+   * @param eyev The eye vector.
+   * @param normalv The normal vector of the object surface on the hit position.
+   * @param in_shadow If the hit position is in the shadow.
+   */
+  virtual Color lighting(const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) = 0;
 
   virtual const Color& color() = 0;
   virtual double ambient() = 0;

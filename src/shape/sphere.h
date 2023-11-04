@@ -2,6 +2,7 @@
 #define CA5A6AF1_A42B_4C61_B95B_A526A561D656
 
 #include "basicshape.h"
+#include "material/material.h"
 #include "math/tuple.h"
 
 namespace RayTracer {
@@ -19,8 +20,8 @@ class Sphere : public BasicShape {
   IntersectionCollection intersect(const Ray& ray) const override;
 
  private:
-  explicit Sphere(std::uint64_t id) : 
-    BasicShape(id),
+  explicit Sphere(std::uint64_t id, Matrix transform = Transform::id(), Material::MaterialPtr material = std::make_shared<Material::PhongMaterial>()): 
+    BasicShape(id, transform, material),
     _origin(Point(0, 0, 0)) {}
   Point _origin;
 };

@@ -11,6 +11,7 @@ Computation Computation::prepare_computations(const Intersection& i, const Ray& 
   comps.eyev = -r.direction();
   comps.normalv = comps.object->normal_at(comps.point);
   comps.inside = (comps.normalv.dot(comps.eyev) < 0.0);
+  comps.over_point = comps.point + comps.normalv * DOUBLE_EPSILON;
 
   return comps;
 }
