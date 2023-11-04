@@ -31,9 +31,16 @@ class IntersectionCollection {
     return const_cast<IntersectionCollection&>(*this).operator[](index);
   }
 
+  bool empty() { return _intersections.empty(); }
+
+  bool empty() const { return _intersections.empty(); }
+
   std::list<Intersection>::iterator begin() { return _intersections.begin(); }
+
   std::list<Intersection>::const_iterator cbegin() const { return _intersections.cbegin(); }
+
   std::list<Intersection>::iterator end() { return _intersections.end(); }
+
   std::list<Intersection>::const_iterator cend() const { return _intersections.cend(); }
 
   /**

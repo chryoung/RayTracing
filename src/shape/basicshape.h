@@ -69,6 +69,16 @@ class BasicShape : public std::enable_shared_from_this<BasicShape> {
    */
   virtual IntersectionCollection intersect(const Ray& ray) const;
 
+  /**
+   * Calculate normal in local space.
+   */
+  virtual Vector local_normal_at(const Point& local_point);
+
+  /**
+   * Test if the object intersects with the test ray in local space.
+   */
+  virtual IntersectionCollection local_intersect(const Ray& local_test_ray);
+
   friend class ShapeBuilder;
 
  protected:
@@ -78,9 +88,6 @@ class BasicShape : public std::enable_shared_from_this<BasicShape> {
     _transform_inv(transform.inverse()),
     _transform_inv_t(_transform_inv.transpose()),
     _material(material) {}
-
-  virtual Vector local_normal_at(const Point& local_point);
-  virtual IntersectionCollection local_intersect(const Ray& local_test_ray);
 
  private:
   std::uint64_t _id;

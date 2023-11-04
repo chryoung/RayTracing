@@ -14,6 +14,8 @@ set(RT_TESTS_SRC_FILES
     vector_test.cpp
     point_test.cpp
     ray_test.cpp
+    sphere_test.cpp
+    plane_test.cpp
     intersection_test.cpp
     shape_test.cpp
     light_test.cpp

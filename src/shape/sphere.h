@@ -15,8 +15,8 @@ class Sphere : public BasicShape {
 
   friend class ShapeBuilder;
 
- protected:
   Vector local_normal_at(const Point& local_point) override;
+
   IntersectionCollection local_intersect(const Ray& local_test_ray) override;
 
  private:
