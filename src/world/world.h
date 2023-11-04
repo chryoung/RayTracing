@@ -41,11 +41,25 @@ public:
 
   Color shade_hit(const Computation& comps);
 
+  /**
+   * Calculate the color at the point in the world hit by the ray.
+   * @param r The test ray.
+   */
   Color color_at(const Ray& r);
 
+  /**
+   * Calculate the color at the point in the world hit by the ray.
+   * @param r The test ray.
+   */
   Color color_at(const Ray& r) const {
     return const_cast<World&>(*this).color_at(r);
   }
+
+  /**
+   * Calculate if a point in the world is in the shadow.
+   * @param p The point to be tested.
+   */
+  bool is_shadowed(const Point& p);
 private:
   std::list<Shape::BasicShapePtr> _objects;
   Light::LightPtr _light;

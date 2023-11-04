@@ -36,7 +36,7 @@ TEST_F(MaterialTest, LightingWithEyeBetweenLightAndSurface) {
   Light::PointLight light{Point{0, 0, -10}, white};
   Material::PhongMaterial m;
 
-  auto result = m.lighting(light, position, eyev, normalv);
+  auto result = m.lighting(light, position, eyev, normalv, false);
   EXPECT_EQ(Color(1.9), result);
 }
 
@@ -46,7 +46,7 @@ TEST_F(MaterialTest, LightingWithEyeBetweenLightAndSurfaceEyeOffset45) {
   Light::PointLight light{Point{0, 0, -10}, white};
   Material::PhongMaterial m;
 
-  auto result = m.lighting(light, position, eyev, normalv);
+  auto result = m.lighting(light, position, eyev, normalv, false);
   EXPECT_EQ(Color(1), result);
 }
 
@@ -55,7 +55,7 @@ TEST_F(MaterialTest, LightingWithEyeBetweenLightAndSurfaceLightOffset45) {
   Light::PointLight light{Point{0, 10, -10}, white};
   Material::PhongMaterial m;
 
-  auto result = m.lighting(light, position, eyev, normalv);
+  auto result = m.lighting(light, position, eyev, normalv, false);
   EXPECT_EQ(Color(0.7364), result);
 }
 
@@ -65,7 +65,7 @@ TEST_F(MaterialTest, LightingWithEyeInThePathOfTheReflection) {
   Light::PointLight light{Point{0, 10, -10}, white};
   Material::PhongMaterial m;
 
-  auto result = m.lighting(light, position, eyev, normalv);
+  auto result = m.lighting(light, position, eyev, normalv, false);
   EXPECT_EQ(Color(1.6364), result);
 }
 
@@ -74,6 +74,15 @@ TEST_F(MaterialTest, LightingWithLightBehindSurface) {
   Light::PointLight light{Point{0, 0, 10}, white};
   Material::PhongMaterial m;
 
-  auto result = m.lighting(light, position, eyev, normalv);
+  auto result = m.lighting(light, position, eyev, normalv, false);
+  EXPECT_EQ(Color(0.1), result);
+}
+
+TEST_F(MaterialTest, LightingWithSurfaceInShadow) {
+  Vector eyev{0, 0, -1};
+  Light::PointLight light{Point{0, 0, -10}, white};
+  Material::PhongMaterial m;
+
+  auto result = m.lighting(light, position, eyev, normalv, true);
   EXPECT_EQ(Color(0.1), result);
 }

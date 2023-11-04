@@ -40,7 +40,9 @@ IntersectionCollection World::intersect(const Ray& ray) {
 
 Color World::shade_hit(const Computation& comps) {
   if (_light) {
-    return comps.object->material()->lighting(*_light, comps.point, comps.eyev, comps.normalv);
+    bool shadowed = is_shadowed(comps.over_point);
+
+    return comps.object->material()->lighting(*_light, comps.point, comps.eyev, comps.normalv, shadowed);
   }
 
   return Color::make_black();
@@ -55,6 +57,22 @@ Color World::color_at(const Ray& r) {
   auto comps = Computation::prepare_computations(*xs.hit(), r);
 
   return shade_hit(comps);
+}
+
+bool World::is_shadowed(const Point& point) {
+  if (_light) {
+    auto v = _light->position() - point;
+    auto distance = v.magnitude();
+    auto direction = v;
+    direction.normalize();
+
+    Ray r{point, direction};
+    auto intersections = this->intersect(r);
+    auto h = intersections.hit();
+    return (h && h->t() < distance);
+  }
+
+  return false;
 }
 
 } /* RayTracer  */ 

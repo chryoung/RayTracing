@@ -36,7 +36,16 @@ class IntersectionCollection {
   std::list<Intersection>::iterator end() { return _intersections.end(); }
   std::list<Intersection>::const_iterator cend() const { return _intersections.cend(); }
 
+  /**
+   * Get the lowest nonnegative hit.
+   * @return The lowest nonnegative hit. Or std::nullopt if not exists.
+   */
   std::optional<Intersection> hit();
+
+  /**
+   * Get the lowest nonnegative hit.
+   * @return The lowest nonnegative hit. Or std::nullopt if not exists.
+   */
   std::optional<Intersection> hit() const { return const_cast<IntersectionCollection&>(*this).hit(); }
 
  private:

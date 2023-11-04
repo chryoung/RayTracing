@@ -63,13 +63,17 @@ PhongMaterial& PhongMaterial::set_shininess(double shininess) {
   return *this;
 }
 
-Color PhongMaterial::lighting(const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv) {
+Color PhongMaterial::lighting(const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) {
   Color effective_color = _color * light.intensity();
 
   Vector lightv = light.position() - position;
   lightv.normalize();
 
   Color ambient = effective_color * _ambient;
+
+  if (in_shadow) {
+    return ambient;
+  }
 
   double light_dot_normal = lightv.dot(normalv);
 
