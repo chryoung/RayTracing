@@ -6,7 +6,7 @@ IntersectionCollection::IntersectionCollection(std::initializer_list<Intersectio
   _intersections.sort([](const Intersection& a, const Intersection& b) { return a.t() < b.t(); });
 }
 
-void IntersectionCollection::insert(const Intersection& i) {
+void IntersectionCollection::insert(Intersection&& i) {
   auto iter = _intersections.begin();
   for (; iter != _intersections.end(); iter++) {
     if (iter->t() > i.t()) {
@@ -14,7 +14,7 @@ void IntersectionCollection::insert(const Intersection& i) {
     }
   }
 
-  _intersections.insert(iter, i);
+  _intersections.insert(iter, std::move(i));
 }
 
 Intersection& IntersectionCollection::operator[](size_t index) {

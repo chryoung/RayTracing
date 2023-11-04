@@ -6,6 +6,7 @@
 #include "ray/computation.h"
 
 #include <gtest/gtest.h>
+#include <memory>
 
 using namespace RayTracer;
 
@@ -83,10 +84,10 @@ TEST(Intersection, WhenInsertLowestTToIntersectionsExpectLowestPositiveT) {
   Intersection i4(2, s);
   Intersection i5(1, s);
   IntersectionCollection xs{i1, i2, i3, i4};
-  xs.insert(i5);
+  xs.insert(std::move(i5));
   auto hit = xs.hit();
   ASSERT_TRUE(hit.has_value());
-  EXPECT_EQ(i5, *hit);
+  EXPECT_EQ(Intersection(1, s), *hit);
 }
 
 TEST(Intersection, PrecomputeStateOfAnInterSection) {

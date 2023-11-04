@@ -8,6 +8,7 @@ set(RT_SRC_FILES
     ray/intersection_collection.cpp
     ray/computation.cpp
     geometry/transform.cpp
+    shape/basicshape.cpp
     shape/sphere.cpp
     material/phong.cpp
     world/world.cpp

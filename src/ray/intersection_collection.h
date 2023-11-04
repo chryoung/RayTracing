@@ -21,7 +21,7 @@ class IntersectionCollection {
 
   IntersectionCollection(std::initializer_list<Intersection> intersections);
 
-  void insert(const Intersection& i);
+  void insert(Intersection&& i);
 
   size_t size() { return _intersections.size(); }
   size_t size() const { return _intersections.size(); }
