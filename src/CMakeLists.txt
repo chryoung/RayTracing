@@ -8,7 +8,9 @@ set(RT_SRC_FILES
     ray/intersection_collection.cpp
     ray/computation.cpp
     geometry/transform.cpp
+    shape/basicshape.cpp
     shape/sphere.cpp
+    shape/plane.cpp
     material/phong.cpp
     world/world.cpp
     camera/camera.cpp)
@@ -34,3 +36,7 @@ target_link_libraries(sphere_with_material_demo rt)
 add_executable(render_world_demo
         demo/render_world_demo.cpp)
 target_link_libraries(render_world_demo rt)
+
+add_executable(render_world_demo_2
+        demo/render_world_demo_2.cpp)
+target_link_libraries(render_world_demo_2 rt)

@@ -8,23 +8,16 @@
 
 namespace RayTracer {
 namespace Shape {
-Vector Sphere::normal_at(const Point& world_point) {
-  auto object_point = transform().inverse() * world_point;
-  auto object_normal = object_point - _origin;
-  auto world_normal = transform().inverse().transpose() * object_normal;
-  world_normal.set_w(0);
-  world_normal.normalize();
-
-  return world_normal;
+Vector Sphere::local_normal_at(const Point& p) {
+  return p - _origin;
 }
 
-IntersectionCollection Sphere::intersect(const Ray& ray) {
+IntersectionCollection Sphere::local_intersect(const Ray& local_test_ray) {
   IntersectionCollection intersections;
 
-    auto test_ray = ray.transform(transform().inverse());
-    auto sphere_to_ray = test_ray.origin() - origin();
-    auto a = test_ray.direction().dot(test_ray.direction());
-    auto b = 2 * test_ray.direction().dot(sphere_to_ray);
+    auto sphere_to_ray = local_test_ray.origin() - origin();
+    auto a = local_test_ray.direction().dot(local_test_ray.direction());
+    auto b = 2 * local_test_ray.direction().dot(sphere_to_ray);
     auto c = sphere_to_ray.dot(sphere_to_ray) - 1;
 
     double discriminant = b * b - 4 * a * c;
@@ -40,10 +33,5 @@ IntersectionCollection Sphere::intersect(const Ray& ray) {
   return intersections;
 }
 
-IntersectionCollection Sphere::intersect(const Ray& ray) const {
-  return const_cast<Sphere&>(*this).intersect(ray);
-}
-
 }  // namespace Shape
-
 }  // namespace RayTracer

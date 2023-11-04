@@ -66,14 +66,14 @@ PhongMaterial& PhongMaterial::set_shininess(double shininess) {
 Color PhongMaterial::lighting(const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) {
   Color effective_color = _color * light.intensity();
 
-  Vector lightv = light.position() - position;
-  lightv.normalize();
-
   Color ambient = effective_color * _ambient;
 
   if (in_shadow) {
     return ambient;
   }
+
+  Vector lightv = light.position() - position;
+  lightv.normalize();
 
   double light_dot_normal = lightv.dot(normalv);
 
@@ -84,7 +84,7 @@ Color PhongMaterial::lighting(const Light::Light& light, const Point& position, 
     diffuse = effective_color * _diffuse * light_dot_normal;
     Vector reflectv = reflect(-lightv, normalv);
     double reflect_dot_eye = reflectv.dot(eyev);
-    if (is_double_le(reflect_dot_eye, 0.0)) {
+    if (reflect_dot_eye < 0) {
       specular = Color::make_black();
     } else {
       double factor = std::pow(reflect_dot_eye, _shininess);

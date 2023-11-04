@@ -15,9 +15,9 @@ class Sphere : public BasicShape {
 
   friend class ShapeBuilder;
 
-  Vector normal_at(const Point& p) override;
-  IntersectionCollection intersect(const Ray& ray) override;
-  IntersectionCollection intersect(const Ray& ray) const override;
+  Vector local_normal_at(const Point& local_point) override;
+
+  IntersectionCollection local_intersect(const Ray& local_test_ray) override;
 
  private:
   explicit Sphere(std::uint64_t id, Matrix transform = Transform::id(), Material::MaterialPtr material = std::make_shared<Material::PhongMaterial>()): 
