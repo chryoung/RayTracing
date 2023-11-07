@@ -11,11 +11,11 @@ namespace RayTracer {
 class Canvas {
  public:
   static Canvas create(int width, int height);
-  Canvas(const Canvas&) = default;
-  Canvas(Canvas&&) = default;
-  Canvas& operator=(const Canvas&) = default;
-  Canvas& operator=(Canvas&&) = default;
-  ~Canvas() = default;
+  Canvas(const Canvas&) = delete;
+  Canvas(Canvas&&);
+  Canvas& operator=(const Canvas&) = delete;
+  Canvas& operator=(Canvas&&);
+  virtual ~Canvas();
   Canvas& write_pixel(int x, int y, const Color& color);
   Color& pixel_at(int x, int y);
   Color& pixel_at(int index);
@@ -61,7 +61,9 @@ class Canvas {
   static constexpr int PPM_LINE_LIMIT = 70;
   static constexpr int COLOR_LIMIT = 255;
 
-  std::vector<std::vector<Color>> _canvas;
+  Color* _canvas;
+  int _width;
+  int _height;
 };
 }  // namespace RayTracer
 

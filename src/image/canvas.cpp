@@ -9,7 +9,41 @@
 #include "utility/log_helper.h"
 
 namespace RayTracer {
-Canvas::Canvas(int width, int height) : _canvas(std::vector<std::vector<Color>>(width, std::vector<Color>(height))) {}
+Canvas::Canvas(int width, int height) : _canvas{new Color[width * height]}, _width{width}, _height{height} {}
+
+Canvas::~Canvas() {
+  if (_canvas != nullptr) {
+    delete [] _canvas;
+    _canvas = nullptr;
+  }
+}
+
+Canvas::Canvas(Canvas&& other) {
+  _width = other._width;
+  _height = other._height;
+  _canvas = other._canvas;
+
+  other._width = 0;
+  other._height = 0;
+  other._canvas = nullptr;
+}
+
+Canvas& Canvas::operator=(Canvas&& other) {
+  if (_canvas != nullptr) {
+    delete [] _canvas;
+    _canvas = nullptr;
+  }
+
+  _width = other._width;
+  _height = other._height;
+  _canvas = other._canvas;
+
+  other._width = 0;
+  other._height = 0;
+  other._canvas = nullptr;
+
+  return *this;
+}
 
 Canvas Canvas::create(int width, int height) {
   if (width <= 0) {
@@ -28,7 +62,7 @@ Canvas& Canvas::write_pixel(int x, int y, const Color& color) {
     throw std::out_of_range(CURRENT_LINE + " write_pixel: x or y is out of range.");
   }
 
-  _canvas[x][y] = color;
+  _canvas[x * _height + y] = color;
 
   return *this;
 }
@@ -38,7 +72,7 @@ Color& Canvas::pixel_at(int x, int y) {
     throw std::out_of_range(CURRENT_LINE + " pixel_at: x or y is out of range.");
   }
 
-  return _canvas[x][y];
+  return _canvas[x * _height + y];
 }
 
 const Color& Canvas::pixel_at(int x, int y) const {
@@ -50,23 +84,22 @@ Color& Canvas::pixel_at(int index) {
     throw std::out_of_range(CURRENT_LINE + " pixel_at: x or y is out of range.");
   }
 
-  int y = index / width();
-  int x = index % width();
-
-  return _canvas[x][y];
+  int x = index % _width;
+  int y = index / _width;
+  return _canvas[x * _height + y];
 }
 
 const Color& Canvas::pixel_at(int index) const {
   return const_cast<Canvas&>(*this).pixel_at(index);
 }
 
-size_t Canvas::width() { return _canvas.size(); }
+size_t Canvas::width() { return _width; }
 
-size_t Canvas::width() const { return _canvas.size(); }
+size_t Canvas::width() const { return _width; }
 
-size_t Canvas::height() { return _canvas[0].size(); }
+size_t Canvas::height() { return _height; }
 
-size_t Canvas::height() const { return _canvas[0].size(); }
+size_t Canvas::height() const { return _height; }
 
 size_t Canvas::num_pixels() { return height() * width(); }
 
@@ -88,10 +121,11 @@ bool Canvas::to_ppm(std::ostream& out) {
   constexpr int NUM_CHARS_PER_COLOR = 12;
   constexpr int RETURN_POS = PIXELS_PER_LINE * NUM_CHARS_PER_COLOR + PIXELS_PER_LINE;
   constexpr int END_POS = RETURN_POS + 1;
-  const int upper_limit = (num_pixels() / NUM_CHARS_PER_COLOR + 1) * NUM_CHARS_PER_COLOR;
+  const int num_pixels_cache = num_pixels();
+  const int upper_limit = (num_pixels_cache / NUM_CHARS_PER_COLOR + 1) * NUM_CHARS_PER_COLOR;
   for (int i = 0; i < upper_limit; i += PIXELS_PER_LINE) {
     int num_wrote = 0;
-    for (int k = i; k < i + PIXELS_PER_LINE && k < num_pixels(); ++k) {
+    for (int k = i; k < i + PIXELS_PER_LINE && k < num_pixels_cache; ++k) {
       const Color& c = pixel_at(k);
       snprintf(color_buffer + num_wrote, PPM_LINE_LIMIT - num_wrote,
         "%3d %3d %3d ",
