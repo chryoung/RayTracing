@@ -12,7 +12,9 @@ namespace RayTracer {
 
 class Camera {
 public:
-  Camera(): _transform{Transform::id()} {
+  Camera(): _transform{Transform::id()},
+    _transform_inv{_transform.inverse()}
+  {
     update_computed_data();
   }
 
@@ -20,7 +22,8 @@ public:
     _hsize(hsize),
     _vsize(vsize),
     _field_of_view(field_of_view),
-    _transform{Transform::id()}
+    _transform{Transform::id()},
+    _transform_inv{_transform.inverse()}
   {
     update_computed_data();
   }
@@ -42,12 +45,14 @@ public:
 
   Camera& set_transform(const Matrix& t) {
     _transform = t;
+    _transform_inv = t.inverse();
 
     return *this;
   }
 
   Camera& set_transform(Matrix&& t) {
     _transform = std::move(t);
+    _transform_inv = _transform.inverse();
 
     return *this;
   }
@@ -77,6 +82,7 @@ private:
   double _half_height;
   double _pixel_size;
   Matrix _transform;
+  Matrix _transform_inv;
 };
   
 } /* RayTracer  */ 

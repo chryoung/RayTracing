@@ -24,9 +24,8 @@ Ray Camera::ray_for_pixel(int px, int py) {
   double world_x = _half_width - xoffset;
   double world_y = _half_height - yoffset;
 
-  Matrix transform_inverse = _transform.inverse();
-  Point pixel = transform_inverse * Point(world_x, world_y, -1);
-  Point origin = transform_inverse * Point(0, 0, 0);
+  Point pixel = _transform_inv * Point(world_x, world_y, -1);
+  Point origin = _transform_inv * Point(0, 0, 0);
   Vector direction = pixel - origin;
   direction.normalize();
 
