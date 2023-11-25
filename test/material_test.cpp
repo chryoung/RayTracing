@@ -5,6 +5,7 @@
 #include "light/pointlight.h"
 #include "material/phong.h"
 #include "image/color.h"
+#include "material/stripe_pattern.h"
 
 
 using namespace RayTracer;
@@ -85,4 +86,19 @@ TEST_F(MaterialTest, LightingWithSurfaceInShadow) {
 
   auto result = m.lighting(light, position, eyev, normalv, true);
   EXPECT_EQ(Color(0.1), result);
+}
+
+TEST_F(MaterialTest, LightingWithAPatternApplied) {
+  Material::PhongMaterial m;
+  m.set_pattern(std::make_shared<StripePattern>())
+    .set_ambient(1)
+    .set_diffuse(0)
+    .set_specular(0);
+  Vector eyev{0, 0, -1};
+  Light::PointLight light{Point{0, 0, -10}, Color{1, 1, 1}};
+  auto c1 = m.lighting(light, Point{0.9, 0, 0}, eyev, normalv, false);
+  auto c2 = m.lighting(light, Point{1.1, 0, 0}, eyev, normalv, false);
+
+  EXPECT_EQ(Color{1}, c1);
+  EXPECT_EQ(Color{0}, c2);
 }

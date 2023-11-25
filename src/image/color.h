@@ -37,6 +37,8 @@ class Color {
 
   static Color make_black() { return Color(0); }
 
+  static Color make_white() { return Color(1); }
+
  private:
   double _red;
   double _green;

@@ -8,6 +8,7 @@
 #include "utility/utility.h"
 #include "utility/log_helper.h"
 #include "light/pointlight.h"
+#include "pattern.h"
 
 namespace RayTracer {
 namespace Material {
@@ -29,12 +30,14 @@ public:
   double diffuse() override;
   double specular() override;
   double shininess() override;
+  std::shared_ptr<Pattern> pattern() override;
 
   const Color& color() const override;
   double ambient() const override;
   double diffuse() const override;
   double specular() const override;
   double shininess() const override;
+  std::shared_ptr<Pattern> pattern() const override;
 
   friend bool operator==(const PhongMaterial& lhs, const PhongMaterial& rhs);
 
@@ -43,10 +46,12 @@ public:
   PhongMaterial& set_diffuse(double diffuse) override;
   PhongMaterial& set_specular(double specular) override;
   PhongMaterial& set_shininess(double shininess) override;
+  PhongMaterial& set_pattern(std::shared_ptr<Pattern> p) override;
 
   Color lighting(const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) override;
 
 private:
+  std::shared_ptr<Pattern> _pattern;
   Color _color;
   double _ambient;
   double _diffuse;
