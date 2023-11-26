@@ -12,6 +12,7 @@ set(RT_SRC_FILES
     shape/sphere.cpp
     shape/plane.cpp
     material/phong.cpp
+    material/stripe_pattern.cpp
     world/world.cpp
     camera/camera.cpp)
 

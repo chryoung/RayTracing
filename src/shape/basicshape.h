@@ -22,8 +22,11 @@ class BasicShape : public std::enable_shared_from_this<BasicShape> {
   std::uint64_t id() { return _id; }
   std::uint64_t id() const { return _id; }
 
-  Matrix& transform() { return _transform; }
+  const Matrix& transform() { return _transform; }
   const Matrix& transform() const { return _transform; }
+
+  const Matrix& transform_inv() { return _transform_inv; }
+  const Matrix& transform_inv() const { return _transform_inv; }
 
   BasicShape& set_transform(const Matrix& new_transform) {
     _transform = new_transform;

@@ -90,7 +90,7 @@ TEST_F(MaterialTest, LightingWithSurfaceInShadow) {
 
 TEST_F(MaterialTest, LightingWithAPatternApplied) {
   Material::PhongMaterial m;
-  m.set_pattern(std::make_shared<StripePattern>())
+  m.set_pattern(std::make_shared<Material::StripePattern>())
     .set_ambient(1)
     .set_diffuse(0)
     .set_specular(0);

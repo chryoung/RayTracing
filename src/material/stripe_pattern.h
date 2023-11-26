@@ -2,10 +2,10 @@
 #define A88EBE07_4E64_4994_8F3F_2C327530C1B0
 
 #include "pattern.h"
-#include "image/color.h"
-#include "math/tuple.h"
+#include <cmath>
 
 namespace RayTracer {
+namespace Material {
 class StripePattern : public Pattern {
  public:
   StripePattern():
@@ -34,24 +34,43 @@ class StripePattern : public Pattern {
   }
 
   Color stripe_at(const Point& p) {
-    if (static_cast<int>(p.x()) % 2 == 0) {
+    int floor;
+    if (p.x() < 0) {
+      floor = -static_cast<int>(std::ceil(-p.x()));
+    } else {
+      floor = static_cast<int>(p.x());
+    }
+
+    if (floor % 2 == 0) {
       return _a;
     }
 
     return _b;
   }
 
-  Color color_at(const Point& p) {
+  Color stripe_at_object(std::shared_ptr<Shape::BasicShape> shape, const Point& p);
+
+  Color color_at(const Point& p) override {
     return stripe_at(p);
   }
 
-  Color color_at(const Point& p) const {
+  Color color_at(const Point& p) const override {
     return const_cast<StripePattern&>(*this).stripe_at(p);
+  }
+
+  Color color_at_object(std::shared_ptr<Shape::BasicShape> shape, const Point& p) override {
+    return stripe_at_object(shape, p);
+  }
+
+  Color color_at_object(std::shared_ptr<Shape::BasicShape> shape, const Point& p) const override {
+    return const_cast<StripePattern&>(*this).color_at_object(shape, p);
   }
 
  private:
   Color _a;
   Color _b;
 };
+
+} // end of namespace Material
 } // end of namespace RayTracer
 #endif
