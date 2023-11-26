@@ -71,11 +71,11 @@ PhongMaterial& PhongMaterial::set_pattern(std::shared_ptr<Pattern> p) {
   return *this;
 }
 
-Color PhongMaterial::lighting(const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) {
+Color PhongMaterial::lighting(std::shared_ptr<Shape::BasicShape> object, const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) {
   Color color;
 
   if (_pattern != nullptr) {
-    color = _pattern->color_at(position);
+    color = _pattern->color_at_object(object, position);
   } else {
     color = _color;
   }

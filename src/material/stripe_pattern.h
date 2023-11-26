@@ -48,6 +48,11 @@ class StripePattern : public Pattern {
     return _b;
   }
 
+  /**
+   * Stripe color at the object.
+   * @param shape The object with stripe pattern. The caller MUST make sure it's not nullptr.
+   * @param p The world point.
+   */
   Color stripe_at_object(std::shared_ptr<Shape::BasicShape> shape, const Point& p);
 
   Color color_at(const Point& p) override {

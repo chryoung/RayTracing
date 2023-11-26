@@ -8,6 +8,10 @@
 #include "pattern.h"
 
 namespace RayTracer {
+namespace Shape {
+class BasicShape;
+} // end of namespace Shape
+
 namespace Material {
 
 class Material {
@@ -20,13 +24,14 @@ public:
 
   /**
    * Calculate the color when the light hit the material.
+   * @param object the object to light.
    * @param light The light source.
    * @param position The position where the light hit.
    * @param eyev The eye vector.
    * @param normalv The normal vector of the object surface on the hit position.
    * @param in_shadow If the hit position is in the shadow.
    */
-  virtual Color lighting(const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) = 0;
+  virtual Color lighting(std::shared_ptr<Shape::BasicShape> object, const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) = 0;
 
   virtual const Color& color() = 0;
   virtual double ambient() = 0;

@@ -46,7 +46,7 @@ int main() {
         auto point = ray.position(hit->t());
         auto normal = hit->object()->normal_at(point);
         const auto& eye = ray.direction();
-        auto color = hit->object()->material()->lighting(light, point, eye, normal, false);
+        auto color = hit->object()->material()->lighting(hit->object(), light, point, eye, normal, false);
         c.write_pixel(x, y, color);
       } else {
         c.write_pixel(x, y, BLACK);

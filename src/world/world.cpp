@@ -43,7 +43,7 @@ Color World::shade_hit(const Computation& comps) {
   if (_light) {
     bool shadowed = is_shadowed(comps.over_point);
 
-    return comps.object->material()->lighting(*_light, comps.point, comps.eyev, comps.normalv, shadowed);
+    return comps.object->material()->lighting(comps.object, *_light, comps.point, comps.eyev, comps.normalv, shadowed);
   }
 
   return Color::make_black();

@@ -48,7 +48,7 @@ public:
   PhongMaterial& set_shininess(double shininess) override;
   PhongMaterial& set_pattern(std::shared_ptr<Pattern> p) override;
 
-  Color lighting(const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) override;
+  Color lighting(std::shared_ptr<Shape::BasicShape> object, const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) override;
 
 private:
   std::shared_ptr<Pattern> _pattern;
