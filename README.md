@@ -6,22 +6,14 @@ This repository is to implement the algorithm and the tests described in the [Th
 
 - C++ compiler with C++17 support
 - CMake
+- Conan
 - Ninja (optional)
 
 ## Compile
 
 ```bash
-mkdir build
-cd build
-cmake ..
-make
-```
-
-### In case you prefer Ninja
-
-```bash
-mkdir build
-cd build
-cmake -G Ninja ..
-ninja
+conan profile detect --force # if you used Conan before this step isn't required.
+conan install . --output-folder=build --build=missing
+cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -GNinja
+cmake --build .
 ```

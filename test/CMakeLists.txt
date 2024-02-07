@@ -1,7 +1,6 @@
-find_package(GTest)
+find_package(GTest REQUIRED)
+include(GoogleTest)
 include_directories(${CMAKE_SOURCE_DIR}/src)
-include_directories(${CMAKE_SOURCE_DIR}/third_party/googletest/googletest/include)
-include_directories(${CMAKE_SOURCE_DIR}/third_party/googletest/googlemock/include)
 enable_testing()
 
 set(RT_TESTS_SRC_FILES
@@ -25,8 +24,8 @@ set(RT_TESTS_SRC_FILES
 
 add_executable(rt_tests ${RT_TESTS_SRC_FILES})
 
-target_link_libraries(rt_tests gtest_main rt)
+target_link_libraries(rt_tests GTest::gtest_main rt)
 set_target_properties(rt_tests
         PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test")
-gtest_add_tests(TARGET rt_tests)
+gtest_discover_tests(rt_tests)
