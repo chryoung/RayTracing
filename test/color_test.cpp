@@ -1,6 +1,6 @@
 #include "image/color.h"
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 using namespace RayTracer;
 

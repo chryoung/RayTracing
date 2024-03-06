@@ -2,7 +2,7 @@
 #include "shape/shapebuilder.h"
 #include "ray/ray.h"
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 using namespace RayTracer;
 

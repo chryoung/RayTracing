@@ -5,7 +5,7 @@
 #include "ray/ray.h"
 #include "ray/computation.h"
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 #include <memory>
 
 using namespace RayTracer;

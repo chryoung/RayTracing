@@ -1,6 +1,6 @@
 #include "math/_point.h"
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 using namespace RayTracer;
 
