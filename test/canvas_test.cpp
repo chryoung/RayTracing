@@ -1,6 +1,6 @@
 #include "image/canvas.h"
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 #include <iostream>
 #include <sstream>

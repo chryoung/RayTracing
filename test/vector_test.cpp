@@ -1,6 +1,6 @@
 #include "math/_vector.h"
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 using namespace RayTracer;
 

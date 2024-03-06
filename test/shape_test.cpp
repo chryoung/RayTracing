@@ -3,7 +3,7 @@
 
 #include <cmath>
 #include <memory>
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 #include "shape/shapebuilder.h"
 #include "geometry/transform.h"

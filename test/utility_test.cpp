@@ -1,7 +1,7 @@
 #include "utility/utility.h"
 #include "utility/memory_pool.h"
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 #include <utility>
 
 using namespace RayTracer;

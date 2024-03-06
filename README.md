@@ -11,9 +11,22 @@ This repository is to implement the algorithm and the tests described in the [Th
 
 ## Compile
 
+### Build release with ninja
+
 ```bash
 conan profile detect --force # if you used Conan before this step isn't required.
 conan install . --output-folder=build --build=missing
-cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -GNinja
+cd build
+cmake -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release -GNinja ..
 cmake --build .
+```
+
+### Build debug with ninja
+
+```bash
+conan profile detect --force # if you used Conan before this step isn't required.
+conan install . --output-folder=build --build=missing --settings=build_type=Debug
+cd build
+cmake -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -GNinja ..
+cmake --build . --config Debug
 ```

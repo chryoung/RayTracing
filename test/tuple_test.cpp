@@ -1,7 +1,7 @@
 #include "math/tuple.h"
 #include "math/util.h"
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 #include <cmath>
 

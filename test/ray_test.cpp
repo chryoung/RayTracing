@@ -1,6 +1,6 @@
 #include "ray/ray.h"
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 #include "geometry/transform.h"
 #include "shape/shapebuilder.h"

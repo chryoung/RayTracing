@@ -1,6 +1,6 @@
 #include "math/matrix.h"
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
 #include <memory>
 
