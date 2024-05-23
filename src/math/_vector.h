@@ -1,6 +1,4 @@
-#ifndef CA17FC77_2B5C_486B_913E_C7224B51DBBD
-#define CA17FC77_2B5C_486B_913E_C7224B51DBBD
-
+#pragma once
 #include "_tuple.h"
 
 namespace RayTracer {
@@ -42,4 +40,3 @@ class Vector : public Tuple {
 
 }  // namespace RayTracer
 
-#endif /* CA17FC77_2B5C_486B_913E_C7224B51DBBD */

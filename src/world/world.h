@@ -1,6 +1,4 @@
-#ifndef BCA943EF_21A1_4078_96EF_64102E5337C8
-#define BCA943EF_21A1_4078_96EF_64102E5337C8
-
+#pragma once
 #include <list>
 #include <optional>
 #include "shape/basicshape.h"
@@ -67,4 +65,3 @@ private:
 
 }
 
-#endif

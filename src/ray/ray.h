@@ -1,6 +1,4 @@
-#ifndef AFDAB679_02C5_4C88_A3D6_F6FE8B9859D5
-#define AFDAB679_02C5_4C88_A3D6_F6FE8B9859D5
-
+#pragma once
 #include <cmath>
 #include <memory>
 #include <vector>
@@ -36,4 +34,3 @@ class Ray {
 };
 }  // namespace RayTracer
 
-#endif /* AFDAB679_02C5_4C88_A3D6_F6FE8B9859D5 */

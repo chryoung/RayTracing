@@ -1,6 +1,4 @@
-#ifndef DE42175B_5A7D_4059_8113_AC1894425874
-#define DE42175B_5A7D_4059_8113_AC1894425874
-
+#pragma once
 #include <cstdint>
 #include <memory>
 
@@ -108,4 +106,3 @@ inline bool operator!=(const BasicShape& a, const BasicShape& b) { return a.id()
 
 }  // namespace RayTracer
 
-#endif /* DE42175B_5A7D_4059_8113_AC1894425874 */

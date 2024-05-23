@@ -1,6 +1,4 @@
-#ifndef CA5A6AF1_A42B_4C61_B95B_A526A561D656
-#define CA5A6AF1_A42B_4C61_B95B_A526A561D656
-
+#pragma once
 #include "basicshape.h"
 #include "material/material.h"
 #include "math/tuple.h"
@@ -29,4 +27,3 @@ class Sphere : public BasicShape {
 
 }  // namespace RayTracer
 
-#endif /* CA5A6AF1_A42B_4C61_B95B_A526A561D656 */

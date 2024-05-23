@@ -1,6 +1,4 @@
-#ifndef C1D37A2B_66FA_428E_AACF_03C888D2A1B7
-#define C1D37A2B_66FA_428E_AACF_03C888D2A1B7
-
+#pragma once
 #include "light.h"
 #include "image/color.h"
 #include "math/tuple.h"
@@ -29,4 +27,3 @@ private:
 }
 }
 
-#endif

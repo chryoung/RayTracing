@@ -1,6 +1,4 @@
-#ifndef A95344E4_2D0E_4F61_AA9A_2CE2D5C2D916
-#define A95344E4_2D0E_4F61_AA9A_2CE2D5C2D916
-
+#pragma once
 #include <memory>
 #include "math/tuple.h"
 #include "light/light.h"
@@ -72,4 +70,3 @@ inline bool operator!=(const Material& lhs, const Material& rhs) {
 }
 }
 
-#endif

@@ -1,6 +1,4 @@
-#ifndef D748DFC1_3B0F_4F96_BCDA_4D139E4794A6
-#define D748DFC1_3B0F_4F96_BCDA_4D139E4794A6
-
+#pragma once
 #include "geometry/transform.h"
 #include "image/color.h"
 #include "math/tuple.h"
@@ -43,4 +41,3 @@ class Pattern {
 } // end of namespace Material
 } // end of namespace RayTracer
 
-#endif

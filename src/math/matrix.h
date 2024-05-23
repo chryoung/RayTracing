@@ -1,6 +1,4 @@
-#ifndef CA47C3DE_E656_407E_870D_96E6611689C6
-#define CA47C3DE_E656_407E_870D_96E6611689C6
-
+#pragma once
 #include <initializer_list>
 #include <memory>
 #include <ostream>
@@ -197,4 +195,3 @@ Vector operator*(const Matrix& a, const Vector& b);
 std::ostream& operator<<(std::ostream& out, const Matrix& m);
 }  // namespace RayTracer
 
-#endif /* CA47C3DE_E656_407E_870D_96E6611689C6 */

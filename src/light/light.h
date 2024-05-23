@@ -1,6 +1,4 @@
-#ifndef D829F898_58C8_4ED6_9606_E2D1BCA6B03F
-#define D829F898_58C8_4ED6_9606_E2D1BCA6B03F
-
+#pragma once
 #include <memory>
 #include "math/tuple.h"
 #include "image/color.h"
@@ -25,4 +23,3 @@ using LightPtr = std::shared_ptr<Light>;
 
 } /* RayTracer */ 
 
-#endif

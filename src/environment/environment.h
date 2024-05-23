@@ -1,6 +1,4 @@
-#ifndef DB1E0476_45C3_4BB2_B83F_F11AF180E1E7
-#define DB1E0476_45C3_4BB2_B83F_F11AF180E1E7
-
+#pragma once
 #include "math/tuple.h"
 
 namespace RayTracer {
@@ -32,4 +30,3 @@ class Environment {
 };
 }  // namespace RayTracer
 
-#endif /* DB1E0476_45C3_4BB2_B83F_F11AF180E1E7 */

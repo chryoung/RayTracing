@@ -1,6 +1,4 @@
-#ifndef A6A29969_407D_4F35_8232_D57683122DCC
-#define A6A29969_407D_4F35_8232_D57683122DCC
-
+#pragma once
 #include <new>
 
 namespace RayTracer{
@@ -84,4 +82,3 @@ private:
 
 }
 
-#endif

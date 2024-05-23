@@ -1,6 +1,4 @@
-#ifndef A77EC4CF_3024_41BB_BC18_66768AB4962D
-#define A77EC4CF_3024_41BB_BC18_66768AB4962D
-
+#pragma once
 #include <cmath>
 
 #include "math/matrix.h"
@@ -75,4 +73,3 @@ class TransformationBuilder {
 }  // namespace Transform
 }  // namespace RayTracer
 
-#endif /* A77EC4CF_3024_41BB_BC18_66768AB4962D */

@@ -1,6 +1,4 @@
-#ifndef DB4C6BD6_4EFF_4E71_AC37_8EE37D1D12D6
-#define DB4C6BD6_4EFF_4E71_AC37_8EE37D1D12D6
-
+#pragma once
 #include <algorithm>
 #include <initializer_list>
 #include <list>
@@ -60,4 +58,3 @@ class IntersectionCollection {
 };
 }  // namespace RayTracer
 
-#endif /* DB4C6BD6_4EFF_4E71_AC37_8EE37D1D12D6 */

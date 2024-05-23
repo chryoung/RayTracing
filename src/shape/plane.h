@@ -1,3 +1,4 @@
+#pragma once
 #include "basicshape.h"
 
 namespace RayTracer {

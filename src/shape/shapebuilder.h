@@ -1,6 +1,4 @@
-#ifndef DF44B5A4_72C3_40F9_9A2B_196B97646C89
-#define DF44B5A4_72C3_40F9_9A2B_196B97646C89
-
+#pragma once
 #include <cstdint>
 #include <memory>
 #include <utility>
@@ -26,4 +24,3 @@ class ShapeBuilder final {
 }  // namespace Shape
 }  // namespace RayTracer
 
-#endif /* DF44B5A4_72C3_40F9_9A2B_196B97646C89 */

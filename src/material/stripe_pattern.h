@@ -1,6 +1,4 @@
-#ifndef A88EBE07_4E64_4994_8F3F_2C327530C1B0
-#define A88EBE07_4E64_4994_8F3F_2C327530C1B0
-
+#pragma once
 #include "pattern.h"
 #include <cmath>
 
@@ -78,4 +76,3 @@ class StripePattern : public Pattern {
 
 } // end of namespace Material
 } // end of namespace RayTracer
-#endif

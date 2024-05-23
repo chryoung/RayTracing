@@ -1,6 +1,4 @@
-#ifndef A40C92F1_F745_420F_A743_50DE7AF7CD59
-#define A40C92F1_F745_420F_A743_50DE7AF7CD59
-
+#pragma once
 #include "_tuple.h"
 
 namespace RayTracer {
@@ -17,4 +15,3 @@ class Point : public Tuple {
 
 }  // namespace RayTracer
 
-#endif /* A40C92F1_F745_420F_A743_50DE7AF7CD59 */

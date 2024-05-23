@@ -1,6 +1,4 @@
-#ifndef D524A412_22F9_458A_B1A1_8B662656FE44
-#define D524A412_22F9_458A_B1A1_8B662656FE44
-
+#pragma once
 #include <stdexcept>
 #include "math/tuple.h"
 #include "material.h"
@@ -74,4 +72,3 @@ inline bool operator!=(const PhongMaterial& lhs, const PhongMaterial& rhs) {
 }
 }
 
-#endif

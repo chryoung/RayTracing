@@ -1,6 +1,4 @@
-#ifndef FD7AFB00_7907_445F_A4E5_5148314ECB9A
-#define FD7AFB00_7907_445F_A4E5_5148314ECB9A
-
+#pragma once
 #include <memory>
 #include "math/matrix.h"
 #include "geometry/transform.h"
@@ -87,4 +85,3 @@ private:
   
 } /* RayTracer  */ 
 
-#endif

@@ -1,6 +1,4 @@
-#ifndef C66010A5_4D2D_48DF_B8BF_7CE9A0F66900
-#define C66010A5_4D2D_48DF_B8BF_7CE9A0F66900
-
+#pragma once
 #include <ostream>
 #include <string>
 #include <vector>
@@ -67,4 +65,3 @@ class Canvas {
 };
 }  // namespace RayTracer
 
-#endif /* C66010A5_4D2D_48DF_B8BF_7CE9A0F66900 */

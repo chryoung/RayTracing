@@ -1,6 +1,4 @@
-#ifndef F38A44CE_973D_4B33_B053_0D5724AA80E6
-#define F38A44CE_973D_4B33_B053_0D5724AA80E6
-
+#pragma once
 #include <ostream>
 
 #include "utility/utility.h"
@@ -74,4 +72,3 @@ inline std::ostream& operator<<(std::ostream& out, const Color& a) {
 }
 }  // namespace RayTracer
 
-#endif /* F38A44CE_973D_4B33_B053_0D5724AA80E6 */

@@ -1,6 +1,4 @@
-#ifndef C17184CD_A5B1_436B_956B_328159AC7BC3
-#define C17184CD_A5B1_436B_956B_328159AC7BC3
-
+#pragma once
 #include "math/tuple.h"
 
 namespace RayTracer {
@@ -34,4 +32,3 @@ class Projectile {
 };
 }  // namespace RayTracer
 
-#endif /* C17184CD_A5B1_436B_956B_328159AC7BC3 */

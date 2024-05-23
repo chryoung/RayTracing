@@ -1,6 +1,4 @@
-#ifndef C9E0998C_94E3_4D8B_B8FC_1C74D8637378
-#define C9E0998C_94E3_4D8B_B8FC_1C74D8637378
-
+#pragma once
 #include <cmath>
 #include <ostream>
 #include <utility>
@@ -128,4 +126,3 @@ inline std::ostream& operator<<(std::ostream& out, const Tuple& t) {
 
 }  // namespace RayTracer
 
-#endif /* C9E0998C_94E3_4D8B_B8FC_1C74D8637378 */

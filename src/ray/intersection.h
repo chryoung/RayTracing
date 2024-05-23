@@ -1,6 +1,4 @@
-#ifndef DC7A1CB1_389F_4A58_B81C_8E3E52BE56A7
-#define DC7A1CB1_389F_4A58_B81C_8E3E52BE56A7
-
+#pragma once
 #include <memory>
 #include <ostream>
 
@@ -35,4 +33,3 @@ inline std::ostream& operator<<(std::ostream& out, const Intersection& a) {
 
 }  // namespace RayTracer
 
-#endif /* DC7A1CB1_389F_4A58_B81C_8E3E52BE56A7 */
