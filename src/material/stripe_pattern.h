@@ -31,7 +31,7 @@ class StripePattern : public Pattern {
     return *this;
   }
 
-  Color stripe_at(const Point& p) {
+  Color pattern_at(const Point& p) override {
     int floor;
     if (p.x() < 0) {
       floor = -static_cast<int>(std::ceil(-p.x()));
@@ -45,30 +45,6 @@ class StripePattern : public Pattern {
 
     return _b;
   }
-
-  /**
-   * Stripe color at the object.
-   * @param shape The object with stripe pattern. The caller MUST make sure it's not nullptr.
-   * @param p The world point.
-   */
-  Color stripe_at_object(std::shared_ptr<Shape::BasicShape> shape, const Point& p);
-
-  Color color_at(const Point& p) override {
-    return stripe_at(p);
-  }
-
-  Color color_at(const Point& p) const override {
-    return const_cast<StripePattern&>(*this).stripe_at(p);
-  }
-
-  Color color_at_object(std::shared_ptr<Shape::BasicShape> shape, const Point& p) override {
-    return stripe_at_object(shape, p);
-  }
-
-  Color color_at_object(std::shared_ptr<Shape::BasicShape> shape, const Point& p) const override {
-    return const_cast<StripePattern&>(*this).color_at_object(shape, p);
-  }
-
  private:
   Color _a;
   Color _b;

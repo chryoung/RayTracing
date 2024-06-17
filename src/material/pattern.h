@@ -15,11 +15,15 @@ class Pattern {
  public:
   Pattern(): _transform(Transform::id()), _transform_inv(_transform.inverse()) {}
   virtual ~Pattern() {}
-  virtual Color color_at(const Point& p) = 0; 
-  virtual Color color_at(const Point& p) const = 0; 
+  virtual Color pattern_at(const Point& p) = 0;
+  virtual Color pattern_at(const Point& p) const {
+    return const_cast<Pattern&>(*this).pattern_at(p);
+  }
 
-  virtual Color color_at_object(std::shared_ptr<Shape::BasicShape> shape, const Point& p) = 0; 
-  virtual Color color_at_object(std::shared_ptr<Shape::BasicShape> shape, const Point& p) const = 0; 
+  virtual Color pattern_at_shape(std::shared_ptr<Shape::BasicShape> shape, const Point& p);
+  virtual Color pattern_at_shape(std::shared_ptr<Shape::BasicShape> shape, const Point& p) const {
+    return const_cast<Pattern&>(*this).pattern_at_shape(shape, p);
+  }
 
   const Matrix& transform() { return _transform; }
   const Matrix& transform() const { return _transform; }
@@ -35,7 +39,7 @@ class Pattern {
  protected:
   Matrix _transform;
   Matrix _transform_inv;
-  
+
 };
 
 } // end of namespace Material

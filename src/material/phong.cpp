@@ -75,7 +75,7 @@ Color PhongMaterial::lighting(std::shared_ptr<Shape::BasicShape> object, const L
   Color color;
 
   if (_pattern != nullptr) {
-    color = _pattern->color_at_object(object, position);
+    color = _pattern->pattern_at_shape(object, position);
   } else {
     color = _color;
   }
