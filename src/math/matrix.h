@@ -53,20 +53,22 @@ class Matrix {
   }
 
   Matrix& operator=(const Matrix& orig) {
-    if (_data != nullptr) {
-      _mem_pool->free(_assigned_mem);
-      _assigned_mem = nullptr;
-      _data = nullptr;
-    }
+    if (this != &orig) {
+      if (_data != nullptr) {
+        _mem_pool->free(_assigned_mem);
+        _assigned_mem = nullptr;
+        _data = nullptr;
+      }
 
-    _num_row = orig._num_row;
-    _num_col = orig._num_col;
-    if (orig._data != nullptr) {
-      _assigned_mem = _mem_pool->alloc();
-      _data = _assigned_mem->get();
-      for (int i = 0; i < _num_row; ++i) {
-        for (int j = 0; j < _num_row; ++j) {
-          _data[i * _num_col + j] = orig._data[i * _num_col + j];
+      _num_row = orig._num_row;
+      _num_col = orig._num_col;
+      if (orig._data != nullptr) {
+        _assigned_mem = _mem_pool->alloc();
+        _data = _assigned_mem->get();
+        for (int i = 0; i < _num_row; ++i) {
+          for (int j = 0; j < _num_row; ++j) {
+            _data[i * _num_col + j] = orig._data[i * _num_col + j];
+          }
         }
       }
     }
@@ -75,21 +77,23 @@ class Matrix {
   }
 
   Matrix& operator=(Matrix&& orig) {
-    if (_data != nullptr) {
-      _mem_pool->free(_assigned_mem);
-      _assigned_mem = nullptr;
-      _data = nullptr;
+    if (this != &orig) {
+      if (_data != nullptr) {
+        _mem_pool->free(_assigned_mem);
+        _assigned_mem = nullptr;
+        _data = nullptr;
+      }
+
+      _num_row = orig._num_row;
+      _num_col = orig._num_col;
+      _data = orig._data;
+      _assigned_mem = orig._assigned_mem;
+
+      orig._num_row = 0;
+      orig._num_col = 0;
+      orig._data = nullptr;
+      orig._assigned_mem = nullptr;
     }
-
-    _num_row = orig._num_row;
-    _num_col = orig._num_col;
-    _data = orig._data;
-    _assigned_mem = orig._assigned_mem;
-
-    orig._num_row = 0;
-    orig._num_col = 0;
-    orig._data = nullptr;
-    orig._assigned_mem = nullptr;
 
     return *this;
   }

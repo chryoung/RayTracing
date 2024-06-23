@@ -29,18 +29,20 @@ Canvas::Canvas(Canvas&& other) {
 }
 
 Canvas& Canvas::operator=(Canvas&& other) {
-  if (_canvas != nullptr) {
-    delete [] _canvas;
-    _canvas = nullptr;
+  if (this != &other) {
+    if (_canvas != nullptr) {
+      delete [] _canvas;
+      _canvas = nullptr;
+    }
+
+    _width = other._width;
+    _height = other._height;
+    _canvas = other._canvas;
+
+    other._width = 0;
+    other._height = 0;
+    other._canvas = nullptr;
   }
-
-  _width = other._width;
-  _height = other._height;
-  _canvas = other._canvas;
-
-  other._width = 0;
-  other._height = 0;
-  other._canvas = nullptr;
 
   return *this;
 }
