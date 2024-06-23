@@ -5,22 +5,14 @@
 namespace RayTracer {
 namespace Shape
 {
-  
-IntersectionCollection BasicShape::intersect(const Ray& ray) const {
-  return const_cast<BasicShape&>(*this).intersect(ray);
-}
 
-IntersectionCollection BasicShape::intersect(const Ray& ray) {
+IntersectionCollection BasicShape::intersect(const Ray& ray) const {
     auto local_test_ray = ray.transform(_transform_inv);
 
     return local_intersect(local_test_ray);
 }
 
 Vector BasicShape::normal_at(const Point& p) const {
-  return const_cast<BasicShape&>(*this).normal_at(p);
-}
-
-Vector BasicShape::normal_at(const Point& p) {
   auto local_point = _transform_inv * p;
   auto local_normal = local_normal_at(local_point);
   auto world_normal = _transform_inv_t * local_normal;
@@ -30,11 +22,11 @@ Vector BasicShape::normal_at(const Point& p) {
   return world_normal;
 }
 
-Vector BasicShape::local_normal_at(const Point& local_point) {
+Vector BasicShape::local_normal_at(const Point& local_point) const {
   return Vector{};
 }
 
-IntersectionCollection BasicShape::local_intersect(const Ray& local_test_ray) {
+IntersectionCollection BasicShape::local_intersect(const Ray& local_test_ray) const {
   return IntersectionCollection{};
 }
 

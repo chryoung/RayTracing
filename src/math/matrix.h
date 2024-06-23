@@ -139,31 +139,20 @@ class Matrix {
   static Matrix zero(size_t num_row, size_t num_col);
   double* operator[](size_t row);
   const double* operator[](size_t row) const;
-  double at(size_t row, size_t col);
   double at(size_t row, size_t col) const;
-  bool is_square();
   bool is_square() const;
   bool multiply_inplace(const Matrix& b);
   bool multiply_inplace(const Tuple& b);
-  bool multiply_to_tuple(const Tuple& b, Tuple& out_product);
-  Matrix transpose();
+  bool multiply_to_tuple(const Tuple& b, Tuple& out_product) const;
   Matrix transpose() const;
   void transpose_inplace();
-  double determinant();
   double determinant() const;
-  bool is_invertible();
   bool is_invertible() const;
-  Matrix submatrix(size_t row, size_t col);
   Matrix submatrix(size_t row, size_t col) const;
-  double minor(size_t row, size_t col);
   double minor(size_t row, size_t col) const;
-  double cofactor(size_t row, size_t col);
   double cofactor(size_t row, size_t col) const;
-  Matrix inverse();
   Matrix inverse() const;
-  size_t rows();
   size_t rows() const;
-  size_t cols();
   size_t cols() const;
 
  private:

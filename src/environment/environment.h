@@ -7,10 +7,8 @@ class Environment {
   Environment(const Vector& gravity, const Vector& wind) : _gravity(gravity), _wind(wind) {}
 
   const Vector& gravity() const { return _gravity; }
-  const Vector& gravity() { return _gravity; }
 
   const Vector& wind() const { return _wind; }
-  const Vector& wind() { return _wind; }
 
   Environment& set_gravity(const Vector& gravity) {
     _gravity = gravity;

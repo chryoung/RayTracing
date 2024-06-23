@@ -14,7 +14,6 @@ public:
   World() {}
   ~World() {}
 
-  std::list<Shape::BasicShapePtr>& objects() { return _objects; }
   const std::list<Shape::BasicShapePtr>& objects() const { return _objects; }
 
   World& add_object(Shape::BasicShapePtr object) {
@@ -23,11 +22,10 @@ public:
     return *this;
   }
 
-  Shape::BasicShapePtr object_at(int i);
   const Shape::BasicShapePtr object_at(int i) const;
 
+  Light::ConstLightPtr light() const { return _light; }
   Light::LightPtr light() { return _light; }
-  const Light::LightPtr light() const { return _light; }
 
   World& set_light(Light::LightPtr light) {
     _light = light;
@@ -35,29 +33,21 @@ public:
     return *this;
   }
 
-  IntersectionCollection intersect(const Ray& ray);
+  IntersectionCollection intersect(const Ray& ray) const;
 
-  Color shade_hit(const Computation& comps);
-
-  /**
-   * Calculate the color at the point in the world hit by the ray.
-   * @param r The test ray.
-   */
-  Color color_at(const Ray& r);
+  Color shade_hit(const Computation& comps) const;
 
   /**
    * Calculate the color at the point in the world hit by the ray.
    * @param r The test ray.
    */
-  Color color_at(const Ray& r) const {
-    return const_cast<World&>(*this).color_at(r);
-  }
+  Color color_at(const Ray& r) const;
 
   /**
    * Calculate if a point in the world is in the shadow.
    * @param p The point to be tested.
    */
-  bool is_shadowed(const Point& p);
+  bool is_shadowed(const Point& p) const;
 private:
   std::list<Shape::BasicShapePtr> _objects;
   Light::LightPtr _light;

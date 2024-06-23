@@ -3,6 +3,7 @@
 #include "image/color.h"
 #include "math/tuple.h"
 #include "math/matrix.h"
+#include "shape/shapefwddecl.h"
 
 namespace RayTracer {
 
@@ -15,17 +16,10 @@ class Pattern {
  public:
   Pattern(): _transform(Transform::id()), _transform_inv(_transform.inverse()) {}
   virtual ~Pattern() {}
-  virtual Color pattern_at(const Point& p) = 0;
-  virtual Color pattern_at(const Point& p) const {
-    return const_cast<Pattern&>(*this).pattern_at(p);
-  }
+  virtual Color pattern_at(const Point& p) const = 0;
 
-  virtual Color pattern_at_shape(std::shared_ptr<Shape::BasicShape> shape, const Point& p);
-  virtual Color pattern_at_shape(std::shared_ptr<Shape::BasicShape> shape, const Point& p) const {
-    return const_cast<Pattern&>(*this).pattern_at_shape(shape, p);
-  }
+  virtual Color pattern_at_shape(Shape::ConstBasicShapePtr shape, const Point& p) const;
 
-  const Matrix& transform() { return _transform; }
   const Matrix& transform() const { return _transform; }
   Pattern& set_transform(const Matrix& transform) {
     _transform = transform;
@@ -33,7 +27,6 @@ class Pattern {
     return *this;
   }
 
-  const Matrix& transform_inv() { return _transform_inv; }
   const Matrix& transform_inv() const { return _transform_inv; }
 
  protected:

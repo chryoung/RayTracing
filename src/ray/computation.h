@@ -9,7 +9,7 @@ namespace RayTracer {
 struct Computation {
   double t;
   bool inside;
-  Shape::BasicShapePtr object;
+  Shape::ConstBasicShapePtr object;
   Point point;
   Point over_point;
   Vector eyev;

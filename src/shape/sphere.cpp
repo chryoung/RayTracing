@@ -8,11 +8,11 @@
 
 namespace RayTracer {
 namespace Shape {
-Vector Sphere::local_normal_at(const Point& p) {
+Vector Sphere::local_normal_at(const Point& p) const {
   return p - _origin;
 }
 
-IntersectionCollection Sphere::local_intersect(const Ray& local_test_ray) {
+IntersectionCollection Sphere::local_intersect(const Ray& local_test_ray) const {
   IntersectionCollection intersections;
 
     auto sphere_to_ray = local_test_ray.origin() - origin();

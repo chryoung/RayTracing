@@ -7,6 +7,7 @@
 #include "utility/log_helper.h"
 #include "light/pointlight.h"
 #include "pattern.h"
+#include "shape/shapefwddecl.h"
 
 namespace RayTracer {
 namespace Material {
@@ -22,13 +23,6 @@ public:
   {}
 
   ~PhongMaterial() = default;
-
-  const Color& color() override;
-  double ambient() override;
-  double diffuse() override;
-  double specular() override;
-  double shininess() override;
-  std::shared_ptr<Pattern> pattern() override;
 
   const Color& color() const override;
   double ambient() const override;
@@ -46,7 +40,7 @@ public:
   PhongMaterial& set_shininess(double shininess) override;
   PhongMaterial& set_pattern(std::shared_ptr<Pattern> p) override;
 
-  Color lighting(std::shared_ptr<Shape::BasicShape> object, const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) override;
+  Color lighting(Shape::ConstBasicShapePtr object, const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) const override;
 
 private:
   std::shared_ptr<Pattern> _pattern;

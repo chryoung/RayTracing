@@ -67,7 +67,7 @@ Canvas& Canvas::write_pixel(int x, int y, const Color& color) {
   return *this;
 }
 
-Color& Canvas::pixel_at(int x, int y) {
+const Color& Canvas::pixel_at(int x, int y) const {
   if (x < 0 || x >= width() || y < 0 || y >= height()) {
     throw std::out_of_range(CURRENT_LINE + " pixel_at: x or y is out of range.");
   }
@@ -75,11 +75,7 @@ Color& Canvas::pixel_at(int x, int y) {
   return _canvas[x * _height + y];
 }
 
-const Color& Canvas::pixel_at(int x, int y) const {
-  return const_cast<Canvas&>(*this).pixel_at(x, y);
-}
-
-Color& Canvas::pixel_at(int index) {
+const Color& Canvas::pixel_at(int index) const {
   if (index < 0 || index >= num_pixels()) {
     throw std::out_of_range(CURRENT_LINE + " pixel_at: x or y is out of range.");
   }
@@ -89,26 +85,14 @@ Color& Canvas::pixel_at(int index) {
   return _canvas[x * _height + y];
 }
 
-const Color& Canvas::pixel_at(int index) const {
-  return const_cast<Canvas&>(*this).pixel_at(index);
-}
-
-size_t Canvas::width() { return _width; }
-
 size_t Canvas::width() const { return _width; }
-
-size_t Canvas::height() { return _height; }
 
 size_t Canvas::height() const { return _height; }
 
-size_t Canvas::num_pixels() { return height() * width(); }
-
 size_t Canvas::num_pixels() const { return height() * width(); }
 
-bool Canvas::to_ppm(std::ostream& out) const { return const_cast<Canvas&>(*this).to_ppm(out); }
-
-bool Canvas::to_ppm(std::ostream& out) {
-  using namespace std;
+bool Canvas::to_ppm(std::ostream& out) const {
+    using namespace std;
 
   const char* ppm_magic_number = "P3";
 
@@ -145,7 +129,7 @@ bool Canvas::to_ppm(std::ostream& out) {
   return true;
 }
 
-bool Canvas::to_file(const std::string& file_name) {
+bool Canvas::to_file(const std::string& file_name) const {
   std::ofstream output(file_name);
   bool result = to_ppm(output);
   output.close();

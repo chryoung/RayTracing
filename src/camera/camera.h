@@ -55,15 +55,10 @@ public:
     return *this;
   }
 
-  double hsize() { return _hsize; }
   double hsize() const { return _hsize; }
-  double vsize() { return _vsize; }
   double vsize() const { return _vsize; }
-  double field_of_view() { return _field_of_view; }
   double field_of_view() const { return _field_of_view; }
-  double pixel_size() { return _pixel_size; }
   double pixel_size() const { return _pixel_size; }
-  Matrix& transform() { return _transform; }
   const Matrix& transform() const { return _transform; }
 
   Ray ray_for_pixel(int px, int py);

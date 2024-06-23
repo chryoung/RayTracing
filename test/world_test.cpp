@@ -29,8 +29,8 @@ protected:
 
     auto default_sphere_2 = Shape::ShapeBuilder::build<Shape::Sphere>(Transform::scaling(0.5, 0.5, 0.5));
 
-    default_world.objects().emplace_back(default_sphere_1);
-    default_world.objects().emplace_back(default_sphere_2);
+    default_world.add_object(default_sphere_1);
+    default_world.add_object(default_sphere_2);
   }
 
   World default_world;

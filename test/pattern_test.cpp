@@ -11,7 +11,7 @@ using namespace RayTracer;
 
 class TestPattern : public Material::Pattern {
  public:
-  Color pattern_at(const Point& p) override {
+  Color pattern_at(const Point& p) const override {
     return Color(p.x(), p.y(), p.z());
   }
 };

@@ -92,14 +92,6 @@ double* Matrix::operator[](size_t row) { return _data + row * _num_col; }
 
 const double* Matrix::operator[](size_t row) const { return _data + row * _num_col; }
 
-double Matrix::at(size_t row, size_t col) {
-  if (row >= rows() || col >= cols()) {
-    throw std::out_of_range(CURRENT_LINE + " at: index is out of range.");
-  }
-
-  return _data[row * _num_col + col];
-}
-
 double Matrix::at(size_t row, size_t col) const {
   if (row >= rows() || col >= cols()) {
     throw std::out_of_range(CURRENT_LINE + " at: index is out of range.");
@@ -107,8 +99,6 @@ double Matrix::at(size_t row, size_t col) const {
 
   return _data[row * _num_col + col];
 }
-
-bool Matrix::is_square() { return rows() == cols(); }
 
 bool Matrix::is_square() const { return rows() == cols(); }
 
@@ -142,7 +132,7 @@ bool Matrix::multiply_inplace(const Tuple& b) {
   return multiply_inplace(matrix_b);
 }
 
-bool Matrix::multiply_to_tuple(const Tuple& b, Tuple& out_product) {
+bool Matrix::multiply_to_tuple(const Tuple& b, Tuple& out_product) const {
   if (cols() != Tuple::TUPLE_DIMENSIONS || !is_square()) {
     return false;
   }
@@ -159,7 +149,7 @@ bool Matrix::multiply_to_tuple(const Tuple& b, Tuple& out_product) {
   return true;
 }
 
-Matrix Matrix::transpose() {
+Matrix Matrix::transpose() const {
   Matrix t(cols(), rows());
 
   for (size_t row = 0; row < rows(); row++) {
@@ -171,14 +161,12 @@ Matrix Matrix::transpose() {
   return t;
 }
 
-Matrix Matrix::transpose() const { return const_cast<Matrix&>(*this).transpose(); }
-
 void Matrix::transpose_inplace() {
   auto t = transpose();
   *this = std::move(t);
 }
 
-double Matrix::determinant() {
+double Matrix::determinant() const {
   if (!is_square()) {
     throw std::runtime_error(CURRENT_LINE + " determinant: non-square matrix cannot have determinant.");
   }
@@ -194,13 +182,9 @@ double Matrix::determinant() {
   }
 }
 
-double Matrix::determinant() const { return const_cast<Matrix&>(*this).determinant(); }
-
-bool Matrix::is_invertible() { return is_double_ne(determinant(), 0); }
-
 bool Matrix::is_invertible() const { return is_double_ne(determinant(), 0); }
 
-Matrix Matrix::submatrix(size_t row, size_t col) {
+Matrix Matrix::submatrix(size_t row, size_t col) const {
   if (row < 0 || col < 0 || row >= rows() || col >= cols()) {
     throw std::invalid_argument(CURRENT_LINE + " submatrix: invalid row or col");
   }
@@ -233,16 +217,12 @@ Matrix Matrix::submatrix(size_t row, size_t col) {
   return s;
 }
 
-Matrix Matrix::submatrix(size_t row, size_t col) const { return const_cast<Matrix&>(*this).submatrix(row, col); }
-
-double Matrix::minor(size_t row, size_t col) {
+double Matrix::minor(size_t row, size_t col) const {
   auto sub = submatrix(row, col);
   return sub.determinant();
 }
 
-double Matrix::minor(size_t row, size_t col) const { return const_cast<Matrix&>(*this).minor(row, col); }
-
-double Matrix::cofactor(size_t row, size_t col) {
+double Matrix::cofactor(size_t row, size_t col) const {
   auto minor = this->minor(row, col);
   if ((row + col) % 2 == 1) {
     return -minor;
@@ -251,14 +231,12 @@ double Matrix::cofactor(size_t row, size_t col) {
   return minor;
 }
 
-double Matrix::cofactor(size_t row, size_t col) const { return const_cast<Matrix&>(*this).cofactor(row, col); }
-
-Matrix Matrix::inverse() {
+Matrix Matrix::inverse() const {
   if (rows() != cols()) {
     throw std::runtime_error("Non-square matrix is not invertible");
   }
 
-  Matrix& a = *this;
+  const Matrix& a = *this;
 
   if (rows() == 2) {
     double det = a[0][0] * a[1][1] - a[0][1] * a[1][0];
@@ -349,13 +327,7 @@ Matrix Matrix::inverse() {
   return companion.transpose();
 }
 
-Matrix Matrix::inverse() const { return const_cast<Matrix&>(*this).inverse(); }
-
-size_t Matrix::rows() { return _num_row; }
-
 size_t Matrix::rows() const { return _num_row; }
-
-size_t Matrix::cols() { return _num_col; }
 
 size_t Matrix::cols() const { return _num_col; }
 

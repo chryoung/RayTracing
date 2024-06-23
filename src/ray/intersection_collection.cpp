@@ -17,7 +17,7 @@ void IntersectionCollection::insert(Intersection&& i) {
   _intersections.insert(iter, std::move(i));
 }
 
-Intersection& IntersectionCollection::operator[](size_t index) {
+const Intersection& IntersectionCollection::operator[](size_t index) const {
   auto iter = _intersections.begin();
   for (size_t i = 0; i < index && iter != _intersections.end(); i++, iter++)
     ;
@@ -29,7 +29,7 @@ Intersection& IntersectionCollection::operator[](size_t index) {
   return *iter;
 }
 
-std::optional<Intersection> IntersectionCollection::hit() {
+std::optional<Intersection> IntersectionCollection::hit() const {
   for (const auto& intersection : _intersections) {
     if (is_double_ge(intersection.t(), 0)) {
       return std::optional<Intersection>(intersection);

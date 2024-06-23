@@ -19,13 +19,13 @@ class TestShape : public Shape::BasicShape {
  public:
    TestShape(std::uint64_t id): Shape::BasicShape{id}, saved_ray{Ray{0, 0, 0, 0, 0, 0}} {}
    ~TestShape() = default;
-   Ray saved_ray;
+   mutable Ray saved_ray;
  protected:
-  Vector local_normal_at(const Point& local_point) override {
+  Vector local_normal_at(const Point& local_point) const override {
     return Vector{local_point.x(), local_point.y(), local_point.z()};
   }
 
-  IntersectionCollection local_intersect(const Ray& local_test_ray) override {
+  IntersectionCollection local_intersect(const Ray& local_test_ray) const override {
     saved_ray = local_test_ray;
 
     return IntersectionCollection{};

@@ -14,10 +14,6 @@ class Color {
   double green() const { return _green; }
   double blue() const { return _blue; }
 
-  double red() { return _red; }
-  double green() { return _green; }
-  double blue() { return _blue; }
-
   Color& set_red(double red) {
     _red = red;
     return *this;

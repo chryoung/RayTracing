@@ -14,9 +14,6 @@ public:
   {}
   ~PointLight() = default;
 
-  const Color& intensity() override { return _intensity; }
-  const Point& position() override { return _position; }
-
   const Color& intensity() const override { return _intensity; }
   const Point& position() const override { return _position; }
 private:

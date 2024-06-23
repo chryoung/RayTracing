@@ -7,16 +7,14 @@
 namespace RayTracer {
 class Intersection {
  public:
-  Intersection(double t, Shape::BasicShapePtr object) : _object(object), _t(t) {}
+  Intersection(double t, Shape::ConstBasicShapePtr object) : _object(object), _t(t) {}
 
-  Shape::BasicShapePtr object() { return _object; }
-  const Shape::BasicShapePtr& object() const { return _object; }
+  Shape::ConstBasicShapePtr object() const { return _object; }
 
-  double t() { return _t; }
   double t() const { return _t; }
 
  private:
-  Shape::BasicShapePtr _object;
+  Shape::ConstBasicShapePtr _object;
   double _t;
 };
 

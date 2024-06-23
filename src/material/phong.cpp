@@ -2,16 +2,10 @@
 #include "phong.h"
 #include "math/util.h"
 #include "utility/utility.h"
+#include "shape/basicshape.h"
 
 namespace RayTracer {
 namespace Material {
-
-const Color& PhongMaterial::color() { return _color; }
-double PhongMaterial::ambient() { return _ambient; }
-double PhongMaterial::diffuse() { return _diffuse; }
-double PhongMaterial::specular() { return _specular; }
-double PhongMaterial::shininess() { return _shininess; }
-std::shared_ptr<Pattern> PhongMaterial::pattern() { return _pattern; }
 
 const Color& PhongMaterial::color() const { return _color; }
 double PhongMaterial::ambient() const { return _ambient; }
@@ -71,7 +65,7 @@ PhongMaterial& PhongMaterial::set_pattern(std::shared_ptr<Pattern> p) {
   return *this;
 }
 
-Color PhongMaterial::lighting(std::shared_ptr<Shape::BasicShape> object, const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) {
+Color PhongMaterial::lighting(Shape::ConstBasicShapePtr object, const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) const {
   Color color;
 
   if (_pattern != nullptr) {

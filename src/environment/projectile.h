@@ -9,10 +9,8 @@ class Projectile {
   Projectile(Point&& position, Vector&& velocity) : _position(position), _velocity(velocity) {}
 
   const Point& postion() const { return _position; }
-  const Point& postion() { return _position; }
 
   const Vector& velocity() const { return _velocity; }
-  const Vector& velocity() { return _velocity; }
 
   Projectile& set_position(const Point& position) {
     _position = position;

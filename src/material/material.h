@@ -4,6 +4,7 @@
 #include "light/light.h"
 #include "image/color.h"
 #include "pattern.h"
+#include "shape/shapefwddecl.h"
 
 namespace RayTracer {
 namespace Shape {
@@ -29,14 +30,7 @@ public:
    * @param normalv The normal vector of the object surface on the hit position.
    * @param in_shadow If the hit position is in the shadow.
    */
-  virtual Color lighting(std::shared_ptr<Shape::BasicShape> object, const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) = 0;
-
-  virtual const Color& color() = 0;
-  virtual double ambient() = 0;
-  virtual double diffuse() = 0;
-  virtual double specular() = 0;
-  virtual double shininess() = 0;
-  virtual std::shared_ptr<Pattern> pattern() = 0;
+  virtual Color lighting(Shape::ConstBasicShapePtr object, const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) const = 0;
 
   virtual const Color& color() const = 0;
   virtual double ambient() const = 0;
@@ -54,6 +48,7 @@ public:
 };
 
 using MaterialPtr = std::shared_ptr<Material>;
+using ConstMaterialPtr = std::shared_ptr<const Material>;
 
 inline bool operator==(const Material& lhs, const Material& rhs) {
   return lhs.color() == rhs.color() &&

@@ -17,21 +17,19 @@ class StripePattern : public Pattern {
   }
   virtual ~StripePattern() {}
 
-  Color a() { return _a; }
   Color a() const { return _a; }
   StripePattern& set_a(const Color& a) {
     _a = a;
     return *this;
   }
 
-  Color b() { return _b; }
   Color b() const { return _b; }
   StripePattern& set_b(const Color& b) {
     _b = b;
     return *this;
   }
 
-  Color pattern_at(const Point& p) override {
+  Color pattern_at(const Point& p) const override {
     int floor;
     if (p.x() < 0) {
       floor = -static_cast<int>(std::ceil(-p.x()));
