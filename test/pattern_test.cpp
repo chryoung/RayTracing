@@ -3,6 +3,7 @@
 #include "math/tuple.h"
 #include "image/color.h"
 #include "material/stripe_pattern.h"
+#include "material/gradient_pattern.h"
 #include "shape/shapebuilder.h"
 #include "shape/sphere.h"
 #include "geometry/transform.h"
@@ -101,4 +102,12 @@ TEST(Pattern, PatternWithObjectTransformationPatternTransformation) {
   pattern.set_transform(Transform::translation(0.5, 1, 1.5));
   auto c = pattern.pattern_at_shape(shape, Point(2.5, 3, 3.5));
   EXPECT_EQ(Color(0.75, 0.5, 0.25), c);
+}
+
+TEST(Pattern, GradientLinearlyInterpolatesBetweenColors) {
+  Material::GradientPattern pattern(Color::make_white(), Color::make_black());
+  EXPECT_EQ(Color::make_white(), pattern.pattern_at(Point(0, 0, 0)));
+  EXPECT_EQ(Color(0.75, 0.75, 0.75), pattern.pattern_at(Point(0.25, 0, 0)));
+  EXPECT_EQ(Color(0.5, 0.5, 0.5), pattern.pattern_at(Point(0.5, 0, 0)));
+  EXPECT_EQ(Color(0.25, 0.25, 0.25), pattern.pattern_at(Point(0.75, 0, 0)));
 }
