@@ -4,6 +4,7 @@
 #include "image/color.h"
 #include "material/stripe_pattern.h"
 #include "material/gradient_pattern.h"
+#include "material/ring_pattern.h"
 #include "shape/shapebuilder.h"
 #include "shape/sphere.h"
 #include "geometry/transform.h"
@@ -110,4 +111,12 @@ TEST(Pattern, GradientLinearlyInterpolatesBetweenColors) {
   EXPECT_EQ(Color(0.75, 0.75, 0.75), pattern.pattern_at(Point(0.25, 0, 0)));
   EXPECT_EQ(Color(0.5, 0.5, 0.5), pattern.pattern_at(Point(0.5, 0, 0)));
   EXPECT_EQ(Color(0.25, 0.25, 0.25), pattern.pattern_at(Point(0.75, 0, 0)));
+}
+
+TEST(Pattern, ARingShouldExtendInBothXAndZ) {
+  Material::RingPattern pattern(Color::make_white(), Color::make_black());
+  EXPECT_EQ(Color::make_white(), pattern.pattern_at(Point(0, 0, 0)));
+  EXPECT_EQ(Color::make_black(), pattern.pattern_at(Point(1, 0, 0)));
+  EXPECT_EQ(Color::make_black(), pattern.pattern_at(Point(0, 0, 1)));
+  EXPECT_EQ(Color::make_black(), pattern.pattern_at(Point(0.708, 0, 0.708)));
 }
