@@ -5,6 +5,7 @@
 #include "material/stripe_pattern.h"
 #include "material/gradient_pattern.h"
 #include "material/ring_pattern.h"
+#include "material/checker_pattern.h"
 #include "shape/shapebuilder.h"
 #include "shape/sphere.h"
 #include "geometry/transform.h"
@@ -119,4 +120,25 @@ TEST(Pattern, ARingShouldExtendInBothXAndZ) {
   EXPECT_EQ(Color::make_black(), pattern.pattern_at(Point(1, 0, 0)));
   EXPECT_EQ(Color::make_black(), pattern.pattern_at(Point(0, 0, 1)));
   EXPECT_EQ(Color::make_black(), pattern.pattern_at(Point(0.708, 0, 0.708)));
+}
+
+TEST(Pattern, CheckersShouldRepeatInX) {
+  Material::CheckerPattern pattern(Color::make_white(), Color::make_black());
+  EXPECT_EQ(Color::make_white(), pattern.pattern_at(Point(0, 0, 0)));
+  EXPECT_EQ(Color::make_white(), pattern.pattern_at(Point(0.99, 0, 0)));
+  EXPECT_EQ(Color::make_black(), pattern.pattern_at(Point(1.01, 0, 0)));
+}
+
+TEST(Pattern, CheckersShouldRepeatInY) {
+  Material::CheckerPattern pattern(Color::make_white(), Color::make_black());
+  EXPECT_EQ(Color::make_white(), pattern.pattern_at(Point(0, 0, 0)));
+  EXPECT_EQ(Color::make_white(), pattern.pattern_at(Point(0, 0.99, 0)));
+  EXPECT_EQ(Color::make_black(), pattern.pattern_at(Point(0, 1.01, 0)));
+}
+
+TEST(Pattern, CheckersShouldRepeatInZ) {
+  Material::CheckerPattern pattern(Color::make_white(), Color::make_black());
+  EXPECT_EQ(Color::make_white(), pattern.pattern_at(Point(0, 0, 0)));
+  EXPECT_EQ(Color::make_white(), pattern.pattern_at(Point(0, 0, 0.99)));
+  EXPECT_EQ(Color::make_black(), pattern.pattern_at(Point(0, 0, 1.01)));
 }
