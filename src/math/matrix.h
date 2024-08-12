@@ -28,9 +28,9 @@ class Matrix {
   Matrix(const Matrix& orig) {
     _num_row = orig._num_row;
     _num_col = orig._num_col;
+    _assigned_mem = _mem_pool->alloc();
+    _data = _assigned_mem->get();
     if (orig._data != nullptr) {
-      _assigned_mem = _mem_pool->alloc();
-      _data = _assigned_mem->get();
       for (int i = 0; i < _num_row; ++i) {
         for (int j = 0; j < _num_col; ++j) {
           _data[i * _num_col + j] = orig._data[i * _num_col + j];
@@ -39,8 +39,7 @@ class Matrix {
     }
   }
 
-
-  Matrix(Matrix&& orig) {
+  Matrix(Matrix&& orig) noexcept {
     _num_row = orig._num_row;
     _num_col = orig._num_col;
     _assigned_mem = orig._assigned_mem;
@@ -76,7 +75,7 @@ class Matrix {
     return *this;
   }
 
-  Matrix& operator=(Matrix&& orig) {
+  Matrix& operator=(Matrix&& orig) noexcept {
     if (this != &orig) {
       if (_data != nullptr) {
         _mem_pool->free(_assigned_mem);

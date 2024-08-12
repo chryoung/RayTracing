@@ -107,7 +107,7 @@ bool Matrix::multiply_inplace(const Matrix& b) {
     return false;
   }
 
-  Matrix product(rows(), b.cols());
+  auto product = Matrix::zero(rows(), b.cols());
   for (size_t row = 0; row < rows(); ++row) {
     for (size_t col = 0; col < b.cols(); ++col) {
       for (size_t i = 0; i < cols(); ++i) {
