@@ -1,5 +1,7 @@
 #include "gtest/gtest.h"
+
 #include <cmath>
+#include "math/pi.h"
 #include "camera/camera.h"
 #include "geometry/transform.h"
 #include "world/world.h"

@@ -1,12 +1,10 @@
-#ifdef _MSC_VER
-#define _USE_MATH_DEFINES
-#endif
 #include <math.h>
 
 #include <fstream>
 #include <iostream>
 
 #include "geometry/transform.h"
+#include "math/pi.h"
 #include "image/canvas.h"
 #include "image/color.h"
 #include "math/tuple.h"

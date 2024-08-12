@@ -1,4 +1,5 @@
 #include "math/tuple.h"
+#include "math/pi.h"
 #include "ray/ray.h"
 #include "image/canvas.h"
 #include "image/color.h"
