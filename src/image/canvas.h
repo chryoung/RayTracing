@@ -10,9 +10,9 @@ class Canvas {
  public:
   static Canvas create(int width, int height);
   Canvas(const Canvas&) = delete;
-  Canvas(Canvas&& other);
+  Canvas(Canvas&& other) noexcept;
   Canvas& operator=(const Canvas&) = delete;
-  Canvas& operator=(Canvas&& other);
+  Canvas& operator=(Canvas&& other) noexcept;
   virtual ~Canvas();
   Canvas& write_pixel(int x, int y, const Color& color);
   const Color& pixel_at(int x, int y) const;

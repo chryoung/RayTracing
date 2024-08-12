@@ -5,6 +5,8 @@
 #include <fstream>
 #include <stdexcept>
 #include <string>
+#include <ranges>
+#include <format>
 
 #include "utility/log_helper.h"
 
@@ -18,7 +20,7 @@ Canvas::~Canvas() {
   }
 }
 
-Canvas::Canvas(Canvas&& other) {
+Canvas::Canvas(Canvas&& other) noexcept {
   _width = other._width;
   _height = other._height;
   _canvas = other._canvas;
@@ -28,7 +30,7 @@ Canvas::Canvas(Canvas&& other) {
   other._canvas = nullptr;
 }
 
-Canvas& Canvas::operator=(Canvas&& other) {
+Canvas& Canvas::operator=(Canvas&& other) noexcept {
   if (this != &other) {
     if (_canvas != nullptr) {
       delete [] _canvas;
@@ -96,39 +98,36 @@ size_t Canvas::num_pixels() const { return height() * width(); }
 bool Canvas::to_ppm(std::ostream& out) const {
     using namespace std;
 
-  const char* ppm_magic_number = "P3";
+    const char* ppm_magic_number = "P3";
 
-  // Write PPM header.
-  out << ppm_magic_number << "\n" << width() << " " << height() << "\n" << COLOR_LIMIT << "\n";
+    // Write PPM header.
+    out << ppm_magic_number << "\n" << width() << " " << height() << "\n" << COLOR_LIMIT << "\n";
 
-  // Write pixels.
-  char color_buffer[PPM_LINE_LIMIT];
-  constexpr int PIXELS_PER_LINE = 5;
-  constexpr int NUM_CHARS_PER_COLOR = 12;
-  constexpr int RETURN_POS = PIXELS_PER_LINE * NUM_CHARS_PER_COLOR + PIXELS_PER_LINE;
-  constexpr int END_POS = RETURN_POS + 1;
-  const int num_pixels_cache = num_pixels();
-  const int upper_limit = (num_pixels_cache / NUM_CHARS_PER_COLOR + 1) * NUM_CHARS_PER_COLOR;
-  for (int i = 0; i < upper_limit; i += PIXELS_PER_LINE) {
-    int num_wrote = 0;
-    for (int k = i; k < i + PIXELS_PER_LINE && k < num_pixels_cache; ++k) {
-      const Color& c = pixel_at(k);
-      snprintf(color_buffer + num_wrote, PPM_LINE_LIMIT - num_wrote,
-        "%3d %3d %3d ",
-        scale_color(c.red()),
-        scale_color(c.green()),
-        scale_color(c.blue())
-      );
+    // Write pixels.
+    constexpr int PIXELS_PER_LINE = 5;
+    const auto num_pixels_cache = static_cast<int>(num_pixels());
 
-      num_wrote += NUM_CHARS_PER_COLOR;
+    auto pixels = ranges::views::iota(0, num_pixels_cache)
+                | ranges::views::transform([this](int k) {
+                    const Color& c = pixel_at(k);
+                    return format("{:3d} {:3d} {:3d}", scale_color(c.red()), scale_color(c.green()), scale_color(c.blue()));
+                  });
+
+    int count = 0;
+    for (const auto& pixel : pixels) {
+        out << pixel << " ";
+        ++count;
+        if (count % PIXELS_PER_LINE == 0) {
+            out.seekp(-1, ios_base::cur); // Move back one character to overwrite the last space
+            out << "\n";
+        }
     }
 
-    color_buffer[num_wrote - 1] = '\n';
-    color_buffer[num_wrote] = '\0';
-    out << color_buffer;
-  }
+    if (count % PIXELS_PER_LINE != 0) {
+        out.seekp(-1, ios_base::end); // Move back one character to overwrite the last space
+    }
 
-  return true;
+    return true;
 }
 
 bool Canvas::to_file(const std::string& file_name) const {
