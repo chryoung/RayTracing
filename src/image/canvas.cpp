@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <string>
 #include <ranges>
-#include <format>
+#include <fmt/core.h>
 
 #include "utility/log_helper.h"
 
@@ -110,7 +110,7 @@ bool Canvas::to_ppm(std::ostream& out) const {
     auto pixels = ranges::views::iota(0, num_pixels_cache)
                 | ranges::views::transform([this](int k) {
                     const Color& c = pixel_at(k);
-                    return format("{:3d} {:3d} {:3d}", scale_color(c.red()), scale_color(c.green()), scale_color(c.blue()));
+                    return fmt::format("{:3d} {:3d} {:3d}", scale_color(c.red()), scale_color(c.green()), scale_color(c.blue()));
                   });
 
     int count = 0;

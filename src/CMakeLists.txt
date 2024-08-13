@@ -1,4 +1,5 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+find_package(fmt REQUIRED)
 
 set(RT_SRC_FILES
     shape/shapebuilder.cpp
@@ -17,6 +18,7 @@ set(RT_SRC_FILES
     camera/camera.cpp)
 
 add_library(rt ${RT_SRC_FILES})
+target_link_libraries(rt fmt::fmt)
 
 add_executable(projenv_demo
         demo/projenv_demo.cpp math/matrix.cpp)
