@@ -30,7 +30,3 @@ cd build
 cmake -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -GNinja ..
 cmake --build . --config Debug
 ```
-
-## Todos
-
-- [ ] Rewrite `Canvas::to_ppm`
