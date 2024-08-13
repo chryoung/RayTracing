@@ -1,6 +1,4 @@
-#ifndef CA17FC77_2B5C_486B_913E_C7224B51DBBD
-#define CA17FC77_2B5C_486B_913E_C7224B51DBBD
-
+#pragma once
 #include "_tuple.h"
 
 namespace RayTracer {
@@ -11,7 +9,6 @@ class Vector : public Tuple {
 
   Vector& set_w(double w) override { return *this; }
 
-  bool is_vector() override { return true; }
   bool is_vector() const override { return true; }
 
   Vector& operator+=(const Vector& other) {
@@ -34,7 +31,7 @@ class Vector : public Tuple {
     return Vector(-x(), -y(), -z());
   }
 
-  Vector cross(const Vector& other) {
+  Vector cross(const Vector& other) const {
     return Vector(y() * other.z() - z() * other.y(), z() * other.x() - x() * other.z(),
                   x() * other.y() - y() * other.x());
   }
@@ -42,4 +39,3 @@ class Vector : public Tuple {
 
 }  // namespace RayTracer
 
-#endif /* CA17FC77_2B5C_486B_913E_C7224B51DBBD */

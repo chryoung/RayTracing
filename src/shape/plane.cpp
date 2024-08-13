@@ -6,11 +6,11 @@
 
 namespace RayTracer {
 namespace Shape {
-Vector Plane::local_normal_at(const Point& local_point) {
+Vector Plane::local_normal_at(const Point& local_point) const {
   return Vector{0, 1, 0};
 }
 
-IntersectionCollection Plane::local_intersect(const Ray& local_test_ray) {
+IntersectionCollection Plane::local_intersect(const Ray& local_test_ray) const {
   if (std::fabs(local_test_ray.direction().y()) < DOUBLE_EPSILON) {
     return IntersectionCollection{};
   }

@@ -1,5 +1,7 @@
+
 #include <cmath>
 #include <memory>
+#include "math/pi.h"
 #include "light/pointlight.h"
 #include "shape/shapebuilder.h"
 #include "shape/sphere.h"
@@ -7,6 +9,7 @@
 #include "world/world.h"
 #include "camera/camera.h"
 #include "geometry/transform.h"
+#include "material/stripe_pattern.h"
 #include "image/color.h"
 
 int main() {
@@ -18,11 +21,14 @@ int main() {
   floor->material()->set_color(Color{1, 0.9, 0.9}).set_specular(0);
 
   auto middle = Shape::ShapeBuilder::build<Shape::Sphere>();
+  std::shared_ptr<Material::Pattern> pattern = std::make_shared<Material::StripePattern>(Color::make_white(), Color(1, 0, 0));
+  pattern->set_transform(Transform::scaling(0.2, 0.2, 0.2));
   middle->set_transform(Transform::translation(-0.5, 1, 0.5));
   middle->material()
     ->set_color(Color{0.1, 1, 0.5})
     .set_diffuse(0.7)
-    .set_specular(0.3);
+    .set_specular(0.3)
+    .set_pattern(pattern);
 
   auto right = Shape::ShapeBuilder::build<Shape::Sphere>();
   tb

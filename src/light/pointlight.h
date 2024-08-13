@@ -1,6 +1,4 @@
-#ifndef C1D37A2B_66FA_428E_AACF_03C888D2A1B7
-#define C1D37A2B_66FA_428E_AACF_03C888D2A1B7
-
+#pragma once
 #include "light.h"
 #include "image/color.h"
 #include "math/tuple.h"
@@ -16,9 +14,6 @@ public:
   {}
   ~PointLight() = default;
 
-  const Color& intensity() override { return _intensity; }
-  const Point& position() override { return _position; }
-
   const Color& intensity() const override { return _intensity; }
   const Point& position() const override { return _position; }
 private:
@@ -29,4 +24,3 @@ private:
 }
 }
 
-#endif

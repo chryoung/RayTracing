@@ -1,5 +1,7 @@
 #include "gtest/gtest.h"
+
 #include <cmath>
+#include "math/pi.h"
 #include "camera/camera.h"
 #include "geometry/transform.h"
 #include "world/world.h"
@@ -66,8 +68,8 @@ TEST(Camera, RenderAWorldWithACamera) {
     auto default_sphere_2 = Shape::ShapeBuilder::build<Shape::Sphere>();
     default_sphere_2->set_transform(Transform::scaling(0.5, 0.5, 0.5));
 
-    default_world.objects().emplace_back(default_sphere_1);
-    default_world.objects().emplace_back(default_sphere_2);
+    default_world.add_object(default_sphere_1);
+    default_world.add_object(default_sphere_2);
 
     Camera c{11, 11, M_PI_2};
     Point from(0, 0, -5);

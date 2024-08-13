@@ -1,6 +1,4 @@
-#ifndef C66010A5_4D2D_48DF_B8BF_7CE9A0F66900
-#define C66010A5_4D2D_48DF_B8BF_7CE9A0F66900
-
+#pragma once
 #include <ostream>
 #include <string>
 #include <vector>
@@ -12,28 +10,16 @@ class Canvas {
  public:
   static Canvas create(int width, int height);
   Canvas(const Canvas&) = delete;
-  Canvas(Canvas&&);
+  Canvas(Canvas&& other) noexcept;
   Canvas& operator=(const Canvas&) = delete;
-  Canvas& operator=(Canvas&&);
+  Canvas& operator=(Canvas&& other) noexcept;
   virtual ~Canvas();
   Canvas& write_pixel(int x, int y, const Color& color);
-  Color& pixel_at(int x, int y);
-  Color& pixel_at(int index);
   const Color& pixel_at(int x, int y) const;
   const Color& pixel_at(int index) const;
-  size_t width();
   size_t width() const;
-  size_t height();
   size_t height() const;
-  size_t num_pixels();
   size_t num_pixels() const;
-
-  /**
-   * @brief Saves the Canvas to PPM file.
-   * @param out The stream to be written.
-   * @returns True if saved. Otherwise false.
-   */
-  bool to_ppm(std::ostream& out);
 
   /**
    * @brief Saves the Canvas to PPM file.
@@ -42,11 +28,7 @@ class Canvas {
    */
   bool to_ppm(std::ostream& out) const;
 
-  bool to_file(const std::string& file_name);
-
-  inline bool to_file(const std::string& file_name) const {
-    return const_cast<Canvas&>(*this).to_file(file_name);
-  }
+  bool to_file(const std::string& file_name) const;
 
  private:
   Canvas(int width, int height);
@@ -67,4 +49,3 @@ class Canvas {
 };
 }  // namespace RayTracer
 
-#endif /* C66010A5_4D2D_48DF_B8BF_7CE9A0F66900 */

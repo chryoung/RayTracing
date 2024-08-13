@@ -2,21 +2,17 @@
 #include "phong.h"
 #include "math/util.h"
 #include "utility/utility.h"
+#include "shape/basicshape.h"
 
 namespace RayTracer {
 namespace Material {
-
-const Color& PhongMaterial::color() { return _color; }
-double PhongMaterial::ambient() { return _ambient; }
-double PhongMaterial::diffuse() { return _diffuse; }
-double PhongMaterial::specular() { return _specular; }
-double PhongMaterial::shininess() { return _shininess; }
 
 const Color& PhongMaterial::color() const { return _color; }
 double PhongMaterial::ambient() const { return _ambient; }
 double PhongMaterial::diffuse() const { return _diffuse; }
 double PhongMaterial::specular() const { return _specular; }
 double PhongMaterial::shininess() const { return _shininess; }
+std::shared_ptr<Pattern> PhongMaterial::pattern() const { return _pattern; }
 
 PhongMaterial& PhongMaterial::set_color(Color color) {
   _color = color;
@@ -63,8 +59,22 @@ PhongMaterial& PhongMaterial::set_shininess(double shininess) {
   return *this;
 }
 
-Color PhongMaterial::lighting(const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) {
-  Color effective_color = _color * light.intensity();
+PhongMaterial& PhongMaterial::set_pattern(std::shared_ptr<Pattern> p) {
+  _pattern = p;
+
+  return *this;
+}
+
+Color PhongMaterial::lighting(Shape::ConstBasicShapePtr object, const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) const {
+  Color color;
+
+  if (_pattern != nullptr) {
+    color = _pattern->pattern_at_shape(object, position);
+  } else {
+    color = _color;
+  }
+
+  Color effective_color = color * light.intensity();
 
   Color ambient = effective_color * _ambient;
 

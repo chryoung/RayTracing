@@ -1,6 +1,4 @@
-#ifndef FD7AFB00_7907_445F_A4E5_5148314ECB9A
-#define FD7AFB00_7907_445F_A4E5_5148314ECB9A
-
+#pragma once
 #include <memory>
 #include "math/matrix.h"
 #include "geometry/transform.h"
@@ -57,15 +55,10 @@ public:
     return *this;
   }
 
-  double hsize() { return _hsize; }
   double hsize() const { return _hsize; }
-  double vsize() { return _vsize; }
   double vsize() const { return _vsize; }
-  double field_of_view() { return _field_of_view; }
   double field_of_view() const { return _field_of_view; }
-  double pixel_size() { return _pixel_size; }
   double pixel_size() const { return _pixel_size; }
-  Matrix& transform() { return _transform; }
   const Matrix& transform() const { return _transform; }
 
   Ray ray_for_pixel(int px, int py);
@@ -87,4 +80,3 @@ private:
   
 } /* RayTracer  */ 
 
-#endif

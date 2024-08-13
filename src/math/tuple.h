@@ -1,6 +1,4 @@
-#ifndef D0D9AE10_CF76_4E95_A679_4159C90E4C80
-#define D0D9AE10_CF76_4E95_A679_4159C90E4C80
-
+#pragma once
 #include "_point.h"
 #include "_tuple.h"
 #include "_vector.h"
@@ -48,4 +46,3 @@ inline Vector operator-(const Vector& a, const Vector& b) {
 
 }  // namespace RayTracer
 
-#endif /* D0D9AE10_CF76_4E95_A679_4159C90E4C80 */

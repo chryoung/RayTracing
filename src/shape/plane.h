@@ -1,3 +1,4 @@
+#pragma once
 #include "basicshape.h"
 
 namespace RayTracer {
@@ -7,9 +8,9 @@ class ShapeBuilder;
 
 class Plane : public BasicShape {
  public:
-  Vector local_normal_at(const Point& local_point) override;
+  Vector local_normal_at(const Point& local_point) const override;
 
-  IntersectionCollection local_intersect(const Ray& local_test_ray) override;
+  IntersectionCollection local_intersect(const Ray& local_test_ray) const override;
 
   friend class ShapeBuilder;
  private:

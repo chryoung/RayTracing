@@ -1,6 +1,4 @@
-#ifndef C17184CD_A5B1_436B_956B_328159AC7BC3
-#define C17184CD_A5B1_436B_956B_328159AC7BC3
-
+#pragma once
 #include "math/tuple.h"
 
 namespace RayTracer {
@@ -11,10 +9,8 @@ class Projectile {
   Projectile(Point&& position, Vector&& velocity) : _position(position), _velocity(velocity) {}
 
   const Point& postion() const { return _position; }
-  const Point& postion() { return _position; }
 
   const Vector& velocity() const { return _velocity; }
-  const Vector& velocity() { return _velocity; }
 
   Projectile& set_position(const Point& position) {
     _position = position;
@@ -34,4 +30,3 @@ class Projectile {
 };
 }  // namespace RayTracer
 
-#endif /* C17184CD_A5B1_436B_956B_328159AC7BC3 */

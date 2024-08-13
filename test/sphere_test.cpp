@@ -9,6 +9,7 @@
 #include "geometry/transform.h"
 #include "math/matrix.h"
 #include "math/tuple.h"
+#include "math/pi.h"
 #include "material/phong.h"
 #include "ray/ray.h"
 #include "ray/intersection_collection.h"

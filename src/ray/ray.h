@@ -1,6 +1,4 @@
-#ifndef AFDAB679_02C5_4C88_A3D6_F6FE8B9859D5
-#define AFDAB679_02C5_4C88_A3D6_F6FE8B9859D5
-
+#pragma once
 #include <cmath>
 #include <memory>
 #include <vector>
@@ -19,14 +17,11 @@ class Ray {
       : _origin(Point(origin_x, origin_y, origin_z)), _direction(Vector(direction_x, direction_y, direction_z)) {}
   Ray(const Point& origin, const Vector& direction) : _origin(origin), _direction(direction) {}
 
-  const Point& origin() { return _origin; }
   const Point& origin() const { return _origin; }
 
-  const Vector& direction() { return _direction; }
   const Vector& direction() const { return _direction; }
 
-  Point position(double time) { return _origin + _direction * time; }
-  Point position(double time) const { return const_cast<Ray&>(*this).position(time); }
+  Point position(double time) const { return _origin + _direction * time; }
 
   Ray transform(const Matrix& t) const;
 
@@ -36,4 +31,3 @@ class Ray {
 };
 }  // namespace RayTracer
 
-#endif /* AFDAB679_02C5_4C88_A3D6_F6FE8B9859D5 */

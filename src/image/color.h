@@ -1,6 +1,4 @@
-#ifndef F38A44CE_973D_4B33_B053_0D5724AA80E6
-#define F38A44CE_973D_4B33_B053_0D5724AA80E6
-
+#pragma once
 #include <ostream>
 
 #include "utility/utility.h"
@@ -15,10 +13,6 @@ class Color {
   double red() const { return _red; }
   double green() const { return _green; }
   double blue() const { return _blue; }
-
-  double red() { return _red; }
-  double green() { return _green; }
-  double blue() { return _blue; }
 
   Color& set_red(double red) {
     _red = red;
@@ -36,6 +30,8 @@ class Color {
   }
 
   static Color make_black() { return Color(0); }
+
+  static Color make_white() { return Color(1); }
 
  private:
   double _red;
@@ -72,4 +68,3 @@ inline std::ostream& operator<<(std::ostream& out, const Color& a) {
 }
 }  // namespace RayTracer
 
-#endif /* F38A44CE_973D_4B33_B053_0D5724AA80E6 */

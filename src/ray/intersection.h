@@ -1,6 +1,4 @@
-#ifndef DC7A1CB1_389F_4A58_B81C_8E3E52BE56A7
-#define DC7A1CB1_389F_4A58_B81C_8E3E52BE56A7
-
+#pragma once
 #include <memory>
 #include <ostream>
 
@@ -9,16 +7,14 @@
 namespace RayTracer {
 class Intersection {
  public:
-  Intersection(double t, Shape::BasicShapePtr object) : _object(object), _t(t) {}
+  Intersection(double t, Shape::ConstBasicShapePtr object) : _object(object), _t(t) {}
 
-  Shape::BasicShapePtr object() { return _object; }
-  const Shape::BasicShapePtr& object() const { return _object; }
+  Shape::ConstBasicShapePtr object() const { return _object; }
 
-  double t() { return _t; }
   double t() const { return _t; }
 
  private:
-  Shape::BasicShapePtr _object;
+  Shape::ConstBasicShapePtr _object;
   double _t;
 };
 
@@ -35,4 +31,3 @@ inline std::ostream& operator<<(std::ostream& out, const Intersection& a) {
 
 }  // namespace RayTracer
 
-#endif /* DC7A1CB1_389F_4A58_B81C_8E3E52BE56A7 */

@@ -20,7 +20,8 @@ set(RT_TESTS_SRC_FILES
     light_test.cpp
     material_test.cpp
     world_test.cpp
-    camera_test.cpp)
+    camera_test.cpp
+    pattern_test.cpp)
 
 add_executable(rt_tests ${RT_TESTS_SRC_FILES})
 

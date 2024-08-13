@@ -1,6 +1,4 @@
-#ifndef D524A412_22F9_458A_B1A1_8B662656FE44
-#define D524A412_22F9_458A_B1A1_8B662656FE44
-
+#pragma once
 #include <stdexcept>
 #include "math/tuple.h"
 #include "material.h"
@@ -8,6 +6,8 @@
 #include "utility/utility.h"
 #include "utility/log_helper.h"
 #include "light/pointlight.h"
+#include "pattern.h"
+#include "shape/shapefwddecl.h"
 
 namespace RayTracer {
 namespace Material {
@@ -24,17 +24,12 @@ public:
 
   ~PhongMaterial() = default;
 
-  const Color& color() override;
-  double ambient() override;
-  double diffuse() override;
-  double specular() override;
-  double shininess() override;
-
   const Color& color() const override;
   double ambient() const override;
   double diffuse() const override;
   double specular() const override;
   double shininess() const override;
+  std::shared_ptr<Pattern> pattern() const override;
 
   friend bool operator==(const PhongMaterial& lhs, const PhongMaterial& rhs);
 
@@ -43,10 +38,12 @@ public:
   PhongMaterial& set_diffuse(double diffuse) override;
   PhongMaterial& set_specular(double specular) override;
   PhongMaterial& set_shininess(double shininess) override;
+  PhongMaterial& set_pattern(std::shared_ptr<Pattern> p) override;
 
-  Color lighting(const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) override;
+  Color lighting(Shape::ConstBasicShapePtr object, const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) const override;
 
 private:
+  std::shared_ptr<Pattern> _pattern;
   Color _color;
   double _ambient;
   double _diffuse;
@@ -69,4 +66,3 @@ inline bool operator!=(const PhongMaterial& lhs, const PhongMaterial& rhs) {
 }
 }
 
-#endif

@@ -1,6 +1,4 @@
-#ifndef DB4C6BD6_4EFF_4E71_AC37_8EE37D1D12D6
-#define DB4C6BD6_4EFF_4E71_AC37_8EE37D1D12D6
-
+#pragma once
 #include <algorithm>
 #include <initializer_list>
 #include <list>
@@ -23,15 +21,9 @@ class IntersectionCollection {
 
   void insert(Intersection&& i);
 
-  size_t size() { return _intersections.size(); }
   size_t size() const { return _intersections.size(); }
 
-  Intersection& operator[](size_t index);
-  const Intersection& operator[](size_t index) const {
-    return const_cast<IntersectionCollection&>(*this).operator[](index);
-  }
-
-  bool empty() { return _intersections.empty(); }
+  const Intersection& operator[](size_t index) const;
 
   bool empty() const { return _intersections.empty(); }
 
@@ -47,17 +39,10 @@ class IntersectionCollection {
    * Get the lowest nonnegative hit.
    * @return The lowest nonnegative hit. Or std::nullopt if not exists.
    */
-  std::optional<Intersection> hit();
-
-  /**
-   * Get the lowest nonnegative hit.
-   * @return The lowest nonnegative hit. Or std::nullopt if not exists.
-   */
-  std::optional<Intersection> hit() const { return const_cast<IntersectionCollection&>(*this).hit(); }
+  std::optional<Intersection> hit() const;
 
  private:
   std::list<Intersection> _intersections;
 };
 }  // namespace RayTracer
 
-#endif /* DB4C6BD6_4EFF_4E71_AC37_8EE37D1D12D6 */

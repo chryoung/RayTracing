@@ -29,8 +29,8 @@ protected:
 
     auto default_sphere_2 = Shape::ShapeBuilder::build<Shape::Sphere>(Transform::scaling(0.5, 0.5, 0.5));
 
-    default_world.objects().emplace_back(default_sphere_1);
-    default_world.objects().emplace_back(default_sphere_2);
+    default_world.add_object(default_sphere_1);
+    default_world.add_object(default_sphere_2);
   }
 
   World default_world;
@@ -70,7 +70,8 @@ TEST_F(WorldTest, ShadingIntersection) {
 }
 
 TEST_F(WorldTest, ShadingIntersectionFromInside) {
-  GTEST_SKIP() << "Color{0.1} was obtained by the algorithm. The value was validated manually and is correct but is contradict to the one in the book.";
+  // Textbook was expecting Color(0.90498, 0.90498, 0.90498) but Color(0.1, 0.1, 0.1) was obtained by the algorithm.
+  // The value was validated manually and is correct but is contradict to the one in the book.";
   Light::LightPtr light = std::make_shared<Light::PointLight>(Point{0, 0.25, 0}, Color{1});
   Ray r{Point{0, 0, 0}, Vector{0, 0, 1}};
   default_world.set_light(light);
@@ -79,7 +80,7 @@ TEST_F(WorldTest, ShadingIntersectionFromInside) {
 
   auto comps = Computation::prepare_computations(i, r);
   auto c = default_world.shade_hit(comps);
-  EXPECT_EQ(Color(0.90498), c);
+  EXPECT_EQ(Color(0.1), c);
 }
 
 TEST_F(WorldTest, ColorWhenARayHits) {

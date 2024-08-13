@@ -1,6 +1,4 @@
-#ifndef C9E0998C_94E3_4D8B_B8FC_1C74D8637378
-#define C9E0998C_94E3_4D8B_B8FC_1C74D8637378
-
+#pragma once
 #include <cmath>
 #include <ostream>
 #include <utility>
@@ -21,11 +19,6 @@ class Tuple {
   static Tuple make_point(double x, double y, double z) { return Tuple(x, y, z, POINT_W); }
 
   static Tuple make_vector(double x, double y, double z) { return Tuple(x, y, z, VECTOR_W); }
-
-  virtual double x() { return _x; }
-  virtual double y() { return _y; }
-  virtual double z() { return _z; }
-  virtual double w() { return _w; }
 
   virtual double x() const { return _x; }
   virtual double y() const { return _y; }
@@ -56,8 +49,6 @@ class Tuple {
     return *this;
   }
 
-  virtual double magnitude() { return std::sqrt(_x * _x + _y * _y + _z * _z + _w * _w); }
-
   virtual double magnitude() const { return std::sqrt(_x * _x + _y * _y + _z * _z + _w * _w); }
 
   virtual void normalize() {
@@ -68,10 +59,8 @@ class Tuple {
     _w = _w / m;
   }
 
-  virtual bool is_point() { return is_double_eq(_w, POINT_W); }
   virtual bool is_point() const { return is_double_eq(_w, POINT_W); }
 
-  virtual bool is_vector() { return is_double_eq(_w, VECTOR_W); }
   virtual bool is_vector() const { return is_double_eq(_w, VECTOR_W); }
 
   Tuple& operator+=(const Tuple& other) {
@@ -94,13 +83,7 @@ class Tuple {
 
   Tuple operator-() const { return Tuple(-_x, -_y, -_z, -_w); }
 
-  double dot(const Tuple& other) { return _x * other._x + _y * other._y + _z * other._z + _w * other._w; }
-
   double dot(const Tuple& other) const { return _x * other._x + _y * other._y + _z * other._z + _w * other._w; }
-
-  Tuple cross(const Tuple& other) {
-    return make_vector(_y * other._z - _z * other._y, _z * other._x - _x * other._z, _x * other._y - _y * other._x);
-  }
 
   Tuple cross(const Tuple& other) const {
     return make_vector(_y * other._z - _z * other._y, _z * other._x - _x * other._z, _x * other._y - _y * other._x);
@@ -128,4 +111,3 @@ inline std::ostream& operator<<(std::ostream& out, const Tuple& t) {
 
 }  // namespace RayTracer
 
-#endif /* C9E0998C_94E3_4D8B_B8FC_1C74D8637378 */

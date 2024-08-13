@@ -1,6 +1,4 @@
-#ifndef CA47C3DE_E656_407E_870D_96E6611689C6
-#define CA47C3DE_E656_407E_870D_96E6611689C6
-
+#pragma once
 #include <initializer_list>
 #include <memory>
 #include <ostream>
@@ -30,9 +28,9 @@ class Matrix {
   Matrix(const Matrix& orig) {
     _num_row = orig._num_row;
     _num_col = orig._num_col;
+    _assigned_mem = _mem_pool->alloc();
+    _data = _assigned_mem->get();
     if (orig._data != nullptr) {
-      _assigned_mem = _mem_pool->alloc();
-      _data = _assigned_mem->get();
       for (int i = 0; i < _num_row; ++i) {
         for (int j = 0; j < _num_col; ++j) {
           _data[i * _num_col + j] = orig._data[i * _num_col + j];
@@ -41,8 +39,7 @@ class Matrix {
     }
   }
 
-
-  Matrix(Matrix&& orig) {
+  Matrix(Matrix&& orig) noexcept {
     _num_row = orig._num_row;
     _num_col = orig._num_col;
     _assigned_mem = orig._assigned_mem;
@@ -55,20 +52,22 @@ class Matrix {
   }
 
   Matrix& operator=(const Matrix& orig) {
-    if (_data != nullptr) {
-      _mem_pool->free(_assigned_mem);
-      _assigned_mem = nullptr;
-      _data = nullptr;
-    }
+    if (this != &orig) {
+      if (_data != nullptr) {
+        _mem_pool->free(_assigned_mem);
+        _assigned_mem = nullptr;
+        _data = nullptr;
+      }
 
-    _num_row = orig._num_row;
-    _num_col = orig._num_col;
-    if (orig._data != nullptr) {
-      _assigned_mem = _mem_pool->alloc();
-      _data = _assigned_mem->get();
-      for (int i = 0; i < _num_row; ++i) {
-        for (int j = 0; j < _num_row; ++j) {
-          _data[i * _num_col + j] = orig._data[i * _num_col + j];
+      _num_row = orig._num_row;
+      _num_col = orig._num_col;
+      if (orig._data != nullptr) {
+        _assigned_mem = _mem_pool->alloc();
+        _data = _assigned_mem->get();
+        for (int i = 0; i < _num_row; ++i) {
+          for (int j = 0; j < _num_row; ++j) {
+            _data[i * _num_col + j] = orig._data[i * _num_col + j];
+          }
         }
       }
     }
@@ -76,22 +75,24 @@ class Matrix {
     return *this;
   }
 
-  Matrix& operator=(Matrix&& orig) {
-    if (_data != nullptr) {
-      _mem_pool->free(_assigned_mem);
-      _assigned_mem = nullptr;
-      _data = nullptr;
+  Matrix& operator=(Matrix&& orig) noexcept {
+    if (this != &orig) {
+      if (_data != nullptr) {
+        _mem_pool->free(_assigned_mem);
+        _assigned_mem = nullptr;
+        _data = nullptr;
+      }
+
+      _num_row = orig._num_row;
+      _num_col = orig._num_col;
+      _data = orig._data;
+      _assigned_mem = orig._assigned_mem;
+
+      orig._num_row = 0;
+      orig._num_col = 0;
+      orig._data = nullptr;
+      orig._assigned_mem = nullptr;
     }
-
-    _num_row = orig._num_row;
-    _num_col = orig._num_col;
-    _data = orig._data;
-    _assigned_mem = orig._assigned_mem;
-
-    orig._num_row = 0;
-    orig._num_col = 0;
-    orig._data = nullptr;
-    orig._assigned_mem = nullptr;
 
     return *this;
   }
@@ -141,31 +142,20 @@ class Matrix {
   static Matrix zero(size_t num_row, size_t num_col);
   double* operator[](size_t row);
   const double* operator[](size_t row) const;
-  double at(size_t row, size_t col);
   double at(size_t row, size_t col) const;
-  bool is_square();
   bool is_square() const;
   bool multiply_inplace(const Matrix& b);
   bool multiply_inplace(const Tuple& b);
-  bool multiply_to_tuple(const Tuple& b, Tuple& out_product);
-  Matrix transpose();
+  bool multiply_to_tuple(const Tuple& b, Tuple& out_product) const;
   Matrix transpose() const;
   void transpose_inplace();
-  double determinant();
   double determinant() const;
-  bool is_invertible();
   bool is_invertible() const;
-  Matrix submatrix(size_t row, size_t col);
   Matrix submatrix(size_t row, size_t col) const;
-  double minor(size_t row, size_t col);
   double minor(size_t row, size_t col) const;
-  double cofactor(size_t row, size_t col);
   double cofactor(size_t row, size_t col) const;
-  Matrix inverse();
   Matrix inverse() const;
-  size_t rows();
   size_t rows() const;
-  size_t cols();
   size_t cols() const;
 
  private:
@@ -197,4 +187,3 @@ Vector operator*(const Matrix& a, const Vector& b);
 std::ostream& operator<<(std::ostream& out, const Matrix& m);
 }  // namespace RayTracer
 
-#endif /* CA47C3DE_E656_407E_870D_96E6611689C6 */

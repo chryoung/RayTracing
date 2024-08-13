@@ -1,6 +1,4 @@
-#ifndef CA5A6AF1_A42B_4C61_B95B_A526A561D656
-#define CA5A6AF1_A42B_4C61_B95B_A526A561D656
-
+#pragma once
 #include "basicshape.h"
 #include "material/material.h"
 #include "math/tuple.h"
@@ -15,9 +13,9 @@ class Sphere : public BasicShape {
 
   friend class ShapeBuilder;
 
-  Vector local_normal_at(const Point& local_point) override;
+  Vector local_normal_at(const Point& local_point) const override;
 
-  IntersectionCollection local_intersect(const Ray& local_test_ray) override;
+  IntersectionCollection local_intersect(const Ray& local_test_ray) const override;
 
  private:
   explicit Sphere(std::uint64_t id, Matrix transform = Transform::id(), Material::MaterialPtr material = std::make_shared<Material::PhongMaterial>()): 
@@ -29,4 +27,3 @@ class Sphere : public BasicShape {
 
 }  // namespace RayTracer
 
-#endif /* CA5A6AF1_A42B_4C61_B95B_A526A561D656 */

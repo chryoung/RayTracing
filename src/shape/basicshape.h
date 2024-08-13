@@ -1,6 +1,4 @@
-#ifndef DE42175B_5A7D_4059_8113_AC1894425874
-#define DE42175B_5A7D_4059_8113_AC1894425874
-
+#pragma once
 #include <cstdint>
 #include <memory>
 
@@ -19,12 +17,11 @@ namespace Shape {
 class BasicShape : public std::enable_shared_from_this<BasicShape> {
  public:
   virtual ~BasicShape() = default;
-  std::uint64_t id() { return _id; }
+
   std::uint64_t id() const { return _id; }
 
-  Matrix& transform() { return _transform; }
   const Matrix& transform() const { return _transform; }
-
+  const Matrix& transform_inv() const { return _transform_inv; }
   BasicShape& set_transform(const Matrix& new_transform) {
     _transform = new_transform;
     _transform_inv = _transform.inverse();
@@ -33,20 +30,13 @@ class BasicShape : public std::enable_shared_from_this<BasicShape> {
     return *this;
   }
 
+  Material::ConstMaterialPtr material() const { return _material; }
   Material::MaterialPtr material() { return _material; }
-  const Material::MaterialPtr material() const { return _material; }
-
   BasicShape& set_material(const Material::MaterialPtr& material) {
     _material = material;
 
     return *this;
   }
-
-  /**
-   * Calculate the normal at the point on the object itself.
-   * @param p The point on the object.
-   */
-  virtual Vector normal_at(const Point& p);
 
   /**
    * Calculate the normal at the point on the object itself.
@@ -59,25 +49,17 @@ class BasicShape : public std::enable_shared_from_this<BasicShape> {
    * @param ray The test ray.
    * @return The collection of intersects
    */
-  virtual IntersectionCollection intersect(const Ray& ray);
-
-
-  /**
-   * Test if the object intersects with the test ray.
-   * @param ray The test ray.
-   * @return The collection of intersects
-   */
   virtual IntersectionCollection intersect(const Ray& ray) const;
 
   /**
    * Calculate normal in local space.
    */
-  virtual Vector local_normal_at(const Point& local_point);
+  virtual Vector local_normal_at(const Point& local_point) const;
 
   /**
    * Test if the object intersects with the test ray in local space.
    */
-  virtual IntersectionCollection local_intersect(const Ray& local_test_ray);
+  virtual IntersectionCollection local_intersect(const Ray& local_test_ray) const;
 
   friend class ShapeBuilder;
 
@@ -97,12 +79,9 @@ class BasicShape : public std::enable_shared_from_this<BasicShape> {
   Material::MaterialPtr _material;
 };
 
-using BasicShapePtr = std::shared_ptr<BasicShape>;
-
 inline bool operator==(const BasicShape& a, const BasicShape& b) { return a.id() == b.id(); }
 inline bool operator!=(const BasicShape& a, const BasicShape& b) { return a.id() != b.id(); }
 }  // namespace Shape
 
 }  // namespace RayTracer
 
-#endif /* DE42175B_5A7D_4059_8113_AC1894425874 */
