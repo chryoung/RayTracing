@@ -14,9 +14,10 @@ struct Computation {
   Point over_point;
   Vector eyev;
   Vector normalv;
+  Vector reflectv;
 
   static Computation prepare_computations(const Intersection& i, const Ray& r);
 };
-  
-} /* RayTracer  */ 
+
+} /* RayTracer  */
 

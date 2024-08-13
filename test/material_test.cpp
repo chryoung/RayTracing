@@ -6,8 +6,10 @@
 #include "material/phong.h"
 #include "image/color.h"
 #include "material/stripe_pattern.h"
-#include "shape/sphere.h"
 #include "shape/shapebuilder.h"
+#include "shape/sphere.h"
+#include "shape/plane.h"
+#include "ray/computation.h"
 
 
 using namespace RayTracer;
@@ -110,4 +112,20 @@ TEST_F(MaterialTest, LightingWithAPatternApplied) {
 
   EXPECT_EQ(Color{1}, c1);
   EXPECT_EQ(Color{0}, c2);
+}
+
+TEST_F(MaterialTest, ReflectiveMaterial) {
+  Material::PhongMaterial m;
+  m.set_reflective(0.0);
+  EXPECT_DOUBLE_EQ(0.0, m.reflective());
+}
+
+TEST_F(MaterialTest, PrecomputingTheReflectionVector) {
+  Shape::BasicShapePtr shape = Shape::ShapeBuilder::build<Shape::Plane>();
+  const double x = sqrt(2.0) / 2.0;
+  Ray r{Point{0, 1, -1}, Vector{0, -x, x}};
+  Intersection i(sqrt(2.0), shape);
+
+  auto comps = Computation::prepare_computations(i, r);
+  EXPECT_EQ(Vector(0, x, x), comps.reflectv);
 }
