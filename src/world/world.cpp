@@ -28,17 +28,20 @@ IntersectionCollection World::intersect(const Ray& ray) const {
   return union_intersection;
 }
 
-Color World::shade_hit(const Computation& comps) const {
+Color World::shade_hit(const Computation& comps, int remaining) const {
   if (_light) {
     bool shadowed = is_shadowed(comps.over_point);
 
-    return comps.object->material()->lighting(comps.object, *_light, comps.point, comps.eyev, comps.normalv, shadowed);
+    auto surface = comps.object->material()->lighting(comps.object, *_light, comps.point, comps.eyev, comps.normalv, shadowed);
+    auto reflected = reflected_color(comps, remaining);
+
+    return surface + reflected;
   }
 
   return Color::make_black();
 }
 
-Color World::color_at(const Ray& r) const {
+Color World::color_at(const Ray& r, int remaining) const {
   auto xs = intersect(r);
   if (!xs.hit()) {
     return Color::make_black();
@@ -46,7 +49,7 @@ Color World::color_at(const Ray& r) const {
 
   auto comps = Computation::prepare_computations(*xs.hit(), r);
 
-  return shade_hit(comps);
+  return shade_hit(comps, remaining);
 }
 
 bool World::is_shadowed(const Point& point) const {
@@ -65,13 +68,17 @@ bool World::is_shadowed(const Point& point) const {
   return false;
 }
 
-Color World::reflected_color(const Computation& comps) const {
+Color World::reflected_color(const Computation& comps, int remaining) const {
+  if (remaining <= 0) {
+    return Color::make_black();
+  }
+
   if (is_double_eq(comps.object->material()->reflective(), 0)) {
     return Color::make_black();
   }
 
   Ray reflect_ray{comps.over_point, comps.reflectv};
-  auto color = color_at(reflect_ray);
+  auto color = color_at(reflect_ray, remaining - 1);
 
   return color * comps.object->material()->reflective();
 }

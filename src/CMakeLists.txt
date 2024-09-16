@@ -43,3 +43,7 @@ target_link_libraries(render_world_demo rt)
 add_executable(render_world_demo_2
         demo/render_world_demo_2.cpp)
 target_link_libraries(render_world_demo_2 rt)
+
+add_executable(render_world_demo_reflection
+        demo/render_world_demo_reflection.cpp)
+target_link_libraries(render_world_demo_reflection rt)

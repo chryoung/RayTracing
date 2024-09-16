@@ -2,7 +2,7 @@
 #include <cmath>
 
 namespace RayTracer {
-constexpr double DOUBLE_EPSILON = 1e-5;
+constexpr double DOUBLE_EPSILON = 1e-4;
 
 inline bool is_double_eq(double a, double b) {
   return (std::fabs(a - b) < DOUBLE_EPSILON);
