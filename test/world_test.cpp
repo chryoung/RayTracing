@@ -14,7 +14,6 @@
 #include "utility/utility.h"
 
 using namespace RayTracer;
-using namespace RayTracer::Shape;
 
 class WorldTest : public ::testing::Test {
 protected:
