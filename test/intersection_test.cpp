@@ -1,6 +1,7 @@
 #include "ray/intersection.h"
 #include "ray/intersection_collection.h"
 #include "shape/sphere.h"
+#include "shape/plane.h"
 #include "shape/shapebuilder.h"
 #include "ray/ray.h"
 #include "ray/computation.h"
@@ -100,4 +101,14 @@ TEST(Intersection, PrecomputeStateOfAnInterSection) {
   EXPECT_EQ(Point(0, 0, -1), comps.point);
   EXPECT_EQ(Vector(0, 0, -1), comps.eyev);
   EXPECT_EQ(Vector(0, 0, -1), comps.normalv);
+}
+
+
+TEST(InterSection, PrecomputeReflectionVector) {
+  auto shape = Shape::ShapeBuilder::build<Shape::Plane>();
+  double sqrt_2_2 = std::sqrt(2) / 2;
+  Ray r{Point{0, 1, -1}, Vector{0, -sqrt_2_2, sqrt_2_2}};
+  Intersection i{std::sqrt(2), shape};
+  auto comps = Computation::prepare_computations(i, r);
+  EXPECT_EQ(Vector(0, sqrt_2_2, sqrt_2_2), comps.reflectv);
 }

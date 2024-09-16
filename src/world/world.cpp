@@ -1,5 +1,6 @@
 #include "world.h"
 #include <memory>
+#include "utility/utility.h"
 
 namespace RayTracer {
 
@@ -62,6 +63,17 @@ bool World::is_shadowed(const Point& point) const {
   }
 
   return false;
+}
+
+Color World::reflected_color(const Computation& comps) const {
+  if (is_double_eq(comps.object->material()->reflective(), 0)) {
+    return Color::make_black();
+  }
+
+  Ray reflect_ray{comps.over_point, comps.reflectv};
+  auto color = color_at(reflect_ray);
+
+  return color * comps.object->material()->reflective();
 }
 
 } /* RayTracer  */ 

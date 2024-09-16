@@ -1,6 +1,5 @@
 #pragma once
 #include <list>
-#include <optional>
 #include "shape/basicshape.h"
 #include "light/light.h"
 #include "ray/ray.h"
@@ -48,6 +47,12 @@ public:
    * @param p The point to be tested.
    */
   bool is_shadowed(const Point& p) const;
+
+  /**
+   * Calculate the reflected color
+   * @param comps The computation of shape and ray
+   */
+  Color reflected_color(const Computation& comps) const;
 private:
   std::list<Shape::BasicShapePtr> _objects;
   Light::LightPtr _light;

@@ -5,14 +5,16 @@
 #include "world/world.h"
 #include "light/pointlight.h"
 #include "shape/sphere.h"
+#include "shape/plane.h"
 #include "shape/shapebuilder.h"
+#include "material/phong.h"
 #include "geometry/transform.h"
-#include "math/tuple.h"
 #include "ray/ray.h"
 #include "ray/computation.h"
 #include "utility/utility.h"
 
 using namespace RayTracer;
+using namespace RayTracer::Shape;
 
 class WorldTest : public ::testing::Test {
 protected:
@@ -141,4 +143,30 @@ TEST_F(WorldTest, HitShouldOffsetPoint) {
   auto comps = Computation::prepare_computations(i, r);
   EXPECT_TRUE(comps.over_point.z() < DOUBLE_EPSILON / 2);
   EXPECT_TRUE(comps.point.z() > comps.over_point.z());
+}
+
+TEST_F(WorldTest, ReflectedColorForANonReflectiveMaterial) {
+  Ray r{Point{0, 0, 0}, Vector{0, 0, 1}};
+  auto shape = default_world.object_at(1);
+  shape->material()->set_ambient(1);
+  Intersection i{1, shape};
+  auto comps = Computation::prepare_computations(i, r);
+  auto color = default_world.reflected_color(comps);
+  EXPECT_EQ(Color(0), color);
+}
+
+TEST_F(WorldTest, ReflectedColorForAReflectiveMaterial) {
+  auto material = std::make_shared<Material::PhongMaterial>();
+  material->set_reflective(0.5);
+  auto shape = Shape::ShapeBuilder::build<Shape::Plane>(
+      Transform::translation(0, -1, 0),
+      material);
+  default_world.add_object(shape);
+  double sqrt_2 = std::sqrt(2.0);
+  double sqrt_2_2 = sqrt_2 / 2.0;
+  Ray r{Point{0, 0, -3}, Vector{0,  -sqrt_2_2, sqrt_2_2}};
+  Intersection i{sqrt_2, shape};
+  auto comps = Computation::prepare_computations(i, r);
+  auto color = default_world.reflected_color(comps);
+  EXPECT_EQ(Color(0.190332, 0.237915, 0.142749), color);
 }
