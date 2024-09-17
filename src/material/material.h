@@ -38,6 +38,8 @@ public:
   virtual double specular() const = 0;
   virtual double shininess() const = 0;
   virtual double reflective() const = 0;
+  virtual double transparency() const = 0;
+  virtual double refractive_index() const = 0;
   virtual std::shared_ptr<Pattern> pattern() const = 0;
 
   virtual Material& set_color(Color color) = 0;
@@ -47,6 +49,8 @@ public:
   virtual Material& set_shininess(double shininess) = 0;
   virtual Material& set_pattern(std::shared_ptr<Pattern> p) = 0;
   virtual Material& set_reflective(double reflective) = 0;
+  virtual Material& set_transparency(double transparency) = 0;
+  virtual Material& set_refractive_index(double refractive_index) = 0;
 };
 
 using MaterialPtr = std::shared_ptr<Material>;

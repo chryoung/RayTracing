@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include <cmath>
+#include <memory>
 
-#include "math/tuple.h"
 #include "light/pointlight.h"
 #include "material/phong.h"
 #include "image/color.h"
@@ -20,6 +20,15 @@ protected:
     normalv = Vector{0, 0, -1};
     position = Point{0, 0, 0};
     white = Color{1, 1, 1};
+  }
+
+  std::shared_ptr<Shape::Sphere> glass_sphere() {
+    auto s = Shape::ShapeBuilder::build<Shape::Sphere>();
+    s->material()
+      ->set_transparency(1.0)
+      .set_refractive_index(1.5);
+
+    return s;
   }
 
   Vector normalv;
@@ -128,4 +137,10 @@ TEST_F(MaterialTest, PrecomputingTheReflectionVector) {
 
   auto comps = Computation::prepare_computations(i, r);
   EXPECT_EQ(Vector(0, x, x), comps.reflectv);
+}
+
+TEST_F(MaterialTest, TransparencyAndRefractiveIndexForDefaultMaterial) {
+  Material::PhongMaterial m;
+  EXPECT_DOUBLE_EQ(0.0, m.transparency());
+  EXPECT_DOUBLE_EQ(1.0, m.refractive_index());
 }

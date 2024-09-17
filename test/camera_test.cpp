@@ -3,6 +3,7 @@
 #include <cmath>
 #include "math/pi.h"
 #include "camera/camera.h"
+#include "light/pointlight.h"
 #include "geometry/transform.h"
 #include "world/world.h"
 #include "shape/shapebuilder.h"

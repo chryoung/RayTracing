@@ -1,8 +1,6 @@
 #include <cmath>
 #include "phong.h"
 #include "math/util.h"
-#include "utility/utility.h"
-#include "shape/basicshape.h"
 
 namespace RayTracer {
 namespace Material {
@@ -13,6 +11,8 @@ double PhongMaterial::diffuse() const { return _diffuse; }
 double PhongMaterial::specular() const { return _specular; }
 double PhongMaterial::shininess() const { return _shininess; }
 double PhongMaterial::reflective() const { return _reflective; }
+double PhongMaterial::transparency() const { return _transparency; }
+double PhongMaterial::refractive_index() const { return _refractive_index; }
 std::shared_ptr<Pattern> PhongMaterial::pattern() const { return _pattern; }
 
 PhongMaterial& PhongMaterial::set_color(Color color) {
@@ -66,6 +66,18 @@ PhongMaterial& PhongMaterial::set_reflective(double reflective) {
   }
 
   _reflective = reflective;
+
+  return *this;
+}
+
+PhongMaterial& PhongMaterial::set_transparency(double transparency) {
+  _transparency = transparency;
+
+  return *this;
+}
+
+PhongMaterial& PhongMaterial::set_refractive_index(double refractive_index) {
+  _refractive_index = refractive_index;
 
   return *this;
 }
