@@ -12,6 +12,7 @@ double PhongMaterial::ambient() const { return _ambient; }
 double PhongMaterial::diffuse() const { return _diffuse; }
 double PhongMaterial::specular() const { return _specular; }
 double PhongMaterial::shininess() const { return _shininess; }
+double PhongMaterial::reflective() const { return _reflective; }
 std::shared_ptr<Pattern> PhongMaterial::pattern() const { return _pattern; }
 
 PhongMaterial& PhongMaterial::set_color(Color color) {
@@ -55,6 +56,16 @@ PhongMaterial& PhongMaterial::set_shininess(double shininess) {
   }
 
   _shininess = shininess;
+
+  return *this;
+}
+
+PhongMaterial& PhongMaterial::set_reflective(double reflective) {
+  if (reflective > 1.0 || reflective < 0.0) {
+    throw std::invalid_argument(CURRENT_LINE + "reflective should be between 0 and 1");
+  }
+
+  _reflective = reflective;
 
   return *this;
 }

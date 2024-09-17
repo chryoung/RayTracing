@@ -37,6 +37,7 @@ public:
   virtual double diffuse() const = 0;
   virtual double specular() const = 0;
   virtual double shininess() const = 0;
+  virtual double reflective() const = 0;
   virtual std::shared_ptr<Pattern> pattern() const = 0;
 
   virtual Material& set_color(Color color) = 0;
@@ -45,6 +46,7 @@ public:
   virtual Material& set_specular(double specular) = 0;
   virtual Material& set_shininess(double shininess) = 0;
   virtual Material& set_pattern(std::shared_ptr<Pattern> p) = 0;
+  virtual Material& set_reflective(double reflective) = 0;
 };
 
 using MaterialPtr = std::shared_ptr<Material>;

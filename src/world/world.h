@@ -1,6 +1,5 @@
 #pragma once
 #include <list>
-#include <optional>
 #include "shape/basicshape.h"
 #include "light/light.h"
 #include "ray/ray.h"
@@ -35,19 +34,27 @@ public:
 
   IntersectionCollection intersect(const Ray& ray) const;
 
-  Color shade_hit(const Computation& comps) const;
+  Color shade_hit(const Computation& comps, int remaining = 5) const;
 
   /**
    * Calculate the color at the point in the world hit by the ray.
    * @param r The test ray.
+   * @param remaining The count of remaining jumps of light.
    */
-  Color color_at(const Ray& r) const;
+  Color color_at(const Ray& r, int remaining = 5) const;
 
   /**
    * Calculate if a point in the world is in the shadow.
    * @param p The point to be tested.
    */
   bool is_shadowed(const Point& p) const;
+
+  /**
+   * Calculate the reflected color
+   * @param comps The computation of shape and ray
+   * @param remaining The count of remaining jumps of light.
+   */
+  Color reflected_color(const Computation& comps, int remaining) const;
 private:
   std::list<Shape::BasicShapePtr> _objects;
   Light::LightPtr _light;

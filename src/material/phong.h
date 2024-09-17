@@ -19,7 +19,8 @@ public:
     _ambient(0.1),
     _diffuse(0.9),
     _specular(0.9),
-    _shininess(200.0)
+    _shininess(200.0),
+    _reflective(0)
   {}
 
   ~PhongMaterial() = default;
@@ -29,6 +30,7 @@ public:
   double diffuse() const override;
   double specular() const override;
   double shininess() const override;
+  double reflective() const override;
   std::shared_ptr<Pattern> pattern() const override;
 
   friend bool operator==(const PhongMaterial& lhs, const PhongMaterial& rhs);
@@ -38,6 +40,7 @@ public:
   PhongMaterial& set_diffuse(double diffuse) override;
   PhongMaterial& set_specular(double specular) override;
   PhongMaterial& set_shininess(double shininess) override;
+  PhongMaterial& set_reflective(double reflective) override;
   PhongMaterial& set_pattern(std::shared_ptr<Pattern> p) override;
 
   Color lighting(Shape::ConstBasicShapePtr object, const Light::Light& light, const Point& position, const Vector& eyev, const Vector& normalv, bool in_shadow) const override;
@@ -49,6 +52,7 @@ private:
   double _diffuse;
   double _specular;
   double _shininess;
+  double _reflective;
 };
 
 inline bool operator==(const PhongMaterial& lhs, const PhongMaterial& rhs) {

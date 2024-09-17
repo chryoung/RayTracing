@@ -5,9 +5,10 @@
 #include "world/world.h"
 #include "light/pointlight.h"
 #include "shape/sphere.h"
+#include "shape/plane.h"
 #include "shape/shapebuilder.h"
+#include "material/phong.h"
 #include "geometry/transform.h"
-#include "math/tuple.h"
 #include "ray/ray.h"
 #include "ray/computation.h"
 #include "utility/utility.h"
@@ -141,4 +142,90 @@ TEST_F(WorldTest, HitShouldOffsetPoint) {
   auto comps = Computation::prepare_computations(i, r);
   EXPECT_TRUE(comps.over_point.z() < DOUBLE_EPSILON / 2);
   EXPECT_TRUE(comps.point.z() > comps.over_point.z());
+}
+
+TEST_F(WorldTest, ReflectedColorForANonReflectiveMaterial) {
+  Ray r{Point{0, 0, 0}, Vector{0, 0, 1}};
+  auto shape = default_world.object_at(1);
+  shape->material()->set_ambient(1);
+  Intersection i{1, shape};
+  auto comps = Computation::prepare_computations(i, r);
+  auto color = default_world.reflected_color(comps, 5);
+  EXPECT_EQ(Color(0), color);
+}
+
+TEST_F(WorldTest, ReflectedColorForAReflectiveMaterial) {
+  auto material = std::make_shared<Material::PhongMaterial>();
+  material->set_reflective(0.5);
+  auto shape = Shape::ShapeBuilder::build<Shape::Plane>(
+      Transform::translation(0, -1, 0),
+      material);
+  default_world.add_object(shape);
+  double sqrt_2 = std::sqrt(2.0);
+  double sqrt_2_2 = sqrt_2 / 2.0;
+  Ray r{Point{0, 0, -3}, Vector{0,  -sqrt_2_2, sqrt_2_2}};
+  Intersection i{sqrt_2, shape};
+  auto comps = Computation::prepare_computations(i, r);
+  auto color = default_world.reflected_color(comps, 5);
+  EXPECT_EQ(Color(0.19032, 0.2379, 0.14274), color);
+}
+
+TEST_F(WorldTest, shade_hitWithAReflectiveMaterial) {
+  auto material = std::make_shared<Material::PhongMaterial>();
+  material->set_reflective(0.5);
+  auto shape = Shape::ShapeBuilder::build<Shape::Plane>(
+      Transform::translation(0, -1, 0),
+      material);
+  default_world.add_object(shape);
+  double sqrt_2 = std::sqrt(2.0);
+  double sqrt_2_2 = sqrt_2 / 2.0;
+  Ray r{Point{0, 0, -3}, Vector{0,  -sqrt_2_2, sqrt_2_2}};
+  Intersection i{sqrt_2, shape};
+  auto comps = Computation::prepare_computations(i, r);
+  auto color = default_world.shade_hit(comps);
+  EXPECT_EQ(Color(0.87677, 0.92436, 0.82918), color);
+}
+
+TEST_F(WorldTest, color_atWithMutuallyReflectiveSurfaces) {
+  World w;
+  auto light = std::make_shared<Light::PointLight>(Point{0, 0, 0}, Color{1.0});
+  w.set_light(light);
+
+  auto lower_material = std::make_shared<Material::PhongMaterial>();
+  lower_material->set_reflective(1);
+  auto lower = Shape::ShapeBuilder::build<Shape::Plane>(
+      Transform::translation(0, -1, 0),
+      lower_material);
+
+  w.add_object(lower);
+
+  auto upper_material = std::make_shared<Material::PhongMaterial>();
+  upper_material->set_reflective(1);
+  auto upper = Shape::ShapeBuilder::build<Shape::Plane>(
+      Transform::translation(0, 1, 0),
+      upper_material);
+
+  w.add_object(upper);
+  w.add_object(lower);
+
+  Ray r{Point{0, 0, 0}, Vector{0, 1, 0}};
+  w.color_at(r);
+
+  EXPECT_NO_FATAL_FAILURE();
+}
+
+TEST_F(WorldTest, ReflectedColorAtMaximumRecursiveDepth) {
+  auto material = std::make_shared<Material::PhongMaterial>();
+  material->set_reflective(0.5);
+  auto shape = Shape::ShapeBuilder::build<Shape::Plane>(
+      Transform::translation(0, -1, 0),
+      material);
+  default_world.add_object(shape);
+  double sqrt_2 = std::sqrt(2.0);
+  double sqrt_2_2 = sqrt_2 / 2.0;
+  Ray r{Point{0, 0, -3}, Vector{0,  -sqrt_2_2, sqrt_2_2}};
+  Intersection i{sqrt_2, shape};
+  auto comps = Computation::prepare_computations(i, r);
+  auto color = default_world.reflected_color(comps, 0);
+  EXPECT_EQ(Color(0, 0, 0), color);
 }
