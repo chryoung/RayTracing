@@ -4,7 +4,7 @@ This repository is to implement the algorithm and the tests described in the [Th
 
 ## Requirement
 
-- C++ compiler with C++17 support
+- C++ compiler with C++20 support
 - CMake
 - Conan
 - Ninja (optional)
